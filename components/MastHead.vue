@@ -4,10 +4,8 @@
     <inner-column>
       <nav class="mast-head">
         <NuxtLink class="logo" href="/">home</NuxtLink>
-
-        <slot name="end">
-          <NuxtLink to="/profile">Profile</NuxtLink>
-        </slot>
+        <br />
+        <NuxtLink to="/profile">Profile</NuxtLink>
       </nav>
     </inner-column>
   </section>

@@ -1,7 +1,11 @@
-<script setup></script>
+<script setup>
+  const counter = useCounterService()
+</script>
 
 <template>
-  <h1>example page to show routes</h1>
+  <h1>example page to show routes and how the store works</h1>
+
+  <p>Count value: {{ counter.count }}</p>
 </template>
 
 <style></style>
