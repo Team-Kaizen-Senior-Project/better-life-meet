@@ -1,5 +1,11 @@
+<script setup>
+  const route = useRoute()
+</script>
+
 <template>
-  <div>
-    <NuxtWelcome />
+  <div class="app" :data-route="route.name">
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
   </div>
 </template>
