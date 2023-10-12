@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   // ... other options
   modules: ['@pinia/nuxt'],
+  css: ['~/assets/css/main.css'],
   imports: {
     dirs: ['./services'],
   },
@@ -15,6 +16,12 @@ export default defineNuxtConfig({
     compilerOptions: {
       isCustomElement: (tag) =>
         ['inner-column', 'module', 'text-content', 'input-field'].includes(tag),
+    },
+  },
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
     },
   },
 })
