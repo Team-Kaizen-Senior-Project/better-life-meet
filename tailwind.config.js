@@ -7,7 +7,11 @@ export default {
     './app.vue',
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors:{
+        'better-life-bg':"#1e293b"
+      }
+    },
   },
   plugins: [],
 }
