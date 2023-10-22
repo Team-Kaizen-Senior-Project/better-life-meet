@@ -5,10 +5,8 @@
       class="w-[90vw] max-w-[1600px] items-center mx-auto flex justify-between"
     >
       <nav class="mast-head">
-        <!-- TODO: add in logo svg -->
         <NuxtLink href="/" class="flex gap-2">
-          <span class="font-semibold text-2xl text-blue-400">Tribe</span>
-          <span class="text-blue-400 text-2xl">Meet</span>
+          <img src="/better-life-logo.png" class="w-[10vw]">
         </NuxtLink>
       </nav>
       <div class="flex gap-2 items-center">
