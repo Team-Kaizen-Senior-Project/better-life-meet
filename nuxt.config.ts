@@ -24,4 +24,18 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+  auth: {
+    redirect: {
+      login: '/', // redirect user when not connected
+      callback: '/auth/signed-in'
+    },
+    strategies: {
+      local: false,
+      auth0: {
+        domain: process.env.AUTH0_DOMAIN,
+        client_id: process.env.AUTH0_CLIENT_ID,
+        logoutRedirectUri: 'http://localhost:3000',
+      }
+    }
+  },
 })
