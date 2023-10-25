@@ -7,9 +7,11 @@ export const useHabitStore = defineStore('habits', () => {
     ]);
 
     function addHabit(habitText) {
-        const newId = habits.value.length + 1;
-        habits.value.push({ id: newId, text: habitText });
-        console.log("test")
+        if (habitText) {
+            const newId = habits.value.length + 1;
+            habits.value.push({ id: newId, text: habitText });
+            console.log("test")
+        }
     }
 
     function removeHabit(id) {
@@ -18,7 +20,6 @@ export const useHabitStore = defineStore('habits', () => {
 
     function saveHabits() {
         //TODO save the habit in db
-        console.log(save)
     }
 
     return { habits, addHabit, removeHabit, saveHabits }
