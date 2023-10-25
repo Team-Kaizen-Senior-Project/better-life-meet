@@ -6,6 +6,7 @@ const counter = useCounterService()
   <section class="page-header">
     <inner-column>
       <h1>Index Page</h1>
+      <HabitsList />
       <h2>Example of a pinia service</h2>
       <p>
         Increment or decrement, and then go to the

@@ -18,6 +18,7 @@ export const useHabitStore = defineStore('habits', () => {
 
     function saveHabits() {
         //TODO save the habit in db
+        console.log(save)
     }
 
     return { habits, addHabit, removeHabit, saveHabits }
