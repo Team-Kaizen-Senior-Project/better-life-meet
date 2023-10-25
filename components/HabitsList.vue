@@ -19,13 +19,12 @@ function handleSave() {
 
 </script>
 <template>
-    <div class="p-6 max-w-lg max-h-lg mx-auto bg-gray-900 border-2 border-dashed border-white">
+    <div class="p-6 max-w-lg max-h-lg mx-auto bg-gray-800 border-2 border-dashed border-white">
         <div v-if="editMode">
             <h1 class="text-2xl font-semibold text-white mb-4">Your habits for this week</h1>
             <ul>
                 <li v-for="habit in habits.habits" :key="habit.id" class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-3 w-full">
-                        <PencilIcon class="h-9 w-9 text-gray-800 bg-white p-2 rounded" />
                         <input class=" bg-white rounded-lg p-2 w-full" v-model="habit.text" />
                         <BackspaceIcon @click="habits.removeHabit(habit.id)"
                             class="h-9 w-9 text-white bg-red-500 p-2 rounded" />
