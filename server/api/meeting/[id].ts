@@ -1,7 +1,7 @@
 import { Client, fql } from 'fauna'
 
 export default defineEventHandler(async (event) => {
-  // Get Customer ID
+  // Get Meeting ID
   const { id } = event.context.params as { id: string }
 
   // Initialize Fauna client
@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     // TODO: Create a valid FQL query
-    const query = fql`Customer.byId(${id})`
+    const query = fql`Meeting.byId(${id}){data}`
     const document = await client.query(query)
 
     return document.data
