@@ -10,7 +10,7 @@
         </NuxtLink>
       </nav>
       <div class="flex gap-2 items-center">
-        <button class="bg-white aspect-square text-lg h-[2.5rem] rounded-full">
+        <button class="bg-gray-200 aspect-square text-lg h-[2.5rem] rounded-full">
           U
         </button>
         <div class="flex flex-col text-white">
