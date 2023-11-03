@@ -1,12 +1,11 @@
 <script setup>
-  const counter = useCounterService()
+const counter = useCounterService()
 </script>
 
 <template>
   <section class="page-header">
     <inner-column>
       <h1>Index Page</h1>
-
       <h2>Example of a pinia service</h2>
       <p>
         Increment or decrement, and then go to the
@@ -22,13 +21,13 @@
   </section>
 </template>
 <style scoped>
-  .count {
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-  }
+.count {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
 
-  h3 {
-    margin: 0;
-  }
+h3 {
+  margin: 0;
+}
 </style>
