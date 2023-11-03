@@ -1,17 +1,21 @@
 /* 
 This file is for configuring mediasoup. 
+
 It creates a worker and a router.
-The worker is responsible for creating the router, which is responsible for
-creating transports, producers, and consumers. 
-The router is exported so that it can be used in the controllers/webrtcController.js file.
+
+* The worker is responsible for creating the router, which is responsible for
+  creating transports, producers, and consumers. 
+  Also the work handles low-level operations like encoding, decoding, and routing media streams.
+
+* The router is exported so that it can be used in the controllers/webrtcController.js file.
+  Router routes media streams between different endpoints like transports and producers/consumers.
 */
 
 const mediasoup = require('mediasoup');
 
 /*
-Defines the media codecs that the server will support. The server 
-will support the Opus audio codec with a clock rate 
-of 48000Hz and 2 channels.
+Defines the media codecs that the server will support. 
+The server will support the Opus audio codec with a clock rate of 48000Hz and 2 channels.
 */
 const mediaCodecs = [
   {
@@ -28,7 +32,7 @@ let router = null;
 const initializeMediaSoup = async () => {
     try {
       worker = await mediasoup.createWorker();
-      console.log('mediasoup Worker created');
+      console.log('mediasoup Worker created {worker:%s}', worker);
     
       worker.on('died', () => {
         console.error('mediasoup Worker died, exiting in a few seconds...');
@@ -36,7 +40,7 @@ const initializeMediaSoup = async () => {
       });
     
       router = await worker.createRouter({ mediaCodecs });
-      console.log('mediasoup Router created');
+      console.log('mediasoup Router created {router:%s}', router);
     } catch (error) {
       console.error('Failed to initialize mediasoup:', error);
     }

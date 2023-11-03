@@ -33,5 +33,28 @@ module.exports = {
     }
   },
 
-  // other methods related to WebRTC like createProducer, createConsumer
+  async createProducer(req, res) {
+    try {
+      const router = getRouter();
+      if (!router) {
+        throw new Error('Router is not initialized');
+      }
+
+      const { transportId, kind, rtpParameters } = req.body;
+
+      const transport = router._transports.get(transportId);
+      console.log(`transportId: ${transportId}`)
+      if (!transport) {
+        throw new Error(`Transport with id "${transportId}" not found`);
+      }
+
+      const producer = await transport.produce({ kind, rtpParameters });
+
+      res.json({ id: producer.id });
+      console.log(`Created producer with id ${producer.id}`);
+    } catch (error) {
+      console.error(`Failed to create producer: ${error}`);
+      res.status(500).send(error.message);
+    }
+  }
 };
