@@ -1,6 +1,5 @@
 /*
   This is the server-side logic for handling WebRTC signaling.
-  Maybe adjust this so when user creates a room 
 */
 import { defineEventHandler } from 'h3'
 

@@ -1,6 +1,6 @@
 /*
 * Serves as an HTTP API endpoint for the frontend to interact with.
-* Handles the creation and configuration of WebRTC transports.
+* Handles the creation WebRTC transports.
 */
 import { defineEventHandler, readBody } from 'h3';
 import { initWebRtcTransport } from '../controllers/mediasoupController';

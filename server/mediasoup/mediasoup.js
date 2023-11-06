@@ -5,7 +5,7 @@ It creates a worker and a router.
 
 * The worker is responsible for creating the router, which is responsible for
   creating transports, producers, and consumers. 
-  Also the work handles low-level operations like encoding, decoding, and routing media streams.
+  Also the worker handles low-level operations like encoding, decoding, and routing media streams.
 
 * The router is exported so that it can be used in the controllers/webrtcController.js file.
   Router routes media streams between different endpoints like transports and producers/consumers.
@@ -15,7 +15,7 @@ const mediasoup = require('mediasoup');
 
 /*
 Defines the media codecs that the server will support. 
-The server will support the Opus audio codec with a clock rate of 48000Hz and 2 channels.
+The server as of 1NOV23 will support the Opus audio codec with a clock rate of 48000Hz and 2 channels.
 */
 const mediaCodecs = [
   {

@@ -28,7 +28,6 @@ describe("WebRTC Controller", () => {
 
     expect(result).toEqual({
       id: mockTransportId,
-      // other properties as needed
     });
   });
 
