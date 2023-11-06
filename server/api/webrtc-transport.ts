@@ -1,9 +1,6 @@
 /*
 * Serves as an HTTP API endpoint for the frontend to interact with.
 * Handles the creation and configuration of WebRTC transports.
-
-* TODO: specifically deal with configuring WebRTC transports, 
-        which are part of setting up the media pipeline for sending/receiving media.
 */
 import { defineEventHandler, readBody } from 'h3';
 import { initWebRtcTransport } from '../controllers/mediasoupController';

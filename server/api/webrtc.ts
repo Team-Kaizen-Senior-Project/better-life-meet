@@ -1,4 +1,7 @@
-// TODO: Handle initial signaling and handling SDP offer/answer.
+/*
+  This is the server-side logic for handling WebRTC signaling.
+  Maybe adjust this so when user creates a room 
+*/
 import { defineEventHandler } from 'h3'
 
 export default defineEventHandler(async (event) => {

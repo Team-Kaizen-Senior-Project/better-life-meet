@@ -15,7 +15,6 @@ const commonWebRtcTransportOptions = {
   enableUdp: true,
   enableTcp: false,
   preferUdp: true,
-  // maybe add more options?
 };
 
 async function createWebRtcTransport(options) {
