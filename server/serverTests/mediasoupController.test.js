@@ -6,16 +6,22 @@
 
 const { initWebRtcTransport, createProducer } = require('../controllers/mediasoupController.js');
 const { getRouter } = require("../mediasoup/mediasoup.js");
+const h3 = require('h3');
 
 jest.mock('../mediasoup/mediasoup.js');
+jest.mock('h3', () => ({
+  ...jest.requireActual('h3'),
+  readBody: jest.fn(),
+}));
 
 describe("WebRTC Controller", () => {
-  const mockTransportId = 'mockTransportId'; // Mocked transport ID
-  const mockProducerId = 'mockProducerId'; // Mocked producer ID
+  const mockTransportId = 'mockTransportId'; // mocked transport ID
+  const mockProducerId = 'mockProducerId'; // mocked producer ID
 
   beforeEach(() => {
-    // Reset the mock implementations before each test
+    // reset mocks
     getRouter.mockReset();
+    h3.readBody.mockReset();
   });
 
   it("should initialize WebRTC transport", async () => {
@@ -23,67 +29,45 @@ describe("WebRTC Controller", () => {
     getRouter.mockReturnValue({
       createWebRtcTransport: jest.fn().mockResolvedValue({
         id: mockTransportId,
-        // maybe want other properties later
+        // other properties as needed
       })
     });
 
-    const mockReq = {};
-    const mockRes = {
-      json: jest.fn()
-    };
-
-    // Exercise
-    await initWebRtcTransport(mockReq, mockRes);
+    const result = await initWebRtcTransport();
 
     // Verify
-    expect(mockRes.json).toHaveBeenCalledWith({
+    expect(result).toEqual({
       id: mockTransportId,
-      // other properties that your initWebRtcTransport function adds to the response
+      // other properties as needed
     });
   });
 
   it('should create a producer', async () => {
-    // Mocking a transport object that has a `produce` method.
+    // Setup
+    h3.readBody.mockResolvedValue({
+      transportId: mockTransportId,
+      kind: 'audio', // or 'video'...
+      rtpParameters: {}, // the actual RTP parameters needed
+    });
+
     const mockTransport = {
       produce: jest.fn().mockResolvedValue({
         id: mockProducerId,
       }),
     };
 
-    // Mocking the _transports map to return the mockTransport when `get` is called with `mockTransportId`.
     const mockTransportsMap = new Map();
     mockTransportsMap.set(mockTransportId, mockTransport);
 
-    // Adjust the getRouter mock to return an object that includes the _transports map.
     getRouter.mockReturnValue({
       _transports: mockTransportsMap,
-      // might want to include any other properties and methods that are necessary for the router mock
     });
 
-    const mockReq = {
-      body: {
-        transportId: mockTransportId,
-        kind: 'audio', // TODO: Test 'video' as well
-        rtpParameters: {}, // TODO: Test with rtpParameters
-      }
-    };
-
-    const mockRes = {
-      json: jest.fn(),
-      status: jest.fn().mockReturnThis(), // Mock the status function to allow chaining
-      send: jest.fn(), // Mock the send function to complete the chain
-    };
-
-    // Exercise
-    await createProducer(mockReq, mockRes);
+    const result = await createProducer({ req: { body: {} }, res: {} });
 
     // Verify
-    expect(mockRes.json).toHaveBeenCalledWith({
+    expect(result).toEqual({
       id: mockProducerId,
     });
-
-    // Verify that the status and send functions are not called since there should be no error
-    expect(mockRes.status).not.toHaveBeenCalled();
-    expect(mockRes.send).not.toHaveBeenCalled();
   });
 });
