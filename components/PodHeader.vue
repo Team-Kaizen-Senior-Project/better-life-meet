@@ -1,0 +1,35 @@
+<script setup>
+  import { ChevronDownIcon } from '@heroicons/vue/24/outline'
+</script>
+<template>
+  <header class="bg-black py-4">
+    <div
+      class="mx-auto flex w-[90vw] max-w-[1600px] items-center justify-between"
+    >
+      <div class="flex items-center gap-2">
+        <p class="text-lg font-bold text-white">
+          Weekly Pod Accountability Meeting
+        </p>
+        <button
+          class="flex items-center gap-2 rounded bg-blue-400 p-2 text-white"
+        >
+          View Schedule
+          <ChevronDownIcon class="h-3 w-3" />
+        </button>
+      </div>
+      <div class="flex items-center gap-2">
+        <button
+          class="aspect-square h-[2.5rem] rounded-full bg-gray-200 text-lg"
+        >
+          U
+        </button>
+        <div class="flex flex-col text-white">
+          <p>User</p>
+          <p>user@gmail.com</p>
+        </div>
+      </div>
+    </div>
+  </header>
+</template>
+
+<style scoped></style>
