@@ -1,9 +1,6 @@
 import { Client, fql } from 'fauna'
 
 export default defineEventHandler(async (event) => {
-  // Grab Customer ID
-  const { id } = event.context.params as { id: string }
-
   // Initialize Fauna client
   const client = new Client({
     secret: process.env.FAUNA_KEY,
@@ -11,7 +8,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     // Perform READ query
-    const query = fql`Customer.byId(${id})`
+    const query = fql`Customer.all(){data}`
     const document = await client.query(query)
 
     // Return 'Not found' 404 if document is empty
