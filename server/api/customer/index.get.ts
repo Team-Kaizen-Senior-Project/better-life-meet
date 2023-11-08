@@ -1,30 +1,46 @@
-import { Client, fql } from 'fauna'
+import { AbortError, Client, QueryValue, ServiceError, fql } from 'fauna'
 
 export default defineEventHandler(async (event) => {
+  // Get Customer ID
+  const { id } = event.context.params as { id: string }
+  const {
+    cursor,
+    count,
+  }: { cursor: string | undefined; count: string | undefined } = getQuery(event)
+
   // Initialize Fauna client
   const client = new Client({
     secret: process.env.FAUNA_KEY,
   })
 
   try {
-    // Perform READ query
-    const query = fql`Customer.all(){data}`
-    const document = await client.query(query)
+    let query = fql`Customer.all().paginate()`
 
-    // Return 'Not found' 404 if document is empty
-    if (!document.data) {
-      return createError({
-        statusCode: 404,
-        statusMessage: 'Resource Not Found',
+    if (cursor !== undefined && count !== undefined) {
+      query = fql`Set.paginate(${cursor}, ${Number(count)})`
+    } else if (cursor !== undefined) {
+      query = fql`Set.paginate(${cursor})`
+    } else if (count !== undefined) {
+      query = fql`Customer.all().paginate(${Number(count)})`
+    }
+
+    const response = await client.query(query)
+
+    return response
+  } catch (error: unknown) {
+    if (error instanceof AbortError) {
+      const abortError = error as AbortError
+      const abort = abortError.abort! as { message: string }
+      throw createError({
+        statusCode: abortError.httpStatus,
+        statusMessage: abort.message,
+      })
+    } else {
+      const serviceError = error as ServiceError
+      throw createError({
+        statusCode: serviceError.httpStatus,
+        statusMessage: serviceError.message,
       })
     }
-    // Return query results
-    return document.data
-  } catch (error) {
-    // Throw Server error for all other errors
-    return createError({
-      statusCode: 500,
-      statusMessage: 'Internal Error Occurred',
-    })
   }
 })
