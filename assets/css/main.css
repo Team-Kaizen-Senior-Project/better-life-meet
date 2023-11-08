@@ -41,4 +41,11 @@
 	:where(:not(:defined)) {
 		display: block;
 	}
+
+	inner-column {
+		max-width: 1200px;
+		width: 98%;
+		margin-left: auto;
+		margin-right: auto;
+	}
 }
