@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
     const query = fql`
     let customer = Customer.byId(${id});
     if (!customer.exists()) abort({ message: "Customer with this ID does not exist." });
-    customer!.update(${body});
+    customer!.replace(${body});
     `
     const response = await client.query(query)
 
