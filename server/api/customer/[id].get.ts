@@ -1,4 +1,4 @@
-import { Client, QuerySuccess, ServiceError, fql } from 'fauna'
+import { AbortError, Client, ServiceError, fql } from 'fauna'
 
 export default defineEventHandler(async (event) => {
   // Get Customer ID
@@ -11,19 +11,27 @@ export default defineEventHandler(async (event) => {
 
   try {
     const query = fql`
-    let customers = Customer.all().where(.id == ${id});
-    if (customers.isEmpty()) abort(0);
-    customers.first();
+    let customer = Customer.byId(${id});
+    if (!customer.exists()) abort({ message: "Customer with this ID does not exist." });
+    customer;
     `
     const response = await client.query(query)
 
     return response
   } catch (error: unknown) {
-    console.log(error)
-    const serviceError = error as ServiceError
-    throw createError({
-      statusCode: serviceError.httpStatus,
-      statusMessage: 'Customer with this ID does not exist.',
-    })
+    if (error instanceof AbortError) {
+      const abortError = error as AbortError
+      const abort = abortError.abort! as { message: string }
+      throw createError({
+        statusCode: abortError.httpStatus,
+        statusMessage: abort.message,
+      })
+    } else {
+      const serviceError = error as ServiceError
+      throw createError({
+        statusCode: serviceError.httpStatus,
+        statusMessage: serviceError.message,
+      })
+    }
   }
 })
