@@ -6,6 +6,7 @@ const counter = useCounterService()
   <section class="page-header">
     <inner-column>
       <MicControls />
+      <Test />
       <h1>Index Page</h1>
       <h2>Example of a pinia service</h2>
       <p>
