@@ -1,10 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   // ... other options
-  modules: ['@pinia/nuxt'],
+  modules: ['@pinia/nuxt', '@nuxt/ui'],
   css: ['~/assets/css/main.css'],
   imports: {
     dirs: ['./services'],
+  },
+  // @ts-ignore
+  colorMode: {
+    preference: 'light',
   },
   pinia: {
     autoImports: ['defineStore', 'acceptHMRUpdate'],
