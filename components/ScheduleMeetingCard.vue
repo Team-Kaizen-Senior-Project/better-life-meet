@@ -31,7 +31,7 @@
       }),
     })
     console.log(resp)
-    isOpen.value = false
+    isOpen = false
   }
 </script>
 <template>
