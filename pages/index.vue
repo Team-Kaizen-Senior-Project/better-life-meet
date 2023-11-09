@@ -91,7 +91,7 @@
 					<VideoSettings />
 
 					<div class="grid grid-cols-2 gap-4 md:grid-cols-2">
-						<div v-for="meeting in meetings" :key="meeting.title" class="flex justify-center">
+						<div v-for="meeting in meetings" :key="meeting.title" class="">
 							<MeetingCard :meeting="meeting" :isLive="meeting.isLive" />
 						</div>
 					</div>
