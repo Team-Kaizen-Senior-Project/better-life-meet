@@ -1,16 +1,16 @@
 <script setup></script>
 <template>
-  <header class="bg-black py-4">
+  <header class="bg-black py-3">
     <div
-      class="w-[90vw] max-w-[1600px] items-center mx-auto flex justify-between"
+      class="mx-auto flex w-[90vw] max-w-[1600px] items-center justify-between"
     >
       <nav class="mast-head">
         <NuxtLink href="/" class="flex gap-2">
-          <img src="/better-life-logo.png" class="w-[10vw]">
+          <img src="/better-life-logo.png" class="w-[8vw]" />
         </NuxtLink>
       </nav>
-      <div class="flex gap-2 items-center">
-        <button class="bg-gray-200 aspect-square text-lg h-[2.5rem] rounded-full">
+      <div class="flex items-center gap-2">
+        <button class="h-[2rem] w-[2rem] rounded-full bg-gray-200 text-lg">
           U
         </button>
         <div class="flex flex-col text-white">
