@@ -1,21 +1,21 @@
 <script setup>
-	import { ref } from 'vue'
-	import { PencilSquareIcon } from '@heroicons/vue/24/solid'
-	import { PencilIcon } from '@heroicons/vue/24/solid'
-	import { PlusCircleIcon } from '@heroicons/vue/24/solid'
-	import { BackspaceIcon } from '@heroicons/vue/24/solid'
+import { ref } from 'vue'
+import { PencilSquareIcon } from '@heroicons/vue/24/solid'
+import { PencilIcon } from '@heroicons/vue/24/solid'
+import { PlusCircleIcon } from '@heroicons/vue/24/solid'
+import { BackspaceIcon } from '@heroicons/vue/24/solid'
 
-	const habits = useHabitStore()
+const habits = useHabitStore()
 
-	let editMode = ref(false)
+let editMode = ref(false)
 
-	function toggleEditMode() {
-		editMode.value = !editMode.value
-	}
-	function handleSave() {
-		toggleEditMode()
-		habits.saveHabits()
-	}
+function toggleEditMode() {
+	editMode.value = !editMode.value
+}
+function handleSave() {
+	toggleEditMode()
+	habits.saveHabits()
+}
 </script>
 <template>
 	<div class="border border-dashed border-zinc-500 p-4">
@@ -24,20 +24,20 @@
 			<ul>
 				<li v-for="habit in habits.habits" :key="habit.id" class="mb-4 flex items-center justify-between">
 					<div class="flex w-full items-center gap-3">
-						<input class="w-full rounded-lg bg-white" v-model="habit.text" />
-						<BackspaceIcon @click="habits.removeHabit(habit.id)" class="h-9 w-9 rounded bg-red-500 p-2 text-white" />
+						<input class="w-full rounded-lg bg-gray-700 p-2" v-model="habit.text" />
+						<BackspaceIcon @click="habits.removeHabit(habit.id)"
+							class="h-9 w-9 rounded bg-red-500 p-2 text-white" />
 					</div>
 				</li>
 			</ul>
 			<div class="flex justify-between">
-				<button
-					@click="habits.addHabit()"
-					class="align-center mt-4 flex justify-center rounded-3xl bg-blue-500 px-3 py-2 text-white"
-				>
+				<UButton @click="habits.addHabit()" class="bg-sky-500 p-2 hover:bg-sky-600">
 					Add Habit
-					<PlusCircleIcon class="h-7 w-7 pl-1" />
-				</button>
-				<button @click="handleSave" class="mt-4 rounded-lg bg-green-500 px-3 py-2 text-white">Save</button>
+					<PlusCircleIcon class="h-5 w-5" />
+				</UButton>
+				<UButton @click="handleSave" class="bg-green-500 px-2 py-1 text-white">
+					Save
+				</UButton>
 			</div>
 		</div>
 		<div v-else>
