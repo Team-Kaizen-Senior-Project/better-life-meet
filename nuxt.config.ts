@@ -2,7 +2,10 @@
 export default defineNuxtConfig({
 	// ... other options
 	modules: ['@pinia/nuxt', '@nuxt/ui', '@samk-dev/nuxt-vcalendar'],
-	css: ['~/assets/css/main.css'],
+	// css: ['~/assets/css/main.css'],
+	tailwindcss: {
+		cssPath: '~/assets/css/main.css',
+	},
 	imports: {
 		dirs: ['./services'],
 	},

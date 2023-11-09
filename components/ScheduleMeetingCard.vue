@@ -110,7 +110,7 @@
 				</div>
 				<div class="flex items-center gap-1">
 					<input id="record-check" type="checkbox" />
-					<label for="record-check" class="text-sm font-medium text-white">
+					<label for="record-check" class="text-md font-medium text-white">
 						Include prerecorded videos for the week?
 					</label>
 				</div>
