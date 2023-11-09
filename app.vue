@@ -1,11 +1,11 @@
 <script setup>
-  const route = useRoute()
+	const route = useRoute()
 </script>
 
 <template>
-  <div class="app" :data-route="route.name">
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-  </div>
+	<div class="app flex min-h-screen flex-col" :data-route="route.name">
+		<NuxtLayout>
+			<NuxtPage />
+		</NuxtLayout>
+	</div>
 </template>
