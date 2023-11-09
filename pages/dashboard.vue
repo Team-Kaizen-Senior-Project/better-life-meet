@@ -50,9 +50,9 @@
 <template>
 	<section class="page-header bg-zinc-800 py-12 text-white">
 		<inner-column>
-			<div class="grid grid-cols-1 gap-8 md:grid-cols-12">
+			<div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
 				<!-- column 1 -->
-				<div class="col-span-3 grid gap-4 self-start">
+				<div class="col-span-1 grid gap-4 self-start lg:col-span-3">
 					<HabitsList />
 					<div class="border border-dashed border-zinc-500 p-4">
 						<h2 class="mb-4 text-lg font-medium">Your goals for the quarter</h2>
@@ -63,7 +63,7 @@
 				</div>
 
 				<!-- column 2 -->
-				<div class="col-span-6 grid gap-4">
+				<div class="col-span-1 grid gap-4 md:col-span-6">
 					<!-- <div class="border border-dashed border-zinc-500 p-4">
 						<h2>Video settings</h2>
 						<div>
@@ -90,18 +90,20 @@
 					</div> -->
 					<VideoSettings />
 
-					<div class="grid grid-cols-2 gap-4 md:grid-cols-2">
-						<div v-for="meeting in meetings" :key="meeting.title" class="flex justify-center">
+					<div class="grid grid-cols-2 gap-4 lg:grid-cols-2">
+						<div v-for="meeting in meetings" :key="meeting.title" class="">
 							<MeetingCard :meeting="meeting" :isLive="meeting.isLive" />
 						</div>
 					</div>
 				</div>
 				<!-- column 3 -->
-				<div class="col-span-3">
-					<div>
-						<h2>Upcoming events</h2>
+				<div class="col-span-1 lg:col-span-3">
+					<div class="mb-4">
+						<h2 class="mb-4 text-lg font-medium text-white">Upcoming events</h2>
 						<VCalendar v-model="date" :attributes="attrs" />
 					</div>
+
+					<ScheduleMeetingCard />
 				</div>
 			</div>
 		</inner-column>

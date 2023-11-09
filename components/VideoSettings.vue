@@ -5,9 +5,9 @@
 </script>
 <template>
 	<div class="border border-dashed border-zinc-500 bg-zinc-800 p-4">
-		<h2 class="mb-4 text-base font-medium text-white">Video Settings</h2>
+		<h2 class="mb-4 text-lg font-medium text-white">Video Settings</h2>
 		<div class="">
-			<div class="col-span-8 mb-5 aspect-video w-full rounded bg-gray-800 text-white">
+			<div class="mb-5 aspect-video h-72 w-full rounded bg-gray-800 text-white md:col-span-8">
 				<div class="h-4 w-4"><VideoCameraSlashIcon /></div>
 			</div>
 			<div class="grid gap-2">
@@ -16,7 +16,7 @@
 					<div class="flex items-center gap-2">
 						<Button type="primary" class="w-fit"><div>test mic</div></Button>
 						<div class="flex items-center gap-1">
-							<div v-for="i in 60" :key="`level-bar-${i}`" class="h-4 w-1 rounded-sm bg-neutral-500"></div>
+							<div v-for="i in 55" :key="`level-bar-${i}`" class="h-4 w-1 rounded-sm bg-neutral-500"></div>
 						</div>
 					</div>
 				</div>
