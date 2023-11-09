@@ -38,21 +38,22 @@ async function startMicTest() {
 function stopMicTest() {
     clearInterval(intervalId);
     if (audioContext) {
-        audioContext.close(); // Close the audio context to clean up
+        audioContext.close();
     }
     audioContext = null;
-    micLevel.value = 0; // Reset the mic level
+    micLevel.value = 0;
     isTestingMic.value = false;
 }
 
 async function toggleMicTest() {
     if (isTestingMic.value) {
         stopMicTest();
+        isTestingMic.value = false;
     } else {
         await startMicTest();
+        isTestingMic.value = true;
     }
-    isTestingMic.value = !isTestingMic.value;
-    console.log(isTestingMic.value)
+
 }
 onUnmounted(() => {
     stopMicTest(); // stop the test when the component unmounts
@@ -60,27 +61,27 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="w-44 h-64 p-4 bg-gray-100 border rounded-md shadow-md flex items-center justify-around gap-3 p-5 m-5">
+    <div
+        class="w-44 h-72 bg-gray-800 border rounded-md shadow-md flex items-center justify-around gap-3 m-5 p-2 text-white">
         <!-- Vertical Progress Bar -->
-        <div class="flex flex-col justify-center items-center gap-2">
-            <span class="mb-2 text-sm whitespace-nowrap">Mic level</span>
-            <div class="w-8 bg-gray-200 rounded h-32 flex flex-col-reverse overflow-hidden">
-                <div :style="{ height: `${micLevel}%` }" class="bg-green-500 transition-height duration-300"></div>
+        <div class="flex flex-col justify-between items-center gap-2 h-full">
+            <span class="text-sm whitespace-nowrap">Mic level</span>
+            <div class="w-8 bg-gray-500 rounded h-full flex flex-col-reverse overflow-hidden h-full">
+                <div :style="{ height: `${micLevel * 2}%` }" class="bg-green-500 transition-height duration-300"></div>
             </div>
             <!-- Button to toggle the mic test -->
-            <button @click="toggleMicTest" class="px-4 py-2 rounded bg-blue-500 text-white font-bold whitespace-nowrap">
+            <button @click="toggleMicTest" class="p-1 rounded bg-blue-500 text-white text-sm whitespace-nowrap">
                 {{ isTestingMic ? 'Stop Test' : 'Test Mic' }}
             </button>
         </div>
 
 
         <!-- Volume Control Slider -->
-        <div class="flex flex-col justify-center items-center gap-2 h-full">
+        <div class="flex flex-col justify-center items-center gap-2  h-full">
             <div class="flex flex-col items-center h-full">
                 <span class="mb-2 text-sm whitespace-nowrap">Mic volume</span>
                 <input v-model="micVolume" type="range" min="0" max="100"
-                    class="w-2 bg-transparent appearance-none slider-vertical thumb-horizontal" />
-
+                    class="h-full mb-9 bg-transparent appearance-none slider-vertical thumb-horizontal" />
             </div>
         </div>
     </div>
@@ -90,16 +91,11 @@ onUnmounted(() => {
 <style scoped>
 .slider-vertical {
     writing-mode: bt-lr;
-    /* IE */
     -webkit-appearance: slider-vertical;
-    /* WebKit */
-    width: 8px;
-    height: 100%;
-    padding: 0;
+    width: 5px;
 }
 
-.thumb-horizontal::-webkit-slider-thumb {
-    -webkit-appearance: none;
+.slider-vertical::-webkit-slider-thumb {
     appearance: none;
     margin-top: -12px;
     background-color: #000000;
