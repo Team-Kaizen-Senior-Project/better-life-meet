@@ -1,11 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	// ... other options
-	modules: ['@pinia/nuxt', '@samk-dev/nuxt-vcalendar'],
-
+	modules: ['@pinia/nuxt', '@nuxt/ui', '@samk-dev/nuxt-vcalendar'],
 	css: ['~/assets/css/main.css'],
 	imports: {
 		dirs: ['./services'],
+	},
+	// @ts-ignore
+	colorMode: {
+		preference: 'light',
 	},
 	pinia: {
 		autoImports: ['defineStore', 'acceptHMRUpdate'],

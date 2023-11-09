@@ -25,6 +25,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/vue-fontawesome": "^3.0.5",
+    "@nuxt/ui": "^2.10.0",
     "@pinia/nuxt": "^0.4.11",
     "@popperjs/core": "^2.11.8",
     "class-variance-authority": "^0.7.0",
