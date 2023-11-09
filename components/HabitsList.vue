@@ -1,57 +1,55 @@
 <script setup>
-import { ref } from 'vue'
-import { PencilSquareIcon } from '@heroicons/vue/24/solid'
-import { PencilIcon } from '@heroicons/vue/24/solid'
-import { PlusCircleIcon } from '@heroicons/vue/24/solid'
-import { BackspaceIcon } from '@heroicons/vue/24/solid'
+	import { ref } from 'vue'
+	import { PencilSquareIcon } from '@heroicons/vue/24/solid'
+	import { PencilIcon } from '@heroicons/vue/24/solid'
+	import { PlusCircleIcon } from '@heroicons/vue/24/solid'
+	import { BackspaceIcon } from '@heroicons/vue/24/solid'
 
-const habits = useHabitStore();
+	const habits = useHabitStore()
 
-let editMode = ref(false)
+	let editMode = ref(false)
 
-function toggleEditMode() {
-    editMode.value = !editMode.value;
-}
-function handleSave() {
-    toggleEditMode()
-    habits.saveHabits()
-}
-
+	function toggleEditMode() {
+		editMode.value = !editMode.value
+	}
+	function handleSave() {
+		toggleEditMode()
+		habits.saveHabits()
+	}
 </script>
 <template>
-    <div class="p-6 max-w-lg max-h-lg mx-auto bg-gray-800 border-2 border-dashed border-white">
-        <div v-if="editMode">
-            <h1 class="text-2xl font-semibold text-white mb-4">Your habits for this week</h1>
-            <ul>
-                <li v-for="habit in habits.habits" :key="habit.id" class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-3 w-full">
-                        <input class=" bg-white rounded-lg p-2 w-full" v-model="habit.text" />
-                        <BackspaceIcon @click="habits.removeHabit(habit.id)"
-                            class="h-9 w-9 text-white bg-red-500 p-2 rounded" />
-                    </div>
-                </li>
-            </ul>
-            <div class="flex justify-between">
-                <button @click="habits.addHabit()"
-                    class="bg-blue-500 mt-4 py-2 px-3 rounded-3xl text-white flex justify-center align-center">Add Habit
-                    <PlusCircleIcon class="h-7 w-7 pl-1" />
-                </button>
-                <button @click="handleSave" class="bg-green-500 mt-4 px-3 py-2 rounded-lg text-white">Save</button>
-            </div>
-        </div>
-        <div v-else>
-            <div class="flex align-center justify-between">
-                <h1 class="text-2xl font-bold text-white mb-4">Your habits for this week</h1>
-                <PencilSquareIcon @click="toggleEditMode" class="h-9 w-9 text-gray-800 bg-white p-2 rounded" />
-            </div>
-            <ul>
-                <li v-for="habit in habits.habits" :key="habit.id" class="flex items-center justify-between mb-4">
-                    <div class="flex items-center space-x-2">
-                        <p class="p-2 text-white font-semi-bold">{{ habit.text }}</p>
-                    </div>
-                </li>
-            </ul>
-
-        </div>
-    </div>
+	<div class="border border-dashed border-zinc-500 p-4">
+		<div v-if="editMode">
+			<h1 class="mb-4 text-base font-medium text-white">Your habits for this week</h1>
+			<ul>
+				<li v-for="habit in habits.habits" :key="habit.id" class="mb-4 flex items-center justify-between">
+					<div class="flex w-full items-center gap-3">
+						<input class="w-full rounded-lg bg-white" v-model="habit.text" />
+						<BackspaceIcon @click="habits.removeHabit(habit.id)" class="h-9 w-9 rounded bg-red-500 p-2 text-white" />
+					</div>
+				</li>
+			</ul>
+			<div class="flex justify-between">
+				<button
+					@click="habits.addHabit()"
+					class="align-center mt-4 flex justify-center rounded-3xl bg-blue-500 px-3 py-2 text-white"
+				>
+					Add Habit
+					<PlusCircleIcon class="h-7 w-7 pl-1" />
+				</button>
+				<button @click="handleSave" class="mt-4 rounded-lg bg-green-500 px-3 py-2 text-white">Save</button>
+			</div>
+		</div>
+		<div v-else>
+			<div class="align-center flex justify-between">
+				<h1 class="mb-4 text-lg font-medium text-white">Your habits for this week</h1>
+				<PencilSquareIcon @click="toggleEditMode" class="h-9 w-9 rounded bg-white p-2 text-gray-800" />
+			</div>
+			<ul class="grid gap-2">
+				<li v-for="habit in habits.habits" :key="habit.id">
+					{{ habit.text }}
+				</li>
+			</ul>
+		</div>
+	</div>
 </template>

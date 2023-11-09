@@ -1,17 +1,17 @@
 <template>
-  <main class="">
-    <div class="w-[90%] min-h-[88vh] max-w-[1400px] mx-auto">
-      <h1 class="text-4xl font-bold mt-4 mb-8">All Pods</h1>
-      <section class="xl:grid-cols-4 grid gap-4">
-        <PodView />
-        <PodView />
-        <PodView />
-        <PodView />
-        <PodView />
-        <PodView />
-        <PodView />
-        <PodView />
-      </section>
-    </div>
-  </main>
+	<section class="">
+		<div class="mx-auto min-h-[88vh] w-[90%] max-w-[1400px]">
+			<h1 class="mb-8 mt-4 text-4xl font-bold">All Pods</h1>
+			<section class="grid gap-4 xl:grid-cols-4">
+				<PodView />
+				<PodView />
+				<PodView />
+				<PodView />
+				<PodView />
+				<PodView />
+				<PodView />
+				<PodView />
+			</section>
+		</div>
+	</section>
 </template>
