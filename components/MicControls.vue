@@ -45,14 +45,14 @@ function stopMicTest() {
     isTestingMic.value = false;
 }
 
-function toggleMicTest() {
-    console.log(isTestingMic.value)
+async function toggleMicTest() {
     if (isTestingMic.value) {
         stopMicTest();
     } else {
-        startMicTest();
+        await startMicTest();
     }
     isTestingMic.value = !isTestingMic.value;
+    console.log(isTestingMic.value)
 }
 onUnmounted(() => {
     stopMicTest(); // stop the test when the component unmounts
@@ -60,15 +60,29 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="w-full h-full flex flex-col items-center justify-center p-5 space-y-4">
+    <div class="w-44 h-64 p-4 bg-gray-100 border rounded-md shadow-md flex items-center justify-around gap-3 p-5 m-5">
         <!-- Vertical Progress Bar -->
-        <div class="w-8 bg-gray-200 rounded h-64 flex flex-col-reverse overflow-hidden">
-            <div :style="{ height: `${micLevel}%` }" class="bg-green-500 transition-height duration-300"></div>
+        <div class="flex flex-col justify-center items-center gap-2">
+            <span class="mb-2 text-sm whitespace-nowrap">Mic level</span>
+            <div class="w-8 bg-gray-200 rounded h-32 flex flex-col-reverse overflow-hidden">
+                <div :style="{ height: `${micLevel}%` }" class="bg-green-500 transition-height duration-300"></div>
+            </div>
+            <!-- Button to toggle the mic test -->
+            <button @click="toggleMicTest" class="px-4 py-2 rounded bg-blue-500 text-white font-bold whitespace-nowrap">
+                {{ isTestingMic ? 'Stop Test' : 'Test Mic' }}
+            </button>
         </div>
-        <!-- Button to toggle the mic test -->
-        <button @click="toggleMicTest" class="px-4 py-2 rounded bg-blue-500 text-white font-bold">
-            {{ isTestingMic ? 'Stop Test' : 'Test Mic' }}
-        </button>
+
+
+        <!-- Volume Control Slider -->
+        <div class="flex flex-col justify-center items-center gap-2 h-full">
+            <div class="flex flex-col items-center h-full">
+                <span class="mb-2 text-sm whitespace-nowrap">Mic volume</span>
+                <input v-model="micVolume" type="range" min="0" max="100"
+                    class="w-2 bg-transparent appearance-none slider-vertical thumb-horizontal" />
+
+            </div>
+        </div>
     </div>
 </template>
 
