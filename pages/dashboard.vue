@@ -1,50 +1,50 @@
 <script setup>
-	import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
-	import { VideoCameraSlashIcon } from '@heroicons/vue/24/outline'
-	import { MicrophoneIcon } from '@heroicons/vue/24/solid'
-	import MeetingCard from '@/components/MeetingCard.vue'
-	const meetings = [
-		{
-			title: 'Week 16 Accountability Meeting',
-			date: 'Wednesday October 4th',
-			time: '4:00pm',
-			link: '#link1',
-			isLive: true,
-		},
-		{
-			title: 'Week 17 Accountability Meeting',
-			date: 'Wednesday October 11th',
-			time: '4:00pm',
-			link: '#link2',
-			isLive: false,
-		},
-		{
-			title: 'Week 18 Accountability Meeting',
-			date: 'Friday, October 20th',
-			time: '2:00pm',
-			link: '#link3',
-			isLive: false,
-		},
-		{
-			title: 'Week 19 Accountability Meeting',
-			date: 'Thursday October 26th',
-			time: '3:00 PM',
-			link: '#link4',
-			isLive: false,
-		},
-	]
-	const date = ref(new Date())
+import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
+import { VideoCameraSlashIcon } from '@heroicons/vue/24/outline'
+import { MicrophoneIcon } from '@heroicons/vue/24/solid'
+import MeetingCard from '@/components/MeetingCard.vue'
+const meetings = [
+	{
+		title: 'Week 16 Accountability Meeting',
+		date: 'Wednesday October 4th',
+		time: '4:00pm',
+		link: '#link1',
+		isLive: true,
+	},
+	{
+		title: 'Week 17 Accountability Meeting',
+		date: 'Wednesday October 11th',
+		time: '4:00pm',
+		link: '#link2',
+		isLive: false,
+	},
+	{
+		title: 'Week 18 Accountability Meeting',
+		date: 'Friday, October 20th',
+		time: '2:00pm',
+		link: '#link3',
+		isLive: false,
+	},
+	{
+		title: 'Week 19 Accountability Meeting',
+		date: 'Thursday October 26th',
+		time: '3:00 PM',
+		link: '#link4',
+		isLive: false,
+	},
+]
+const date = ref(new Date())
 
-	const attrs = ref([
-		{
-			key: 'today',
-			highlight: {
-				color: 'green',
-				fillMode: 'solid',
-			},
-			dates: new Date(),
+const attrs = ref([
+	{
+		key: 'today',
+		highlight: {
+			color: 'green',
+			fillMode: 'solid',
 		},
-	])
+		dates: new Date(),
+	},
+])
 </script>
 
 <template>
@@ -100,7 +100,7 @@
 				<div class="col-span-1 lg:col-span-3">
 					<div class="mb-4">
 						<h2 class="mb-4 text-lg font-medium text-white">Upcoming events</h2>
-						<VCalendar v-model="date" :attributes="attrs" />
+						<VCalendar v-model="date" :attributes="attrs" isDark="true" />
 					</div>
 
 					<ScheduleMeetingCard />
@@ -110,13 +110,13 @@
 	</section>
 </template>
 <style scoped>
-	.count {
-		display: flex;
-		gap: 10px;
-		align-items: flex-start;
-	}
+.count {
+	display: flex;
+	gap: 10px;
+	align-items: flex-start;
+}
 
-	h3 {
-		margin: 0;
-	}
+h3 {
+	margin: 0;
+}
 </style>
