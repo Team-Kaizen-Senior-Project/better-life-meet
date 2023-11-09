@@ -7,28 +7,16 @@
 	<div class="border border-dashed border-zinc-500 bg-zinc-800 p-4">
 		<h2 class="mb-4 text-lg font-medium text-white">Video Settings</h2>
 		<div class="">
-			<div class="mb-5 aspect-video h-72 w-full rounded bg-gray-800 text-white md:col-span-8">
-				<div class="h-4 w-4"><VideoCameraSlashIcon /></div>
+			<div class="relative mb-5 aspect-video h-72 w-full rounded bg-gray-800 text-white md:col-span-8">
+				<div class="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 transform">
+					<VideoCameraSlashIcon />
+				</div>
 			</div>
-			<div class="grid gap-2">
-				<div class="grid gap-2 self-start">
-					<label class="text-white">Mic level</label>
-					<div class="flex items-center gap-2">
-						<Button type="primary" class="w-fit"><div>test mic</div></Button>
-						<div class="flex items-center gap-1">
-							<div v-for="i in 55" :key="`level-bar-${i}`" class="h-4 w-1 rounded-sm bg-neutral-500"></div>
-						</div>
-					</div>
-				</div>
-
-				<div class="grid max-w-sm gap-2 self-start">
-					<label class="whitespace-nowrap text-white">Mic volume</label>
-					<input type="range" min="0" max="100" class="hover:cursor-pointer" />
-				</div>
+			<div class="">
+				<MicControls />
 			</div>
 		</div>
-		<div class="justify-left mt-4 flex space-x-2">
-			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+		<div class="mt-4 flex gap-2">
 			<Button type="primary">
 				<div class="h-4 w-4">
 					<Cog6ToothIcon />

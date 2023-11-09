@@ -10,11 +10,10 @@
 	})
 
 	const buttonClasses = computed(() => {
-		const baseClasses =
-			'inline-flex items-center rounded px-2.5 py-1.5 text-xs font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2'
+		const baseClasses = 'inline-flex items-center rounded px-2.5 py-1.5 text-xs font-medium shadow-sm'
 		const typeClasses = {
-			primary: 'bg-neutral-600 text-white hover:bg-neutral-700 focus:ring-neutral-500',
-			secondary: 'bg-green-500 text-white hover:bg-green-600 focus:ring-green-500',
+			primary: 'bg-neutral-600 text-white hover:bg-neutral-700',
+			secondary: 'bg-green-500 text-white hover:bg-green-600',
 			// ... add more button types here
 		}
 
