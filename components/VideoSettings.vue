@@ -14,7 +14,7 @@ const toggleCamera = () => {
 	<div class="border border-dashed border-zinc-500 bg-zinc-800 p-4">
 		<h2 class="mb-4 text-lg font-medium text-white">Video Settings</h2>
 		<div class="relative mb-5 aspect-video h-72 w-full rounded bg-gray-800 text-white md:col-span-8">
-      <div v-if="cameraActive" class="absolute inset-0">
+      <div v-if="cameraActive" class="">
         <VideoPreview :cameraActive="cameraActive" />
       </div>
       <div v-else class="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 transform">

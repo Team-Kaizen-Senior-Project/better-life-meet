@@ -1,6 +1,8 @@
 <template>
-      <video ref="videoElement" autoplay playsinline></video>
-  </template>
+    <div class="h-50">
+        <video ref="videoElement" autoplay playsinline></video>
+    </div>
+</template>
   
   <script setup>
   
@@ -28,7 +30,6 @@
       }
     }
   
-    // Cleanup function to stop the camera when the component is unmounted or the cameraActive prop changes
     onInvalidate(() => {
       if (videoElement.value && videoElement.value.srcObject) {
         const tracks = videoElement.value.srcObject.getTracks()
