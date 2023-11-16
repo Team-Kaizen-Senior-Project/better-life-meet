@@ -30,4 +30,7 @@ export default defineNuxtConfig({
 			autoprefixer: {},
 		},
 	},
+	runtimeConfig: {
+		FAUNA_KEY: process.env.FAUNA_KEY,
+	},
 })
