@@ -27,7 +27,7 @@ export async function fetchAllAttendees() {
 	return data.value?.data // Return the array of attendees
 }
 
-// Creates an attendee using the API
+// Deletes an attendee using the API
 export async function deleteAttendee(id: string) {
 	try {
 		const response = await fetch(`/api/attendee/${id}`, {
