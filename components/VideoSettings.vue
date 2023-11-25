@@ -1,20 +1,27 @@
 <script setup>
-	import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
-	import { VideoCameraSlashIcon } from '@heroicons/vue/24/outline'
+	import { ref } from 'vue'
+	import { Cog6ToothIcon, VideoCameraSlashIcon } from '@heroicons/vue/24/outline'
 	import { MicrophoneIcon } from '@heroicons/vue/24/solid'
+
+	const cameraActive = ref(false)
+
+	const toggleCamera = () => {
+		cameraActive.value = !cameraActive.value
+	}
 </script>
+
 <template>
 	<div class="border border-dashed border-zinc-500 bg-zinc-800 p-4">
 		<h2 class="mb-4 text-lg font-medium text-white">Video Settings</h2>
+		<div class="relative mb-5 aspect-video h-72 w-full rounded bg-gray-800 text-white md:col-span-8">
+			<VideoPreview :cameraActive="cameraActive" v-if="cameraActive" />
+
+			<div v-else class="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 transform">
+				<VideoCameraSlashIcon @click="toggleCamera" />
+			</div>
+		</div>
 		<div class="">
-			<div class="relative mb-5 aspect-video h-72 w-full rounded bg-gray-800 text-white md:col-span-8">
-				<div class="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 transform">
-					<VideoCameraSlashIcon />
-				</div>
-			</div>
-			<div class="">
-				<MicControls />
-			</div>
+			<MicControls />
 		</div>
 		<div class="mt-4 flex gap-2">
 			<Button type="primary">
@@ -22,7 +29,7 @@
 					<Cog6ToothIcon />
 				</div>
 			</Button>
-			<Button type="primary" disabled>
+			<Button type="primary" @click="toggleCamera">
 				<div class="h-4 w-4"><VideoCameraSlashIcon /></div>
 			</Button>
 			<Button type="primary">
