@@ -1,26 +1,25 @@
 <script setup>
-import { ref } from 'vue'
-import { Cog6ToothIcon, VideoCameraSlashIcon } from '@heroicons/vue/24/outline'
-import { MicrophoneIcon } from '@heroicons/vue/24/solid'
+	import { ref } from 'vue'
+	import { Cog6ToothIcon, VideoCameraSlashIcon } from '@heroicons/vue/24/outline'
+	import { MicrophoneIcon } from '@heroicons/vue/24/solid'
 
-const cameraActive = ref(false)
+	const cameraActive = ref(false)
 
-const toggleCamera = () => {
-  cameraActive.value = !cameraActive.value
-}
+	const toggleCamera = () => {
+		cameraActive.value = !cameraActive.value
+	}
 </script>
 
 <template>
 	<div class="border border-dashed border-zinc-500 bg-zinc-800 p-4">
 		<h2 class="mb-4 text-lg font-medium text-white">Video Settings</h2>
 		<div class="relative mb-5 aspect-video h-72 w-full rounded bg-gray-800 text-white md:col-span-8">
-      <div v-if="cameraActive" class="">
-        <VideoPreview :cameraActive="cameraActive" />
-      </div>
-      <div v-else class="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 transform">
-        <VideoCameraSlashIcon @click="toggleCamera" />
-      </div>
-    </div>
+			<VideoPreview :cameraActive="cameraActive" v-if="cameraActive" />
+
+			<div v-else class="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 transform">
+				<VideoCameraSlashIcon @click="toggleCamera" />
+			</div>
+		</div>
 		<div class="">
 			<MicControls />
 		</div>
@@ -39,7 +38,6 @@ const toggleCamera = () => {
 		</div>
 	</div>
 </template>
-
 
 <style scoped>
 	.slider-vertical {
