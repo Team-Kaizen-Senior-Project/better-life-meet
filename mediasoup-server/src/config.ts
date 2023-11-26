@@ -1,31 +1,76 @@
-const os = require('os')
-const ifaces = os.networkInterfaces()
+import os from 'os'
 
-const getLocalIp = () => {
-  let localIp = '127.0.0.1'
-  Object.keys(ifaces).forEach((ifname) => {
-    for (const iface of ifaces[ifname]) {
-      // Ignore IPv6 and 127.0.0.1
-      if (iface.family !== 'IPv4' || iface.internal !== false) {
-        continue
-      }
-      // Set the local ip to the first IPv4 address found and exit the loop
-      localIp = iface.address
-      return
+type MediaKind = 'audio' | 'video'
+
+// configuration for workers,=
+interface MediasoupWorkerConfig {
+    rtcMinPort: number
+    rtcMaxPort: number
+    logLevel: string
+    logTags: string[]
+}
+
+// configuration for WebRTC transport
+interface MediasoupWebRtcTransportConfig {
+    listenIps: {
+        ip: string
+        announcedIp?: string
+    }[];
+    maxIncomingBitrate: number
+    initialAvailableOutgoingBitrate: number
+}
+
+// confirguration for router
+interface MediasoupRouterConfig {
+    mediaCodecs: {
+        kind: MediaKind
+        mimeType: string
+        clockRate: number
+        channels?: number
+        parameters?: {
+            [key: string]: number | string
+        }
+    }[]
+}
+
+// configuration structure for mediasoup
+interface MediasoupConfig {
+    listenIp: string
+    listenPort: number
+    sslCrt: string
+    sslKey: string
+    mediasoup: {
+        numWorkers: number
+        worker: MediasoupWorkerConfig
+        router: MediasoupRouterConfig
+        webRtcTransport: MediasoupWebRtcTransportConfig
     }
-  })
+}
+
+// retreive local IP address
+const getLocalIp = (): string => {
+  let localIp = '127.0.0.1'
+  const ifaces = os.networkInterfaces()
+  
+  for (const ifname of Object.keys(ifaces)) {
+    for (const iface of ifaces[ifname]!) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        localIp = iface.address
+        break
+      }
+    }
+  }
   return localIp
 }
 
-module.exports = {
+// define actual config object using interfaces defined above
+const config: MediasoupConfig = {
   listenIp: '0.0.0.0',
   listenPort: 3016,
   sslCrt: '../ssl/cert.pem',
   sslKey: '../ssl/key.pem',
-
   mediasoup: {
-    // Worker settings
-    numWorkers: Object.keys(os.cpus()).length,
+    numWorkers: os.cpus().length,
     worker: {
       rtcMinPort: 10000,
       rtcMaxPort: 10100,
@@ -36,43 +81,43 @@ module.exports = {
         'dtls',
         'rtp',
         'srtp',
-        'rtcp'
+        'rtcp',
         // 'rtx',
         // 'bwe',
         // 'score',
         // 'simulcast',
         // 'svc'
-      ]
+      ],
     },
-    // Router settings
     router: {
       mediaCodecs: [
         {
-          kind: 'audio',
-          mimeType: 'audio/opus',
-          clockRate: 48000,
-          channels: 2
-        },
-        {
-          kind: 'video',
-          mimeType: 'video/VP8',
-          clockRate: 90000,
-          parameters: {
-            'x-google-start-bitrate': 1000
+            kind: 'audio',
+            mimeType: 'audio/opus',
+            clockRate: 48000,
+            channels: 2
+          },
+          {
+            kind: 'video',
+            mimeType: 'video/VP8',
+            clockRate: 90000,
+            parameters: {
+              'x-google-start-bitrate': 1000
+            }
           }
-        }
-      ]
+      ],
     },
-    // WebRtcTransport settings
     webRtcTransport: {
       listenIps: [
         {
           ip: '0.0.0.0',
-          announcedIp: getLocalIp() // replace by public IP address
-        }
+          announcedIp: getLocalIp(),
+        },
       ],
       maxIncomingBitrate: 1500000,
-      initialAvailableOutgoingBitrate: 1000000
-    }
-  }
+      initialAvailableOutgoingBitrate: 1000000,
+    },
+  },
 }
+
+export default config

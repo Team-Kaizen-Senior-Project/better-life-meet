@@ -3,10 +3,10 @@ import type { Request, Response } from 'express'
 import { Server as SocketIOServer } from 'socket.io'
 import * as mediasoup from 'mediasoup'
 import http from 'http'
-import { types as mediasoupTypes } from "mediasoup";
+import { types as mediasoupTypes } from 'mediasoup'
 
 const Room = require('./Room')
-const config = require('./config')
+import config from './config'
 const app = express()
 const port = process.env.PORT || 3000
 const httpServer = http.createServer(app)
