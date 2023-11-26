@@ -11,7 +11,7 @@
 </script>
 
 <template>
-	<div class="border border-dashed border-zinc-500 bg-zinc-800 p-4">
+	<div class="self-start rounded-lg bg-zinc-900 p-4">
 		<h2 class="mb-4 text-lg font-medium text-white">Video Settings</h2>
 		<div class="relative mb-5 aspect-video h-72 w-full rounded bg-gray-800 text-white md:col-span-8">
 			<VideoPreview :cameraActive="cameraActive" v-if="cameraActive" />
