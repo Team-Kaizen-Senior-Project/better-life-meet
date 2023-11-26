@@ -18,15 +18,12 @@ export default defineEventHandler(async (event) => {
 	// Read in request body (use type assertion to validate body)
 	const body = (await readBody(event)) as Body
 
-	// Store customerRef IDs
+	// Store customer IDs
 	const members: string[] = body.members
-
-	// Initialize array to store the created attendeeRefs
-	let customers = []
 
 	// Create new meeting record and assign attendees
 	try {
-		// Store meeting info into seperate object
+		// Store pod info into seperate object
 		const Pod = {
 			name: body.name,
 			meetingTime: body.meetingTime,
@@ -38,11 +35,11 @@ export default defineEventHandler(async (event) => {
 		// Retrieve pod Id from query (used to update pod object with customer info)
 		const podId = podDoc.data?.id
 
-		// Query to update meeting to include attendee info
+		// Query to update pod to include leader and member customerRefs
 		const updateQuery = fql`Pod.byId(${podId})!.update({leader: Customer.byId(${body.leader}), members: ${members}.map(Customer.byId), meetings: []})`
 		const updatedDoc = await client.query(updateQuery)
 
-		// Return the updated document (meeting + attendies)
+		// Return the updated document
 		return updatedDoc
 
 		// Catch error
