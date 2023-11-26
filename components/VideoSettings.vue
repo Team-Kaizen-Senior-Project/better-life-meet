@@ -13,7 +13,7 @@
 				</div>
 			</div>
 			<div class="">
-				<MicControls />
+				<MicControls box-length="55" />
 			</div>
 		</div>
 		<div class="mt-4 flex gap-2">
