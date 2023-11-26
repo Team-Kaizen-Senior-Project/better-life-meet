@@ -1,4 +1,7 @@
 <script setup>
+	const props = defineProps({
+		boxLength: Number,
+	})
 	const micLevel = ref(0)
 	const isTestingMic = ref(false)
 	let audioContext
@@ -6,7 +9,6 @@
 	let intervalId
 
 	const MAX_LEVEL = 100 // Max level of micLevel
-	const BOXES = 55 // Total number of boxes
 
 	async function startMicTest() {
 		try {
@@ -66,7 +68,7 @@
 
 	const filledBoxes = computed(() => {
 		let level = smoothLevel(micLevel.value) / Math.sqrt(MAX_LEVEL)
-		return Math.ceil(level * BOXES)
+		return Math.ceil(level * props.boxLength)
 	})
 </script>
 
@@ -81,7 +83,7 @@
 				</Button>
 				<div class="flex items-center gap-1">
 					<div
-						v-for="i in 55"
+						v-for="i in Number.parseInt(props.boxLength)"
 						:key="`level-bar-${i}`"
 						:class="[i <= filledBoxes ? 'bg-green-500' : 'bg-neutral-500', 'h-4 w-1 rounded-sm']"
 					></div>

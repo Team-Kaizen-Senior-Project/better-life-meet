@@ -3,6 +3,7 @@
 	import { Cog6ToothIcon, VideoCameraSlashIcon, VideoCameraIcon } from '@heroicons/vue/24/outline'
 	import { MicrophoneIcon } from '@heroicons/vue/24/solid'
 
+	defineProps(['title', 'description', 'boxLength'])
 	const cameraActive = ref(false)
 
 	const toggleCamera = () => {
@@ -12,8 +13,11 @@
 
 <template>
 	<div class="self-start rounded-lg bg-zinc-900 p-4">
-		<h2 class="mb-4 text-lg font-medium text-white">Video Settings</h2>
-		<div class="relative mb-5 aspect-video h-72 w-full rounded bg-gray-800 text-white md:col-span-8">
+		<h2 class="text-lg font-medium text-white">{{ title }}</h2>
+		<p v-if="description" class="text-sm text-zinc-300">
+			This is your chance to make sure your camera is setup and your microphone is working
+		</p>
+		<div class="relative mb-5 mt-4 aspect-video h-72 w-full rounded bg-gray-800 text-white md:col-span-8">
 			<VideoPreview :cameraActive="cameraActive" v-if="cameraActive" />
 
 			<div v-else class="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 transform">
@@ -21,7 +25,7 @@
 			</div>
 		</div>
 		<div class="">
-			<MicControls />
+			<MicControls :box-length="boxLength" />
 		</div>
 		<div class="mt-4 flex gap-2">
 			<Button type="primary">
