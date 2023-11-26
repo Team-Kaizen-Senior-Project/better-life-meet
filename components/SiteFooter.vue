@@ -3,7 +3,7 @@
 </script>
 
 <template>
-	<footer class="site-footer bg-black text-white">
+	<footer class="site-footer bg-black py-10 text-white">
 		<inner-column>
 			<NuxtLink href="/">Home</NuxtLink>
 

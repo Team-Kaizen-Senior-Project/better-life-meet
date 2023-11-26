@@ -3,7 +3,7 @@
 	import { VideoCameraSlashIcon } from '@heroicons/vue/24/outline'
 	import { VideoCameraIcon } from '@heroicons/vue/24/outline'
 	import { MicrophoneIcon } from '@heroicons/vue/24/solid'
-	import { ref } from 'vue'
+	const video = useVideoStore()
 
 	const modalIsOpen = ref(false)
 	const isCameraOn = ref(false)
@@ -11,7 +11,7 @@
 
 	const customModal = ref({
 		overlay: {
-			background: 'bg-zinc-900/90 dark:bg-gray-800/75',
+			background: 'bg-zinc-900/90',
 		},
 	})
 
@@ -68,14 +68,14 @@
 			false,
 		)
 	}
-	onMounted(() => {
-		// Setting this to true in the ref initially breaks the close modal
-		modalIsOpen.value = true
-	})
+	// onMounted(() => {
+	// 	// Setting this to true in the ref initially breaks the close modal
+	// 	video.modalOpen = true
+	// })
 </script>
 <template>
-	<UModal v-model="modalIsOpen" class="w-[90vw] max-w-[400px]" :ui="customModal">
-		<div class="rounded bg-zinc-800 p-4 shadow-lg">
+	<UModal v-model="video.modalOpen" class="max-w-[400px]" :ui="customModal">
+		<!-- <div class="rounded bg-zinc-800 p-4 shadow-lg">
 			<div class="mb-2">
 				<p class="text-lg font-semibold text-white">Pod accountability meeting is starting</p>
 				<p class="text-gray-200">
@@ -106,6 +106,21 @@
 					</button>
 				</div>
 			</div>
-		</div>
+		</div> -->
+		<VideoSettings
+			title="Pod accountability meeting is starting"
+			description="This is your chance to make sure your camera is setup and your microphone is working"
+			:boxLength="50"
+		>
+			<template #join>
+				<Button
+					type="button"
+					@click="video.joinMeeting"
+					class="rounded-md bg-sky-500 font-medium text-white hover:bg-sky-600"
+				>
+					Join
+				</Button>
+			</template>
+		</VideoSettings>
 	</UModal>
 </template>
