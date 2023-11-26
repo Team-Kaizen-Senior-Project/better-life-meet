@@ -1,32 +1,28 @@
 import { AbortError, ServiceError, fql } from 'fauna'
 
-// Endpoint for retrieving all meetings
+// endpoint for retreiving all pods
 export default defineEventHandler(async (event) => {
-	// Initialize Fauna client
-	const { id } = event.context.params as { id: string }
 	const { cursor, count }: { cursor: string | undefined; count: string | undefined } = getQuery(event)
 
-	// Intitialize Fauna client
+	// Initialize Fauna client
 	const { client, error } = useFauna()
 	if (error !== null) return error
 
 	try {
-		// Perform READ query
-		let query = fql`{Meeting.all(){id, data}}`
+		let query = fql`{Pod.all(){id, PodInfo: .data}}.paginate()`
 
 		if (cursor !== undefined && count !== undefined) {
 			query = fql`Set.paginate(${cursor}, ${Number(count)})`
 		} else if (cursor !== undefined) {
 			query = fql`Set.paginate(${cursor})`
 		} else if (count !== undefined) {
-			query = fql`{Meeting.all(){id, data}}.paginate(${Number(count)})`
+			query = fql`{Pod.all(){id, PodInfo: .data}}.paginate(${Number(count)})`
 		}
 
 		const response = await client.query(query)
 
-		// Return query response
 		return response
-	} catch (error) {
+	} catch (error: unknown) {
 		if (error instanceof AbortError) {
 			const abortError = error as AbortError
 			const abort = abortError.abort! as { message: string }
