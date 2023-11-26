@@ -5,15 +5,19 @@ import * as mediasoup from 'mediasoup'
 import http from 'http'
 import { types as mediasoupTypes } from "mediasoup";
 
-
+const Room = require('./Room')
+const config = require('./config')
 const app = express()
 const port = process.env.PORT || 3000
 const httpServer = http.createServer(app)
 const io = new SocketIOServer(httpServer)
+const mediaCodecs = config.mediasoup.router.mediaCodecs
 
 let worker: mediasoupTypes.Worker
 let router: mediasoupTypes.Router
 let transport: mediasoupTypes.WebRtcTransport
+
+let roomList = new Map()
 
 
 async function startMediaSoup() {
@@ -23,22 +27,7 @@ async function startMediaSoup() {
 		})
 		// router with RTP capabilities
 		router = await worker.createRouter({
-			mediaCodecs: [
-				{
-					kind: 'audio',
-					mimeType: 'audio/opus',
-					clockRate: 48000,
-					channels: 2,
-				},
-				{
-					kind: 'video',
-					mimeType: 'video/VP8',
-					clockRate: 90000,
-					parameters: {
-						'x-google-start-bitrate': 1000,
-					},
-				},
-			],
+			mediaCodecs: mediaCodecs,
 		})
 		// create transport
 		transport = await router.createWebRtcTransport({
@@ -64,4 +53,24 @@ app.get('/', (req: Request, res: Response) => {
 
 app.listen(port, () => {
 	console.log(`Server running at http://localhost:${port}`)
+})
+
+function getMediasoupWorker() {
+	if (worker) {
+		return worker
+	}
+	else console.error('Mediasoup worker not initialized')
+  }
+
+io.on('connection', (socket) => {
+	socket.on('createRoom', async ({ room_id }, callback) => {
+	  if (roomList.has(room_id)) {
+		callback('already exists')
+	  } else {
+		console.log('Created room', { room_id: room_id })
+		let worker = await getMediasoupWorker()
+		roomList.set(room_id, new Room(room_id, worker, io))
+		callback(room_id)
+	  }
+	})
 })
