@@ -8,7 +8,7 @@
 			title: 'Week 16 Accountability Meeting',
 			date: 'Wednesday October 4th',
 			time: '4:00pm',
-			link: '#link1',
+			link: '/meeting',
 			isLive: true,
 		},
 	]
@@ -43,15 +43,17 @@
 
 				<!-- column 2 -->
 				<div class="col-span-1 grid gap-4 md:col-span-6">
-					<VideoSettings />
+					<VideoSettings title="Video settings" boxLength="55" />
 				</div>
 				<!-- column 3 -->
 				<div class="col-span-1 grid gap-4 self-start lg:col-span-3">
 					<div class="rounded-lg bg-zinc-900 p-4">
 						<h2 class="mb-4 text-lg font-medium text-white">Upcoming events</h2>
-						<div class="my-calendar">
-							<VCalendar v-model="date" :attributes="attrs" class="" isDark />
-						</div>
+						<ClientOnly>
+							<div class="my-calendar">
+								<VCalendar v-model="date" :attributes="attrs" class="" isDark />
+							</div>
+						</ClientOnly>
 						<div class="mt-4">
 							<ScheduleMeetingCard />
 						</div>

@@ -3,6 +3,7 @@
 		meeting: Object,
 		isLive: Boolean,
 	})
+	const video = useVideoStore()
 
 	const borderClass = computed(() => (props.isLive ? 'border-emerald-600' : 'border-white'))
 	const buttonClass = computed(() => (props.isLive ? 'bg-sky-500 hover:bg-sky-600' : 'bg-zinc-700'))
@@ -18,13 +19,14 @@
 			</div>
 		</div>
 		<div class="flex w-full items-center justify-between">
-			<a
-				:href="meeting.link"
+			<NuxtLink
+				:to="meeting.link"
 				class="mt-4 flex gap-2 rounded-md px-3 py-2 text-sm font-medium leading-tight text-white shadow"
 				:class="buttonClass"
+				@click="video.joinMeeting"
 			>
 				Join
-			</a>
+			</NuxtLink>
 		</div>
 	</div>
 </template>

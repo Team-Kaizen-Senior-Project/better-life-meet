@@ -4,48 +4,55 @@
 	import { MicrophoneIcon } from '@heroicons/vue/24/solid'
 
 	defineProps(['title', 'description', 'boxLength'])
-	const cameraActive = ref(false)
 
-	const toggleCamera = () => {
-		cameraActive.value = !cameraActive.value
-	}
+	const video = useVideoStore()
 </script>
 
 <template>
 	<div class="self-start rounded-lg bg-zinc-900 p-4">
 		<h2 class="text-lg font-medium text-white">{{ title }}</h2>
-		<p v-if="description" class="text-sm text-zinc-300">
+		<p v-if="description" class="mt-2 text-sm text-zinc-300">
 			This is your chance to make sure your camera is setup and your microphone is working
 		</p>
-		<div class="relative mb-5 mt-4 aspect-video h-72 w-full rounded bg-gray-800 text-white md:col-span-8">
-			<VideoPreview :cameraActive="cameraActive" v-if="cameraActive" />
+		<div class="relative mb-5 mt-4 aspect-video h-72 w-full rounded bg-zinc-950 text-white md:col-span-8">
+			<VideoPreview :cameraActive="video.cameraActive" v-if="video.cameraActive" />
 
 			<div v-else class="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 transform">
-				<VideoCameraSlashIcon @click="toggleCamera" />
+				<VideoCameraSlashIcon @click="video.toggleCamera" />
 			</div>
 		</div>
 		<div class="">
 			<MicControls :box-length="boxLength" />
 		</div>
-		<div class="mt-4 flex gap-2">
-			<Button type="primary">
-				<div class="h-4 w-4">
-					<Cog6ToothIcon />
-				</div>
-			</Button>
-			<Button type="primary" @click="toggleCamera" v-if="!cameraActive" class="relative border border-transparent">
-				<div
-					class="h-4 w-4 after:absolute after:left-1/2 after:top-1/2 after:h-12 after:w-[2px] after:-translate-x-1/2 after:-translate-y-1/2 after:rotate-45 after:rounded-xl after:bg-red-500 after:shadow-2xl"
+		<div class="mt-4 flex justify-between">
+			<div class="flex gap-2">
+				<Button type="primary">
+					<div class="h-4 w-4">
+						<Cog6ToothIcon />
+					</div>
+				</Button>
+				<Button
+					type="primary"
+					@click="video.toggleCamera"
+					v-if="!video.cameraActive"
+					class="relative border border-transparent"
 				>
-					<VideoCameraIcon />
-				</div>
-			</Button>
-			<Button v-else @click="toggleCamera" type="primary" class="border border-green-500">
-				<div class="h-4 w-4"><VideoCameraIcon /></div>
-			</Button>
-			<Button type="primary">
-				<div class="h-4 w-4"><MicrophoneIcon /></div>
-			</Button>
+					<div
+						class="h-4 w-4 after:absolute after:left-1/2 after:top-1/2 after:h-12 after:w-[2px] after:-translate-x-1/2 after:-translate-y-1/2 after:rotate-45 after:rounded-xl after:bg-red-500 after:shadow-2xl"
+					>
+						<VideoCameraIcon />
+					</div>
+				</Button>
+				<Button v-else @click="video.toggleCamera" type="primary" class="border border-green-500">
+					<div class="h-4 w-4"><VideoCameraIcon /></div>
+				</Button>
+				<Button type="primary">
+					<div class="h-4 w-4"><MicrophoneIcon /></div>
+				</Button>
+			</div>
+			<div>
+				<slot name="join"></slot>
+			</div>
 		</div>
 	</div>
 </template>
