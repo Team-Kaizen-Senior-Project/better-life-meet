@@ -3,8 +3,9 @@
 	import { VideoCameraSlashIcon } from '@heroicons/vue/24/outline'
 	import { VideoCameraIcon } from '@heroicons/vue/24/outline'
 	import { MicrophoneIcon } from '@heroicons/vue/24/solid'
-
 	const video = useVideoStore()
+
+	const modalIsOpen = ref(false)
 	const isCameraOn = ref(false)
 	const videoPreview = ref(null)
 
@@ -46,13 +47,11 @@
 		isCameraOn.value = false
 	}
 	function joinMeeting() {
-		console.log('in join meeting')
 		const videoElement = document.getElementById('demo-video-element')
 		modalIsOpen.value = false
 		navigator.mediaDevices
 			.getUserMedia({ video: true, audio: false })
 			.then(function (stream) {
-				console.log(isCameraOn.value)
 				if (isCameraOn.value) {
 					videoElement.srcObject = stream
 					videoElement.play()
