@@ -18,7 +18,7 @@
 	}
 </script>
 <template>
-	<div class="border border-dashed border-zinc-500 p-4">
+	<div class="rounded-lg bg-zinc-900 p-4">
 		<div v-if="editMode">
 			<h1 class="mb-4 text-lg font-medium text-white">Your habits for this week</h1>
 			<ul>
