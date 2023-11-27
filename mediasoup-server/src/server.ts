@@ -58,9 +58,9 @@ function getMediasoupWorker() {
 		return worker
 	}
 	else console.error('Mediasoup worker not initialized')
-  }
+}
 
-  // event listener to handle socket connections
+// event listener to handle socket connections
 io.on('connection', (socket) => {
 	socket.on('createRoom', async ({ room_id }, callback) => {
 		if (roomList.has(room_id)) {
