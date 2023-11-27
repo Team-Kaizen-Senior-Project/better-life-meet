@@ -47,7 +47,7 @@ interface MediasoupConfig {
     }
 }
 
-// retreives local IP address
+// retrieves local IP address
 const getLocalIp = (): string => {
   let localIp = '127.0.0.1'
   const ifaces = os.networkInterfaces()
@@ -64,6 +64,8 @@ const getLocalIp = (): string => {
 }
 
 // defines actual config object using interfaces defined above
+// listen for connections
+// handling SSL
 const config: MediasoupConfig = {
   listenIp: '0.0.0.0',
   listenPort: 3016,
