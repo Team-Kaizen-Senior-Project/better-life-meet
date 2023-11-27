@@ -61,23 +61,23 @@ function getMediasoupWorker() {
   }
 
   // event listener to handle socket connections
-  io.on('connection', (socket) => {
-    socket.on('createRoom', async ({ room_id }, callback) => {
-        if (roomList.has(room_id)) {
-            callback('already exists')
-        } else {
-            console.log('Created room', { room_id: room_id })
+io.on('connection', (socket) => {
+	socket.on('createRoom', async ({ room_id }, callback) => {
+		if (roomList.has(room_id)) {
+			callback('already exists')
+		} else {
+			console.log('Created room', { room_id: room_id })
 
-            let worker = getMediasoupWorker()
-            if (!worker) {
-                console.error('Failed to get Mediasoup worker')
-                callback('Server error')
-                return
-            }
+			let worker = getMediasoupWorker()
+			if (!worker) {
+				console.error('Failed to get Mediasoup worker')
+				callback('Server error')
+				return
+			}
 			
-            roomList.set(room_id, new Room(room_id, worker, io))
-            callback(room_id)
-        }
-    })
+			roomList.set(room_id, new Room(room_id, worker, io))
+			callback(room_id)
+		}
+	})
 })
 // TODO: FINISH ME
