@@ -3,7 +3,6 @@ import { AbortError, ServiceError, fql } from 'fauna'
 // Endpoint for retrieving all meetings
 export default defineEventHandler(async (event) => {
 	// Initialize Fauna client
-	const { id } = event.context.params as { id: string }
 	const { cursor, count }: { cursor: string | undefined; count: string | undefined } = getQuery(event)
 
 	// Intitialize Fauna client

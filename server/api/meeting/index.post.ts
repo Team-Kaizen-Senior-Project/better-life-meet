@@ -1,24 +1,5 @@
 import { AbortError, ServiceError, fql } from 'fauna'
 
-// Body interface (read from POST request)
-interface Body {
-	meetingId: string
-	startTime: string
-	endTime: string
-	customerRefs: string[]
-}
-// Attendee interface (defined for reference)
-interface Attendee {
-	customerRef: string | null
-}
-// Meeting interface (defined for reference)
-interface Meeting {
-	meetingId: string
-	startTime: string
-	endTime: string
-	attendeeRefs: Attendee[]
-}
-
 // Endpoint for creating a meeting
 export default defineEventHandler(async (event) => {
 	// Initialize Fauna client

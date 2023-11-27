@@ -1,14 +1,5 @@
 import { AbortError, ServiceError, fql } from 'fauna'
 
-// Body interface (read from POST request)
-interface Body {
-	name: string
-	leader: string
-	meetingTime: string
-	members: string[]
-	meetings: string[]
-}
-
 // Endpoint for creating a pod
 export default defineEventHandler(async (event) => {
 	// Initialize Fauna client

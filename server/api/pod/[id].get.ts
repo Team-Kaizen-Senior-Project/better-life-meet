@@ -5,11 +5,6 @@ export default defineEventHandler(async (event) => {
 	// Get pod ID
 	const { id } = event.context.params as { id: string }
 
-	// Get the query parameters from the event object
-	const idType = event.req.url
-		? new URL(event.req.url, `http://${event.req.headers.host}`).searchParams.get('idType')
-		: 'pod'
-
 	// Initialize Fauna client
 	const { client, error } = useFauna()
 	if (error !== null) return error
