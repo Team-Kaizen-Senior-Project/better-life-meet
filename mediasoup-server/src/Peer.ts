@@ -1,6 +1,5 @@
 // Managing the state and interactions of each participant in real time communication setup
 import { types as mediasoupTypes } from 'mediasoup'
-import { Params } from 'mediasoup/node/lib/fbs/rtp-stream'
 
 // Peer represents each participant in a room
 class Peer {
