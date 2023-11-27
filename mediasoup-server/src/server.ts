@@ -4,9 +4,9 @@ import { Server as SocketIOServer } from 'socket.io'
 import * as mediasoup from 'mediasoup'
 import http from 'http'
 import { types as mediasoupTypes } from 'mediasoup'
-
-const Room = require('./Room')
+import Room from './Room'
 import config from './config'
+
 const app = express()
 const port = process.env.PORT || 3000
 const httpServer = http.createServer(app)
@@ -16,7 +16,6 @@ const mediaCodecs = config.mediasoup.router.mediaCodecs
 let worker: mediasoupTypes.Worker
 let router: mediasoupTypes.Router
 let transport: mediasoupTypes.WebRtcTransport
-
 let roomList = new Map()
 
 async function startMediaSoup() {
@@ -61,16 +60,26 @@ function getMediasoupWorker() {
 	else console.error('Mediasoup worker not initialized')
   }
 
-io.on('connection', (socket) => {
-	socket.on('createRoom', async ({ room_id }, callback) => {
-	  if (roomList.has(room_id)) {
-		callback('already exists')
-	  } else {
-		console.log('Created room', { room_id: room_id })
-		let worker = await getMediasoupWorker()
-		roomList.set(room_id, new Room(room_id, worker, io))
-		callback(room_id)
-	  }
-	})
+  // event listener to handle socket connections
+  io.on('connection', (socket) => {
+    socket.on('createRoom', async ({ room_id }, callback) => {
+        if (roomList.has(room_id)) {
+            callback('already exists')
+        } else {
+            console.log('Created room', { room_id: room_id })
+
+			// ensure we have a worker
+            let worker = getMediasoupWorker()
+            if (!worker) {
+                console.error('Failed to get Mediasoup worker')
+                callback('Server error')
+                return
+            }
+			
+			// if worker is available, create a room
+            roomList.set(room_id, new Room(room_id, worker, io))
+            callback(room_id)
+        }
+    })
 })
 // TODO: FINISH ME
