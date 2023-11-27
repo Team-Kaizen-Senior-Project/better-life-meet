@@ -2,7 +2,7 @@ import os from 'os'
 
 type MediaKind = 'audio' | 'video'
 
-// configuration for workers,=
+// configuration for workers
 interface MediasoupWorkerConfig {
     rtcMinPort: number
     rtcMaxPort: number
@@ -47,7 +47,7 @@ interface MediasoupConfig {
     }
 }
 
-// retreive local IP address
+// retreives local IP address
 const getLocalIp = (): string => {
   let localIp = '127.0.0.1'
   const ifaces = os.networkInterfaces()
@@ -63,7 +63,7 @@ const getLocalIp = (): string => {
   return localIp
 }
 
-// define actual config object using interfaces defined above
+// defines actual config object using interfaces defined above
 const config: MediasoupConfig = {
   listenIp: '0.0.0.0',
   listenPort: 3016,

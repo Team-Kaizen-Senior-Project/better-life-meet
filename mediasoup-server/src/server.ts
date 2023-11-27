@@ -19,7 +19,6 @@ let transport: mediasoupTypes.WebRtcTransport
 
 let roomList = new Map()
 
-
 async function startMediaSoup() {
 	try {
 		worker = await mediasoup.createWorker({
@@ -74,3 +73,4 @@ io.on('connection', (socket) => {
 	  }
 	})
 })
+// TODO: FINISH ME

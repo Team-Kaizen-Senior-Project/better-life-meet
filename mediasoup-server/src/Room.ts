@@ -1,10 +1,7 @@
-const config = require('./config')
+import config from './config'
 import { types as mediasoupTypes } from "mediasoup"
 import { Server as SocketIOServer } from 'socket.io'
-
-type Peer = any // TODO: FINISH ME
-transport: mediasoupTypes.WebRtcTransport
-router: mediasoupTypes.Router
+import Peer from './Peer'
 
 interface Producer {
     id: string
@@ -12,7 +9,7 @@ interface Producer {
 
 class Room {
     id: string
-    router: mediasoupTypes.Router | undefined;
+    router: mediasoupTypes.Router | undefined
     io: SocketIOServer
     peers: Map<string, Peer>
   
@@ -27,21 +24,21 @@ class Room {
       const mediaCodecs = config.mediasoup.router.mediaCodecs
   
       try {
-        const router = await worker.createRouter({ mediaCodecs });
+        const router = await worker.createRouter({ mediaCodecs })
         this.router = router
       } catch (error) {
         console.error('Error creating router:', error)
       }
     }
 
-    // Add peer
+    // add peer
     addPeer(peer: Peer) {
         this.peers.set(peer.id, peer)
     }
 
     // Get producer list for peer
     getProducerListForPeer(): Array<{ producer_id: string }> {
-        let producerList: Array<{ producer_id: string }> = [];
+        let producerList: Array<{ producer_id: string }> = []
         this.peers.forEach(peer => {
             peer.producers.forEach((producer: Producer) => {
                 producerList.push({ producer_id: producer.id })
@@ -63,25 +60,31 @@ class Room {
     async connectPeerTransport(socket_id: string, peerId: string, transport: mediasoupTypes.WebRtcTransport, 
         dtlsParameters: mediasoupTypes.DtlsParameters) {
         if (!this.router) {
-            console.error('Router is not initialized yet, cannot connect peer transport');
+            console.error('Router is not initialized yet, cannot connect peer transport')
             return
         }
-        if (!this.peers.has(socket_id)) {
-            console.error(`Peer with id ${socket_id} not found`)
-            return
+        const peer = this.peers.get(socket_id)
+        if (!peer) {
+            console.error('Peer not found')
+            throw new Error('Peer not found')
         }
-        await this.peers.get(socket_id).connectTransport(transport, dtlsParameters)
+        await peer.connectTransport(transport.id, dtlsParameters)
     }
 
     // Create producer for specific peer in the room
-    async produce(socket_id: string, producerTransportId: string, rtpParameters: mediasoupTypes.RtpParameters, kind: string): Promise<any> {
+    async produce(socket_id: string, producerTransportId: string, rtpParameters: mediasoupTypes.RtpParameters, kind: mediasoupTypes.MediaKind): Promise<any> {
         if (!this.router) {
             console.error('Router is not initialized yet, cannot make producer')
             throw new Error('Router is not initialized')
         }
-        let producer = await this.peers.get(socket_id).produce(producerTransportId, rtpParameters, kind)
+        const peer = this.peers.get(socket_id)
+        if (!peer) {
+            console.error('Peer not found')
+            throw new Error('Peer not found')
+        }
+        let producer = await peer.createProducer(producerTransportId, rtpParameters, kind)
         
-        // Broadcasting new producer to other peers
+        // broadcasting new producer to other peers in the room
         this.broadCast(socket_id, 'newProducers', [{
             producer_id: producer.id,
             producer_socket_id: socket_id
@@ -99,8 +102,13 @@ class Room {
             console.error('Cannot consume: router not initialized or cannot consume')
             throw new Error('Cannot consume')
         }
+        const peer = this.peers.get(socket_id)
+        if (!peer) {
+            console.error('Peer not found')
+            throw new Error('Peer not found')
+        }
 
-        let { consumer, params } = await this.peers.get(socket_id).createConsumer(consumer_transport_id, producer_id, rtpCapabilities)
+        let { consumer, params } = await peer.createConsumer(consumer_transport_id, producer_id, rtpCapabilities)
 
         consumer.on('producerclose', () => {
             console.log('Consumer closed due to producerclose event', {
@@ -128,7 +136,7 @@ class Room {
         this.io.to(socket_id).emit(name, data)
     }
 
-    // get all peers in the room
+    // utility for getting all peers in the room
     getPeers(): Map<string, Peer> {
         return this.peers
     }
