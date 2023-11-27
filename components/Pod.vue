@@ -1,28 +1,36 @@
+<script setup>
+	defineProps(['podNumber', 'joinText'])
+</script>
 <template>
-<div class="w-[304px] h-[338px] pl-[11px] pr-3 pt-5 pb-3 bg-white rounded-lg border border-neutral-300 flex-col justify-end items-center gap-8 inline-flex">
-    <div class="w-[234px] h-[234px] relative">
-        <div class="w-[108px] h-[50px] left-[63px] top-[184px] absolute justify-start items-start gap-2 inline-flex">
-            <div class="w-[50px] h-[50px] bg-slate-50 rounded-lg border border-neutral-400" />
-            <div class="w-[50px] h-[50px] bg-slate-50 rounded-lg border border-neutral-400" />
-        </div>
-        <div class="w-[108px] h-[50px] left-[63px] top-0 absolute justify-start items-start gap-2 inline-flex">
-            <img class="w-[50px] h-[50px] rounded-lg border border-neutral-400"  />
-            <div class="w-[50px] h-[50px] bg-slate-50 rounded-lg border border-neutral-400" />
-        </div>
-        <div class="w-[50px] h-[108px] left-0 top-[63px] absolute flex-col justify-start items-start gap-2 inline-flex">
-            <div class="w-[50px] h-[50px] bg-slate-50 rounded-lg border border-neutral-400" />
-            <div class="w-[50px] h-[50px] bg-slate-50 rounded-lg border border-neutral-400" />
-        </div>
-        <div class="w-[50px] h-[108px] left-[184px] top-[63px] absolute flex-col justify-start items-start gap-2 inline-flex">
-            <div class="w-[50px] h-[50px] bg-slate-50 rounded-lg border border-neutral-400" />
-            <div class="w-[50px] h-[50px] bg-slate-50 rounded-lg border border-neutral-400" />
-        </div>
-        <div class="w-[150px] h-[150px] left-[42px] top-[42px] absolute">
-            <div class="w-[150px] h-[150px] left-0 top-0 absolute bg-black rounded-lg shadow" />
-        </div>
-    </div>
-    <div class="cursor-pointer w-[281px] h-10 px-4 py-2 bg-blue-500 hover:bg-blue-700 rounded-md shadow justify-center items-center gap-2 inline-flex">
-        <div class="text-white text-sm font-normal font-['Inter'] leading-tight">Join pod meeting</div>
-    </div>
-</div>
+	<div class="inline-flex flex-col items-center gap-5 self-start rounded-lg bg-zinc-900 p-5">
+		<div class="relative h-[234px] w-[234px]">
+			<div class="absolute left-[63px] top-[184px] inline-flex h-[50px] w-[108px] items-start justify-start gap-2">
+				<div class="h-[50px] w-[50px] rounded-lg border border-zinc-700 bg-zinc-800" />
+				<div class="h-[50px] w-[50px] rounded-lg border border-zinc-700 bg-zinc-800" />
+			</div>
+			<div class="absolute left-[63px] top-0 inline-flex h-[50px] w-[108px] items-start justify-start gap-2">
+				<div class="h-[50px] w-[50px] rounded-lg border border-zinc-700 bg-zinc-800" />
+				<div class="h-[50px] w-[50px] rounded-lg border border-zinc-700 bg-zinc-800" />
+			</div>
+			<div class="absolute left-0 top-[63px] inline-flex h-[108px] w-[50px] flex-col items-start justify-start gap-2">
+				<div class="h-[50px] w-[50px] rounded-lg border border-zinc-700 bg-zinc-800" />
+				<div class="h-[50px] w-[50px] rounded-lg border border-zinc-700 bg-zinc-800" />
+			</div>
+			<div
+				class="absolute left-[184px] top-[63px] inline-flex h-[108px] w-[50px] flex-col items-start justify-start gap-2"
+			>
+				<div class="h-[50px] w-[50px] rounded-lg border border-zinc-700 bg-zinc-800" />
+				<div class="h-[50px] w-[50px] rounded-lg border border-zinc-700 bg-zinc-800" />
+			</div>
+			<div class="absolute left-[42px] top-[42px] h-[150px] w-[150px]">
+				<div
+					class="absolute left-0 top-0 h-[150px] w-[150px] rounded-lg border border-zinc-700 bg-zinc-800 shadow-xl"
+				></div>
+				<div class="absolute inset-0 flex flex-col items-center justify-center gap-4">
+					<div class="text-center text-base font-medium leading-snug text-white">{{ podNumber }}</div>
+					<Button v-if="joinText" type="primary" class="bg-sky-500 hover:bg-sky-600">Join</Button>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
