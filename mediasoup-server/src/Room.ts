@@ -31,12 +31,10 @@ class Room {
       }
     }
 
-    // add peer
     addPeer(peer: Peer) {
         this.peers.set(peer.id, peer)
     }
 
-    // Get producer list for peer
     getProducerListForPeer(): Array<{ producer_id: string }> {
         let producerList: Array<{ producer_id: string }> = []
         this.peers.forEach(peer => {
@@ -47,7 +45,6 @@ class Room {
         return producerList
     }
 
-    // get RTP capabilities
     getRtpCapabilities() {
         if (!this.router) {
             console.error('Router is not initialized yet')
@@ -56,7 +53,6 @@ class Room {
         return this.router.rtpCapabilities
     }
 
-    // Connect peer transport
     async connectPeerTransport(socket_id: string, peerId: string, transport: mediasoupTypes.WebRtcTransport, 
         dtlsParameters: mediasoupTypes.DtlsParameters) {
         if (!this.router) {
@@ -71,7 +67,7 @@ class Room {
         await peer.connectTransport(transport.id, dtlsParameters)
     }
 
-    // Create producer for specific peer in the room
+    // allow a peer in room to create and send a media stream (producer)
     async produce(socket_id: string, producerTransportId: string, rtpParameters: mediasoupTypes.RtpParameters, kind: mediasoupTypes.MediaKind): Promise<any> {
         if (!this.router) {
             console.error('Router is not initialized yet, cannot make producer')
@@ -131,12 +127,10 @@ class Room {
         }
     } 
     
-    // send a message to a specific peer identified by socket_id
     send(socket_id: string, name: string, data: any): void {
         this.io.to(socket_id).emit(name, data)
     }
 
-    // utility for getting all peers in the room
     getPeers(): Map<string, Peer> {
         return this.peers
     }
