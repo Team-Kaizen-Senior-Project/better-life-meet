@@ -1,30 +1,50 @@
 <script setup>
-	import { computed } from 'vue'
-
+	import { cn } from '../lib/utils'
 	const props = defineProps({
 		type: {
 			type: String,
-			default: 'primary', // Set a default button type if none is provided
+			default: 'primary',
 		},
 		disabled: Boolean,
+		isLink: Boolean,
+		to: {
+			type: String,
+			default: null,
+		},
+		href: {
+			type: String,
+			default: null,
+		},
 	})
+
+	const { type, disabled } = toRefs(props)
+	const attrs = useAttrs()
 
 	const buttonClasses = computed(() => {
 		const baseClasses = 'inline-flex items-center rounded px-2.5 py-1.5 text-xs font-medium shadow-sm'
 		const typeClasses = {
 			primary: 'bg-neutral-600 text-white hover:bg-neutral-700',
 			secondary: 'bg-green-500 text-white hover:bg-green-600',
-			// ... add more button types here
 		}
 
 		const disabledClasses = 'opacity-50 cursor-not-allowed'
-		return `${baseClasses} ${typeClasses[props.type] || ''} ${props.disabled ? disabledClasses : ''}`
+		return cn(baseClasses, typeClasses[type.value] || '', disabled.value ? disabledClasses : '', attrs.class || '')
+	})
+
+	const componentTag = computed(() => (props.isLink ? resolveComponent('NuxtLink') : 'button'))
+	const linkAttribute = computed(() => (props.to ? { to: props.to } : { href: props.href }))
+
+	const combinedAttributes = computed(() => {
+		return {
+			...attrs,
+			...linkAttribute.value,
+			class: buttonClasses.value,
+		}
 	})
 </script>
 
 <template>
-	<button type="button" :class="buttonClasses" :disabled="disabled">
+	<component :is="componentTag" v-bind="combinedAttributes">
 		<slot></slot>
-		<!-- Default slot for button text -->
-	</button>
+	</component>
 </template>
