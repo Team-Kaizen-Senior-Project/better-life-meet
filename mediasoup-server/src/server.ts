@@ -68,7 +68,6 @@ function getMediasoupWorker() {
         } else {
             console.log('Created room', { room_id: room_id })
 
-			// ensure we have a worker
             let worker = getMediasoupWorker()
             if (!worker) {
                 console.error('Failed to get Mediasoup worker')
@@ -76,7 +75,6 @@ function getMediasoupWorker() {
                 return
             }
 			
-			// if worker is available, create a room
             roomList.set(room_id, new Room(room_id, worker, io))
             callback(room_id)
         }

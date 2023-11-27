@@ -98,4 +98,4 @@ class Peer {
     }
 }
 
-export default Peer;
+export default Peer
