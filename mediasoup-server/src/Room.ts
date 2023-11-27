@@ -53,7 +53,7 @@ class Room {
         return this.router.rtpCapabilities
     }
 
-    async connectPeerTransport(socket_id: string, peerId: string, transport: mediasoupTypes.WebRtcTransport, 
+    async connectPeerTransport(socket_id: string, transport: mediasoupTypes.WebRtcTransport, 
         dtlsParameters: mediasoupTypes.DtlsParameters) {
         if (!this.router) {
             console.error('Router is not initialized yet, cannot connect peer transport')
