@@ -1,24 +1,4 @@
-import { fql } from 'fauna'
-
-// Body interface (read from POST request)
-interface Body {
-	meetingId: string
-	startTime: string
-	endTime: string
-	customerRefs: string[]
-}
-
-// Attendee interface (defined for reference)
-interface Attendee {
-	customerRef: string | null
-}
-// Meeting interface (defined for reference)
-interface Meeting {
-	meetingId: string
-	startTime: string
-	endTime: string
-	attendeeRefs: Attendee[]
-}
+import { AbortError, ServiceError, fql } from 'fauna'
 
 // Endpoint for creating a meeting
 export default defineEventHandler(async (event) => {
@@ -69,21 +49,23 @@ export default defineEventHandler(async (event) => {
 		const updatedDoc = await client.query(updateQuery)
 
 		// Return the updated document (meeting + attendies)
-		return updatedDoc.data
+		return updatedDoc
 
 		// Catch error
-	} catch (error) {
-		// Return Bad Request error
-		if (error instanceof TypeError) {
-			return createError({
-				statusCode: 400,
-				statusMessage: `Bad Request`,
+	} catch (error: unknown) {
+		if (error instanceof AbortError) {
+			const abortError = error as AbortError
+			const abort = abortError.abort! as { message: string }
+			throw createError({
+				statusCode: abortError.httpStatus,
+				statusMessage: abort.message,
+			})
+		} else {
+			const serviceError = error as ServiceError
+			throw createError({
+				statusCode: serviceError.httpStatus,
+				statusMessage: serviceError.message,
 			})
 		}
-		// Return Server error for all other errors
-		return createError({
-			statusCode: 500,
-			statusMessage: 'Internal Server Error',
-		})
 	}
 })

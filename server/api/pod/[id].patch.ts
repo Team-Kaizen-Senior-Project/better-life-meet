@@ -1,31 +1,32 @@
 import { AbortError, ServiceError, fql } from 'fauna'
 
-// Endpoint for retrieving all meetings
+// Endpoint for adding new meeting references for a pod
 export default defineEventHandler(async (event) => {
-	// Initialize Fauna client
-	const { cursor, count }: { cursor: string | undefined; count: string | undefined } = getQuery(event)
+	// Get Pod ID
+	const { id } = event.context.params as { id: string }
+	const body = await readBody(event)
 
-	// Intitialize Fauna client
+	// Initialize Fauna client
 	const { client, error } = useFauna()
 	if (error !== null) return error
 
 	try {
-		// Perform READ query
-		let query = fql`{Meeting.all(){id, data}}`
-
-		if (cursor !== undefined && count !== undefined) {
-			query = fql`Set.paginate(${cursor}, ${Number(count)})`
-		} else if (cursor !== undefined) {
-			query = fql`Set.paginate(${cursor})`
-		} else if (count !== undefined) {
-			query = fql`{Meeting.all(){id, data}}.paginate(${Number(count)})`
-		}
-
+		const query = fql`
+        let pod = Pod.byId(${id});
+        if (!pod.exists()) abort({ message: "Pod with this ID does not exist." });
+        
+        let meetingsList = pod!.meetings
+        let updatedList = if (meetingsList != Null){
+            meetingsList.append({Meeting.byId(${body.meetingId})})
+        } else{
+            [Meeting.byId(${body.meetingId})]
+        }
+        pod!.update({meetings: updatedList})
+    `
 		const response = await client.query(query)
 
-		// Return query response
 		return response
-	} catch (error) {
+	} catch (error: unknown) {
 		if (error instanceof AbortError) {
 			const abortError = error as AbortError
 			const abort = abortError.abort! as { message: string }
