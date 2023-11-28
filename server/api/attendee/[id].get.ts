@@ -1,6 +1,6 @@
 import { fql } from 'fauna'
 
-// Endpoint for reading attendee given an Custoemr Id
+// Endpoint for reading attendee given an Customer Id or an Attendee Id
 export default defineEventHandler(async (event) => {
 	// Get ID from the URL params
 	const { id } = event.context.params as { id: string }
