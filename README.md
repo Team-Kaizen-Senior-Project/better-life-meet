@@ -14,6 +14,10 @@ A component-based **web video conferencing application** that integrates with AB
 - **[Node.js](https://nodejs.org/en)** and **[Express](https://expressjs.com/)**: For building a fast, scalable WebRTC server capable of handling concurrent video conferencing sessions.
 - **[MediaSoup](https://mediasoup.org/)**: A versatile WebRTC Selective Forwarding Unit (SFU) for scalable video conferencing.
 
+## ERD
+
+## Prototype
+
 ## Developer Instructions
 **Clone Repo:**
 ```bash
