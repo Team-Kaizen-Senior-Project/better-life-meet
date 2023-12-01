@@ -72,9 +72,19 @@ npm run dev
 (_Placeholder for CSC 191_)
 
 ## Timeline
-| Sprint | Task | Status | Planned Completion | Actual Completion |
-|--------|------|--------|--------------------|-------------------|
-| 1      | Initial Setup and Foundations | Done | need to verify date | need to verify |
-
+| Sprint | Task                                                            | Status  | Date        |
+|--------|-----------------------------------------------------------------|---------|-------------|
+| 1      | Foundational setup of project (repos, database, ERD, etc)       | Done    | 10/09/2023  |
+| 2      | Translation of mockup into actual frontend. Development of backend APIs | Done    | 10/23/2023  |
+| 3      | Refinement of UI and backend APIs (refactor codebases) and initial setup of MediaSoup | Done    | 11/12/2023  |
+| 4      | Meeting room UI, expansion of APIs, Creation of MediaSoup server | Done    | 11/27/2023  |
+| 5      | Integration of MediaSoup Server with Application                | Pending | 02/03/2024 |
+| 6      | POC of podmeeting with Mediasoup                               | Pending | 02/15/2024  |
+| 7      | Web Player                                                      | Pending | 03/02/2024  |
+| 8      | User analytics API design                                       | Pending | 03/17/2024  |
+| 9      | Implementation of API                                          | Pending | 04/05/2024  |
+| 10     | Testing Front-End & Backend/API Compatability on Multiple Devices |  Pending | 04/20/2024  |
+| 11     | Deployment                                                      | Pending | 05/05/2024  |
+| 12     | Additional Features/Finishing Touches                            | Pending | 05/22/2024  |
 
 
