@@ -23,6 +23,15 @@ git clone https://github.com/Team-Kaizen-Senior-Project/better-life-meet.git
 ```bash
 npm install
 ```
+**Install MediaSoup Server Dependencies:**
+```bash
+cd mediasoup-server
+npm install
+```
+**Run MediaSoup Server:**
+```bash
+ts-node server.ts
+```
 **Run Application:**
 ```bash
 npm run dev
