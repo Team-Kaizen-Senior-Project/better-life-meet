@@ -30,17 +30,17 @@ A component-based **web video conferencing application** that integrates with AB
 ## Prototype
 **UI Dashboard:**
 <p align="center">
-  <img src="/user_dashboard.png" width="800"/>
+  <img src="/user_dashboard.png" width="600"/>
 </p>
 
 **Pod Meetings:**
 <p align="center">
-  <img src="/pod_meetings.png" width="800"/>
+  <img src="/pod_meetings.png" width="600"/>
 </p>
 
 **Robust API**
 <p align="center">
-  <img src="/api_postman_example.png" width="800"/>
+  <img src="/api_postman_example.png" width="600"/>
 </p>
 
 ## Developer Instructions
