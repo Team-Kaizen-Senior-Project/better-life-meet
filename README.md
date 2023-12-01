@@ -1,8 +1,12 @@
-![Kaizen](/kaizen.png)
+<p align="center">
+  <img src="/kaizen.png" width="100"/>
+</p>
 # TribeMeet
 A component-based **web video conferencing application** that integrates with ABetterLife's existing software infrastructure and **resolves** compatibility issues, elevates the user experience, and delivers a robust API for detailed user analytics.
 
-![BetterLife](/betterlife_image.png)
+<p align="center">
+  <img src="/betterlife_image.png" width="100"/>
+</p>
 **ABetterLife:** https://abetterlife.com/
 
 ## Technology Stack
