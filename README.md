@@ -30,17 +30,37 @@ A component-based **web video conferencing application** that integrates with AB
 ## Prototype
 **UI Dashboard:**
 <p align="center">
-  <img src="/user_dashboard.png" width="600"/>
-</p>
+  <img src="/user_dashboard.png" width="600"/> <br>
+  <h4>Shown above is the Dashboard, the central page of TribeMeet where logged-in users can:</h4>
+  <ul>
+    <li>Configure video & mic settings (center)</li>
+    <li>Schedule/join a meeting (right column)</li>
+    <li>Assess habits using habit tracker (top left)</li>
+    <li>View goals for the quarter (bottom left)</li>
+  </ul>
+
+</p> <br>
 
 **Pod Meetings:**
 <p align="center">
   <img src="/pod_meetings.png" width="600"/>
-</p>
+  <h4>The core interface of TribeMeet where participants engage in video conferencing:</h4>
+  <ul>
+    <li>View all particpants' cameras in a grid layout</li>
+    <li>Control your video and microphone</li>
+    <li>Exit the meeting with a dedicated leave button</li>
+  </ul>
+</p> <br>
 
 **Robust API**
 <p align="center">
   <img src="/api_postman_example.png" width="600"/>
+  <h4>The robust API of TribeMeet provides extensive control over meeting management and data retrieval. Developers can:</h4>
+  <ul>
+    <li>Schedule meetings with customizable settings</li>
+    <li>Retrieve detailed detailed analytics on participant engagement, including attendance duration, interaction levels, and more.</li>
+    <li>Integrate TribeMeet's functionality into existing workflows or applications for a unified user experience.</li>
+  </ul>
 </p>
 
 ## Developer Instructions
@@ -69,6 +89,9 @@ npm run dev
 ```
 
 ## Testing
+(_Placeholder for CSC 191_)
+
+## Deployment
 (_Placeholder for CSC 191_)
 
 ## Timeline
