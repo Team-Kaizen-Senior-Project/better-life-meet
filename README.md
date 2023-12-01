@@ -70,5 +70,9 @@ npm run dev
 (_Placeholder for CSC 191_)
 
 ## Timeline
-(Jira)
+| Sprint | Task | Status | Planned Completion | Actual Completion |
+|--------|------|--------|--------------------|-------------------|
+| 1      | Initial Setup and Foundations | Done | need to verify date | need to verify |
+
+
 
