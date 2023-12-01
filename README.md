@@ -19,9 +19,13 @@ A component-based **web video conferencing application** that integrates with AB
 ```bash
 git clone https://github.com/Team-Kaizen-Senior-Project/better-life-meet.git
 ```
-**Install Dependencies**
+**Install Dependencies:**
 ```bash
 npm install
+```
+**Run Application:**
+```bash
+npm run dev
 ```
 
 ## Testing
