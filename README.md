@@ -24,7 +24,7 @@ A component-based **web video conferencing application** that integrates with AB
 
 ## ERD
 <p align="center">
-  <img src="/ERD.png" width="800"/>
+  <img src="/ERD.png" width="600"/>
 </p>
 
 ## Prototype
