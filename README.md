@@ -15,6 +15,14 @@ A component-based **web video conferencing application** that integrates with AB
 - **[MediaSoup](https://mediasoup.org/)**: A versatile WebRTC Selective Forwarding Unit (SFU) for scalable video conferencing.
 
 ## Developer Instructions
+**Clone Repo:**
+```bash
+git clone https://github.com/Team-Kaizen-Senior-Project/better-life-meet.git
+```
+**Install Dependencies**
+```bash
+npm install
+```
 
 ## Testing
 (_Placeholder for CSC 191_)
