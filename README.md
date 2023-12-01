@@ -1,5 +1,5 @@
 # TribeMeet
-A component-based \textbf{web video conferencing application} that integrates with ABetterLife's existing software infrastructure and **resolves** compatibility issues, elevates the user experience, and delivers a robust API for detailed user analytics.
+A component-based **web video conferencing application** that integrates with ABetterLife's existing software infrastructure and **resolves** compatibility issues, elevates the user experience, and delivers a robust API for detailed user analytics.
 
 ## Technology Stack
 ### Frontend
