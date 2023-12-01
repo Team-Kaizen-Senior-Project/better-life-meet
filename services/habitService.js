@@ -6,12 +6,9 @@ export const useHabitStore = defineStore('habits', () => {
         { id: 4, text: "Since some habits can be wordy" }
     ]);
 
-    function addHabit(habitText) {
-        if (habitText) {
-            const newId = habits.value.length + 1;
-            habits.value.push({ id: newId, text: habitText });
-            console.log("test")
-        }
+    function addHabit() {
+        const newId = habits.value.length + 1;
+        habits.value.push({ id: newId, text: "Enter New Habit Text" });
     }
 
     function removeHabit(id) {

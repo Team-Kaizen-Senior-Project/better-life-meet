@@ -1,21 +1,22 @@
 <script setup>
-	import { ref } from 'vue'
-	import { PencilSquareIcon } from '@heroicons/vue/24/solid'
-	import { PencilIcon } from '@heroicons/vue/24/solid'
-	import { PlusCircleIcon } from '@heroicons/vue/24/outline'
-	import { XCircleIcon } from '@heroicons/vue/24/outline'
+import { ref } from 'vue'
+import { PencilSquareIcon } from '@heroicons/vue/24/solid'
+import { PencilIcon } from '@heroicons/vue/24/solid'
+import { PlusCircleIcon } from '@heroicons/vue/24/outline'
+import { XCircleIcon } from '@heroicons/vue/24/outline'
 
-	const habits = useHabitStore()
+const habits = useHabitStore()
 
-	let editMode = ref(false)
+let editMode = ref(false)
 
-	function toggleEditMode() {
-		editMode.value = !editMode.value
-	}
-	function handleSave() {
-		toggleEditMode()
-		habits.saveHabits()
-	}
+function toggleEditMode() {
+	editMode.value = !editMode.value
+}
+function handleSave() {
+	toggleEditMode()
+	habits.saveHabits()
+}
+
 </script>
 <template>
 	<div class="rounded-lg bg-zinc-900 p-4">
@@ -24,14 +25,11 @@
 			<ul>
 				<li v-for="habit in habits.habits" :key="habit.id" class="mb-4 flex items-center justify-between">
 					<div class="flex w-full items-center gap-2">
-						<XCircleIcon
-							@click="habits.removeHabit(habit.id)"
-							class="h-5 w-5 rounded text-red-500 hover:cursor-pointer"
-						/>
+						<XCircleIcon @click="habits.removeHabit(habit.id)"
+							class="h-5 w-5 rounded text-red-500 hover:cursor-pointer" />
 						<input
 							class="min-w-0 flex-auto appearance-none rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
-							v-model="habit.text"
-						/>
+							v-model="habit.text" />
 					</div>
 				</li>
 			</ul>
@@ -40,7 +38,8 @@
 					<PlusCircleIcon class="h-5 w-5" />
 					Add Habit
 				</UButton>
-				<UButton @click="handleSave" class="bg-sky-500 text-xs font-medium text-white hover:bg-sky-600">Save</UButton>
+				<UButton @click="handleSave" class="bg-sky-500 text-xs font-medium text-white hover:bg-sky-600">Save
+				</UButton>
 			</div>
 		</div>
 		<div v-else>
