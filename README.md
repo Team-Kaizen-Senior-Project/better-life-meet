@@ -15,6 +15,7 @@ A component-based **web video conferencing application** that integrates with AB
 - **[MediaSoup](https://mediasoup.org/)**: A versatile WebRTC Selective Forwarding Unit (SFU) for scalable video conferencing.
 
 ## ERD
+![Entity Relationship Diagram](/ERD.png)
 
 ## Prototype
 
