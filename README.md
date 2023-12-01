@@ -7,4 +7,8 @@ Video app for Better Life
 ## Developer Instructions
 
 ## Testing
+(_Placeholder for CSC 191_)
+
+## Timeline
+(Jira)
 
