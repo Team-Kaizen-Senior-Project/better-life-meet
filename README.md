@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="/kaizen.png" width="100"/>
+  <img src="./images/kaizen.png" width="100"/>
 </p>
 
 # TribeMeet
 A component-based **web video conferencing application** that integrates with ABetterLife's existing software infrastructure and **resolves** compatibility issues, elevates the user experience, and delivers a robust API for detailed user analytics.
 
 <p align="left">
-  <img src="/betterlife_image.png" width="100"/>
+  <img src="./images/betterlife_image.png" width="100"/>
 </p>
 
 **ABetterLife:** https://abetterlife.com/
@@ -24,13 +24,13 @@ A component-based **web video conferencing application** that integrates with AB
 
 ## ERD
 <p align="center">
-  <img src="/ERD.png" width="600"/>
+  <img src="./images/ERD.png" width="600"/>
 </p>
 
 ## Prototype
 **UI Dashboard:**
 <p align="center">
-  <img src="/user_dashboard.png" width="600"/> <br>
+  <img src="./images/user_dashboard.png" width="600"/> <br>
   <h4>Shown above is the Dashboard, the central page of TribeMeet where logged-in users can:</h4>
   <ul>
     <li>Configure video & mic settings (center)</li>
@@ -43,7 +43,7 @@ A component-based **web video conferencing application** that integrates with AB
 
 **Pod Meetings:**
 <p align="center">
-  <img src="/pod_meetings.png" width="600"/>
+  <img src="./images/pod_meetings.png" width="600"/>
   <h4>The core interface of TribeMeet where participants engage in video conferencing:</h4>
   <ul>
     <li>View all particpants' cameras in a grid layout</li>
@@ -54,7 +54,7 @@ A component-based **web video conferencing application** that integrates with AB
 
 **Robust API**
 <p align="center">
-  <img src="/api_postman_example.png" width="600"/>
+  <img src="./images/api_postman_example.png" width="600"/>
   <h4>The robust API of TribeMeet provides extensive control over meeting management and data retrieval. Developers can:</h4>
   <ul>
     <li>Schedule meetings with customizable settings</li>
