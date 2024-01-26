@@ -1,8 +1,8 @@
-# TribeMeet
-
 <p align="center">
-  <img src="./images/kaizen.png" width="100"/>
+  <img src="./images/kaizen-black.png" width="100"/>
 </p>
+
+# TribeMeet
 
 A component-based **web video conferencing application** that integrates with ABetterLife's existing software infrastructure and **resolves** compatibility issues, elevates the user experience, and delivers a robust API for detailed user analytics.
 
