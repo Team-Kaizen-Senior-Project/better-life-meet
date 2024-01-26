@@ -33,4 +33,5 @@ export default defineNuxtConfig({
 	runtimeConfig: {
 		FAUNA_KEY: process.env.FAUNA_KEY,
 	},
+    ssr: false, // mediasoup client cannot work with SSR enabled
 })
