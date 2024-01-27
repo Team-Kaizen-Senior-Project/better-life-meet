@@ -27,7 +27,6 @@ const initializeWebSocketServer = (httpServer: http.Server): io.Server => {
 	wss.on('connection', async (socket: io.Socket) => {
 		socket.on('greet', (data) => {
 			console.log(data)
-			socket.emit('Hello, world!')
 		})
 	})
 
