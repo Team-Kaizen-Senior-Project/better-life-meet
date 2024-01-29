@@ -26,12 +26,15 @@ services:
     depends_on:
       - mediasoup
   nginx:
-    image: nginx:alpine
-    volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    build: ./nginx
     ports:
       - 80:80
       - 443:443
+    develop:
+      watch:
+        - path: ./nginx/default.conf
+          target: /etc/nginx/conf.d/default.conf
+          action: sync+restart
     depends_on:
       - mediasoup
       - nuxt
