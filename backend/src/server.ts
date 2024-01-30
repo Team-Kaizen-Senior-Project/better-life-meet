@@ -2,6 +2,7 @@ import http from 'http'
 import io from 'socket.io'
 import express, { Express } from 'express'
 import cors from 'cors'
+import SelectiveForwardingUnit from './SelectiveForwardingUnit'
 
 const initializeExpressServer = (): Express => {
 	const app: Express = express()
@@ -34,6 +35,9 @@ const initializeWebSocketServer = (httpServer: http.Server): io.Server => {
 }
 
 const main = async () => {
+
+	const sfu: SelectiveForwardingUnit = await SelectiveForwardingUnit.getInstance()
+
 	const app: Express = initializeExpressServer()
 
 	const httpServer: http.Server = new http.Server(app)
