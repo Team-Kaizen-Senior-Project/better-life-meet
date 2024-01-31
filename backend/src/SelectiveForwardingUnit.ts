@@ -1,8 +1,7 @@
 import { Worker } from 'mediasoup/node/lib/types'
 import { createWorker } from 'mediasoup'
-import Room from './Room'
+import Meeting from './Meeting'
 import config from './config'
-
 
 export default class SelectiveForwardingUnit {
 	private static instance: SelectiveForwardingUnit
@@ -10,7 +9,7 @@ export default class SelectiveForwardingUnit {
 	private workers: Worker[]
 	private workerIndex: number = 0
 
-	public rooms: Room[]
+	public meetings: Map<string, Meeting>
 
 	public static async getInstance(): Promise<SelectiveForwardingUnit> {
 		if (!this.instance) {
@@ -23,13 +22,13 @@ export default class SelectiveForwardingUnit {
 
 	private constructor() {
 		this.workers = []
-		this.rooms = []
+		this.meetings = new Map()
 	}
 
 	private async setupWorkers() {
 		for (let i = 0; i < config.numberOfWorkers; i++) {
 			const worker = await createWorker(config.workerSettings)
-			this.workers.push(worker);
+			this.workers.push(worker)
 		}
 	}
 
@@ -40,11 +39,11 @@ export default class SelectiveForwardingUnit {
 		return worker
 	}
 
-	public async createRoom() {
-		const room = await Room.build(this.getWorker())
+	public async createRoom(): Promise<Meeting> {
+		const meeting = await Meeting.build(this.getWorker())
 
-		this.rooms.push(room)
+		this.meetings.set(meeting.id, meeting)
 
-		return room
+		return meeting
 	}
 }
