@@ -10,7 +10,7 @@ export async function fetchMeeting(id: string) {
 		console.error('Error fetching meeting:', error.value)
 		return null
 	}
-
+	// @ts-ignore
 	return data.value?.data // Extract the `data` field from the response
 }
 
@@ -38,7 +38,7 @@ export async function deleteMeeting(id: string) {
 			throw new Error('Error deleting meeting')
 		}
 
-		return await response
+		return response
 	} catch (error) {
 		console.error('Error:', error)
 		throw error
@@ -47,22 +47,22 @@ export async function deleteMeeting(id: string) {
 
 // Creates a meeting using the API
 export async function createMeeting(meetingInfo: any) {
-    try {
-        const response = await fetch(`/api/meeting`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(meetingInfo),
-        })
+	try {
+		const response = await fetch(`/api/meeting`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(meetingInfo),
+		})
 
-        if (!response.ok) {
-            throw new Error('Error creating meeting')
-        }
+		if (!response.ok) {
+			throw new Error('Error creating meeting')
+		}
 
-        return await response
-    } catch (error) {
-        console.error('Error:', error)
-        throw error
-    }
+		return response
+	} catch (error) {
+		console.error('Error:', error)
+		throw error
+	}
 }

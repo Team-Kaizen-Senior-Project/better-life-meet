@@ -1,5 +1,14 @@
-<script setup>
+<script setup lang="ts">
 	import { CalendarIcon } from '@heroicons/vue/24/solid'
+	export interface IMeeting {
+		meetingId: string
+		startTime: string
+		endTime: string
+		customerRefs: string[]
+	}
+	// TODO: Placeholder content: replace after user login integration
+	const tempAttendees = ['380615136598032449', '380615136598033473', '380615136598034497', '380615136598035521']
+
 	const isOpen = ref(false)
 	const meetingStore = useScheduleMeetingStore()
 	const timeZones = [
@@ -10,26 +19,26 @@
 		'Alaska Time',
 		'Hawaii-Aleutian Time',
 	]
-	async function scheduleMeeting(e) {
+	async function scheduleMeeting(e: Event) {
 		e.preventDefault()
-		const form = e.target
+		const form = e.target as HTMLFormElement
 		if (!form.checkValidity()) return
 		const startTime = new Date(`${meetingStore.startTimeData.date} ${meetingStore.startTimeData.time}`)
 		const endTime = new Date(`${meetingStore.endTimeData.date} ${meetingStore.endTimeData.time}`)
-		const resp = await $fetch('/api/meeting', {
-			method: 'POST',
-			body: JSON.stringify({
-				meetingId: meetingStore.generateMeetingId(),
-				startTime: startTime,
-				endTime: endTime,
-				// TODO: get customerRefs from DB
-				customerRefs: ['1243257081'],
-			}),
-		})
-		console.log(resp)
-		isOpen = false
+		const meetingBody: IMeeting = {
+			meetingId: meetingStore.generateMeetingId(),
+			startTime: startTime.toISOString(),
+			endTime: endTime.toISOString(),
+			customerRefs: tempAttendees,
+		}
+		try {
+			createMeeting(meetingBody)
+			isOpen.value = false
+			form.reset()
+		} catch (error) {
+			console.error(error)
+		}
 	}
-
 	const customModal = ref({
 		overlay: {
 			background: 'bg-zinc-900/90 dark:bg-gray-800/75',
