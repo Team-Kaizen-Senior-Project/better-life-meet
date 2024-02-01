@@ -39,7 +39,7 @@ export default class SelectiveForwardingUnit {
 		return worker
 	}
 
-	public async createRoom(): Promise<Meeting> {
+	public async createMeeting(): Promise<Meeting> {
 		const meeting = await Meeting.build(this.getWorker())
 
 		this.meetings.set(meeting.id, meeting)

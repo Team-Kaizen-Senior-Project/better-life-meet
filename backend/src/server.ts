@@ -88,9 +88,9 @@ const initializeWebSocketServer = (httpServer: http.Server, sfu: SelectiveForwar
 const main = async () => {
 	const sfu: SelectiveForwardingUnit = await SelectiveForwardingUnit.getInstance()
 
-	// Temporary room
-	const room = await sfu.createRoom()
-	console.log(room.id)
+	// Temporary meeting
+	const meeting = await sfu.createMeeting()
+	console.log(meeting.id)
 
 	const app: Express = initializeExpressServer()
 
