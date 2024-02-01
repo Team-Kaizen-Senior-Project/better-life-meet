@@ -4,6 +4,8 @@ import express, { Express } from 'express'
 import cors from 'cors'
 import SelectiveForwardingUnit from './SelectiveForwardingUnit'
 import Meeting from './Meeting'
+import config from './config'
+import Peer from './Peer'
 
 const initializeExpressServer = (): Express => {
 	const app: Express = express()
@@ -32,11 +34,14 @@ const initializeWebSocketServer = (httpServer: http.Server, sfu: SelectiveForwar
 		socket.on('join', (meetingId, callback) => {
 			// Check if the meeting ID is valid
 			if (sfu.meetings.has(meetingId)) {
-				const meeting = sfu.meetings.get(meetingId)!
-				console.log(`${socket.id} joined meeting: ${meeting.id}`)
+				const meeting: Meeting = sfu.meetings.get(meetingId)!
+
+				const peer: Peer = new Peer(socket)
+				meeting.peers.set(peer.id, peer)
+
+				console.log(`${peer.id} joined meeting: ${meeting.id}`)
 
 				sockets.set(socket.id, meeting)
-				console.log(sockets.keys())
 				callback(true)
 			} else {
 				callback(false)
@@ -45,18 +50,17 @@ const initializeWebSocketServer = (httpServer: http.Server, sfu: SelectiveForwar
 
 		socket.on('disconnect', () => {
 			if (sockets.has(socket.id)) {
-				const meeting = sockets.get(socket.id)!
-				const peers = meeting.peers!
+				const meeting: Meeting = sockets.get(socket.id)!
+				const peer: Peer = meeting.peers.get(socket.id)!
 
-				if (peers.has(socket.id)) {
-					peers.delete(socket.id)
+				if (meeting.peers.has(peer.id)) {
+					meeting.peers.delete(peer.id)
 					// TODO: Update other peers of this disconnect
 				}
 
-				console.log(`${socket.id} left meeting: ${meeting.id}`)
+				console.log(`${peer.id} left meeting: ${meeting.id}`)
 				sockets.delete(socket.id)
 			}
-			console.log(sockets.keys())
 		})
 
 		socket.on('getRouterCapabilities', (meetingId, callback) => {
@@ -65,9 +69,17 @@ const initializeWebSocketServer = (httpServer: http.Server, sfu: SelectiveForwar
 		})
 
 		// TODO: Create transports
-		socket.on('createSendTransport', () => {})
+		socket.on('createSendTransport', async (meetingId, callback) => {
+			const meeting: Meeting = sfu.meetings.get(meetingId)!
+			const peer: Peer = meeting.peers.get(socket.id)!
+			const sendTransport = await peer.createSendTransport(meeting)
 
-		socket.on('createRecvTransport', () => {})
+			const { id, iceParameters, iceCandidates, dtlsParameters, sctpParameters } = sendTransport
+
+			callback({ id, iceParameters, iceCandidates, dtlsParameters, sctpParameters })
+		})
+
+		socket.on('createRecvTransport', (meetingId) => {})
 	})
 
 	return wss

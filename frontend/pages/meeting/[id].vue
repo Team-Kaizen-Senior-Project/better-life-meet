@@ -3,7 +3,7 @@
 <script setup lang="ts">
 	import { io } from 'socket.io-client'
 	import { Device } from 'mediasoup-client'
-	import type { RtpCapabilities } from 'mediasoup-client/lib/types'
+	import type { RtpCapabilities, TransportOptions } from 'mediasoup-client/lib/types'
 
 	const route = useRoute()
 	const meetingId = route.params.id
@@ -30,11 +30,14 @@
 		await device.load({ routerRtpCapabilities })
 
 		// TODO: Create transports
-		console.log(device.canProduce('video'))
-		console.log(device.canProduce('audio'))
-		console.log(device.sctpCapabilities)
-
-		// device.createRecvTransport
+		// Send Transport
+		const transportOptions = await new Promise<TransportOptions>((resolve) => {
+			ws.emit('createSendTransport', meetingId, (options: any) => {
+				resolve(options)
+			})
+		})
+		const sendTransport = device.createSendTransport(transportOptions)
+		
 	} else {
 		console.error('Invalid meeting ID.')
 	}
