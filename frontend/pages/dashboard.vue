@@ -6,9 +6,9 @@
 	const meetings = [
 		{
 			title: 'Week 16 Accountability Meeting',
+			id: 2,
 			date: 'Wednesday October 4th',
 			time: '4:00pm',
-			link: '/meeting',
 			isLive: true,
 		},
 	]

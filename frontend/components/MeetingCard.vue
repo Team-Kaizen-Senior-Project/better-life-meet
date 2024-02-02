@@ -20,7 +20,7 @@
 		</div>
 		<div class="flex w-full items-center justify-between">
 			<NuxtLink
-				:to="meeting.link"
+				:to="`/meeting/${meeting.id}`"
 				class="mt-4 flex gap-2 rounded-md px-3 py-2 text-sm font-medium leading-tight text-white shadow"
 				:class="buttonClass"
 				@click="video.joinMeeting"
