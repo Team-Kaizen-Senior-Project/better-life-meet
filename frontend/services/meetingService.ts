@@ -1,3 +1,10 @@
+// Interface for meeting info
+interface MeetingInfo {
+	startTime: string
+	endTime: string
+	customerRefs: string[]
+}
+
 // Fetches a meeting from the API given a meeting ID
 export async function fetchMeeting(id: string) {
 	// Construct the URL with query parameters
@@ -46,8 +53,13 @@ export async function deleteMeeting(id: string) {
 }
 
 // Creates a meeting using the API
-export async function createMeeting(meetingInfo: any) {
+export async function createMeeting(startTime: string, endTime: string, customerRefs: string[]) {
 	try {
+		const meetingInfo: MeetingInfo = {
+            startTime,
+            endTime,
+            customerRefs
+        };
 		const response = await fetch(`/api/meeting`, {
 			method: 'POST',
 			headers: {
