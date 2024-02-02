@@ -1,11 +1,5 @@
 <script setup lang="ts">
 	import { CalendarIcon } from '@heroicons/vue/24/solid'
-	export interface IMeeting {
-		meetingId: string
-		startTime: string
-		endTime: string
-		customerRefs: string[]
-	}
 	// TODO: Placeholder content: replace after user login integration
 	const tempAttendees = ['380615136598032449', '380615136598033473', '380615136598034497', '380615136598035521']
 
@@ -25,14 +19,8 @@
 		if (!form.checkValidity()) return
 		const startTime = new Date(`${meetingStore.startTimeData.date} ${meetingStore.startTimeData.time}`)
 		const endTime = new Date(`${meetingStore.endTimeData.date} ${meetingStore.endTimeData.time}`)
-		const meetingBody: IMeeting = {
-			meetingId: meetingStore.generateMeetingId(),
-			startTime: startTime.toISOString(),
-			endTime: endTime.toISOString(),
-			customerRefs: tempAttendees,
-		}
 		try {
-			createMeeting(meetingBody)
+			createMeeting(startTime, endTime, tempAttendees)
 			isOpen.value = false
 			form.reset()
 		} catch (error) {

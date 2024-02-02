@@ -1,5 +1,5 @@
 // Interface for meeting info
-interface MeetingInfo {
+export interface MeetingInfo {
 	startTime: string
 	endTime: string
 	customerRefs: string[]
@@ -53,13 +53,15 @@ export async function deleteMeeting(id: string) {
 }
 
 // Creates a meeting using the API
-export async function createMeeting(startTime: string, endTime: string, customerRefs: string[]) {
+export async function createMeeting(startTime: Date, endTime: Date, customerRefs: string[]) {
 	try {
+		const startDateString = startTime.toISOString()
+		const endDateString = endTime.toISOString()
 		const meetingInfo: MeetingInfo = {
-            startTime,
-            endTime,
-            customerRefs
-        };
+			startTime: startDateString,
+			endTime: endDateString,
+			customerRefs,
+		}
 		const response = await fetch(`/api/meeting`, {
 			method: 'POST',
 			headers: {
