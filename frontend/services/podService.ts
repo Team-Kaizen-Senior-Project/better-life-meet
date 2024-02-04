@@ -45,7 +45,7 @@ export async function deletePod(id: string) {
 			throw new Error('Error deleting Pod')
 		}
 
-		return await response.json()
+		return response.json()
 	} catch (error) {
 		console.error('Error:', error)
 		throw error
@@ -67,7 +67,7 @@ export async function updatePod(id: string, updateInfo: Pod) {
 			throw new Error('Error updating Pod')
 		}
 
-		return await response.json()
+		return response.json()
 	} catch (error) {
 		console.error('Error:', error)
 		throw error
