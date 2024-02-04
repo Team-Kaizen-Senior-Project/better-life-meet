@@ -15,10 +15,8 @@
 
 		// Call GET all pods
 		const pods = await fetchAllPods()
-		console.log('All pods: \n', pods.data)
+		console.log('All pods: \n', pods)
 	}
 
-	onMounted(() => {
-		testServices()
-	})
+	testServices()
 </script>
