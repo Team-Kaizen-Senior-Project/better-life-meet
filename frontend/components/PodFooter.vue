@@ -12,7 +12,7 @@
 					<Button class="rounded px-5 py-3">
 						<MicrophoneIcon class="h-5 w-5" />
 					</Button>
-					<Button class="rounded px-5 py-3">
+					<Button class="rounded px-5 py-3" @click="video.toggleCamera">
 						<VideoCameraIcon class="h-5 w-5" />
 					</Button>
 					<Button class="rounded px-5 py-3">

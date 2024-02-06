@@ -1,4 +1,8 @@
-<script setup>
+<script setup lang="ts">
+	import { io } from 'socket.io-client'
+	import { Device } from 'mediasoup-client'
+	import type { RtpCapabilities, TransportOptions } from 'mediasoup-client/lib/types'
+
 	// Simulated array of external streams.
 	// Each item in the array represents a stream object for an external user.
 	const externalStreams = ref([
@@ -17,18 +21,55 @@
 
 	// Computed property to determine if there are any external streams
 	const hasExternalStreams = computed(() => externalStreams.value.length > 0)
+
+	// Connect to websocket server
+	const ws = io({ path: '/wss' })
+
+	const isConnected = await new Promise<boolean>((resolve) => {
+		ws.on('connect', () => {
+			ws.emit('join', meetingId, (response: boolean) => {
+				resolve(response)
+			})
+		})
+	})
+
+	if (isConnected) {
+		// Retrieve router RTP capabilities
+		const routerRtpCapabilities = await new Promise<RtpCapabilities>((resolve) => {
+			ws.emit('getRouterCapabilities', meetingId, (rtpCapabilities: RtpCapabilities) => {
+				resolve(rtpCapabilities)
+			})
+		})
+
+		// Load device with the router RTP capabilities
+		const device = new Device()
+		await device.load({ routerRtpCapabilities })
+
+		// Create send transport
+		const transportOptions = await new Promise<TransportOptions>((resolve) => {
+			ws.emit('createSendTransport', meetingId, (options: any) => {
+				resolve(options)
+			})
+		})
+		const sendTransport = device.createSendTransport(transportOptions)
+
+		// TODO: Set transport "connect" event handler.
+		sendTransport.on('connect', async ({ dtlsParameters }, callback, errback) => {})
+
+		// TODO: Set transport "produce" event handler.
+		sendTransport.on('produce', async ({ kind, rtpParameters, appData }, callback, errback) => {})
+
+		// TODO: Set transport "producedata" event handler.
+		sendTransport.on('producedata', async ({ sctpStreamParameters, label, protocol, appData }, callback, errback) => {})
+	}
 </script>
 
 <template>
 	<PodHeader />
-	<p class="text-white">meeting id: {{ meetingId }}</p>
 	<div class="flex min-h-[82vh] items-center justify-center bg-zinc-800">
 		<div class="grid h-[70vh] w-[80vw] grid-cols-4 grid-rows-2 gap-3">
 			<!-- Local user's video feed -->
-			<div
-				class="relative overflow-hidden rounded-lg bg-zinc-900"
-				v-if="video.cameraActive && video.joinedMeeting && !video.modalOpen"
-			>
+			<div class="relative overflow-hidden rounded-lg bg-zinc-900" v-if="video.cameraActive && !video.modalOpen">
 				<VideoPreview :cameraActive="video.cameraActive" />
 				<p class="absolute bottom-0 left-0 bg-black px-2 py-1.5 text-white">Local User</p>
 			</div>
