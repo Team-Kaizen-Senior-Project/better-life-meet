@@ -1,4 +1,4 @@
-import { WorkerSettings, RouterOptions, WebRtcTransportOptions } from 'mediasoup/node/lib/types'
+import { WorkerSettings, RouterOptions, WebRtcTransportOptions, TransportListenInfo } from 'mediasoup/node/lib/types'
 import os from 'os'
 
 type MediasoupConfiguration = {
@@ -6,6 +6,29 @@ type MediasoupConfiguration = {
 	workerSettings: WorkerSettings
 	routerOptions: RouterOptions
 	webRtcTransportOptions: WebRtcTransportOptions
+}
+
+const getListenInfos = (): TransportListenInfo[] => {
+	const listenIps: TransportListenInfo[] = []
+
+	for (const networkInterfaces of Object.values(os.networkInterfaces())) {
+		networkInterfaces?.forEach((networkInterface) => {
+			if (networkInterface.family === 'IPv4') {
+				listenIps.push({ ip: networkInterface.address, protocol: 'udp' })
+			} else if (networkInterface.family === 'IPv6' && networkInterface.address[0] !== 'f') {
+				listenIps.push({ ip: networkInterface.address, protocol: 'udp' })
+			}
+		})
+	}
+
+	if (listenIps.length === 0) {
+		listenIps.push({ ip: '127.0.0.1', protocol: 'udp' })
+	}
+
+	// TODO: If we have a public IP address, add it
+	// listenIps.push({ ip: '0.0.0.0', announcedIp: 'X.X.X.X', protocol: 'udp' })
+
+	return listenIps
 }
 
 const config: MediasoupConfiguration = {
@@ -64,15 +87,7 @@ const config: MediasoupConfiguration = {
 		],
 	},
 	webRtcTransportOptions: {
-		listenIps: [
-			{
-				ip: '0.0.0.0',
-				announcedIp: '127.0.0.1',
-			},
-		],
-		enableUdp: true,
-		enableTcp: true,
-		preferUdp: true,
+		listenInfos: getListenInfos(),
 	},
 }
 
