@@ -4,8 +4,12 @@ import express, { Express } from 'express'
 import cors from 'cors'
 import SelectiveForwardingUnit from './SelectiveForwardingUnit'
 import Meeting from './Meeting'
-import config from './config'
 import Peer from './Peer'
+
+import type { TransportOptions, DtlsParameters } from 'mediasoup-client/lib/types'
+import type { WebRtcTransport } from 'mediasoup/node/lib/WebRtcTransport'
+import type { ProducerOptions } from 'mediasoup/node/lib/Producer'
+import type { DataProducerOptions } from 'mediasoup/node/lib/DataProducer'
 
 const initializeExpressServer = (): Express => {
 	const app: Express = express()
@@ -28,6 +32,7 @@ const initializeWebSocketServer = (httpServer: http.Server, sfu: SelectiveForwar
 	})
 
 	const sockets: Map<string, Meeting> = new Map()
+	const transports: Map<string, WebRtcTransport> = new Map() // FIXME: Dead transports need to be removed when socket closes
 
 	// * Specify WebSocket events here
 	wss.on('connection', async (socket: io.Socket) => {
@@ -68,18 +73,41 @@ const initializeWebSocketServer = (httpServer: http.Server, sfu: SelectiveForwar
 			callback(meeting.rtpCapabilities)
 		})
 
-		// TODO: Create transports
 		socket.on('createSendTransport', async (meetingId, callback) => {
 			const meeting: Meeting = sfu.meetings.get(meetingId)!
 			const peer: Peer = meeting.peers.get(socket.id)!
+
 			const sendTransport = await peer.createSendTransport(meeting)
+			transports.set(sendTransport.id, sendTransport)
 
-			const { id, iceParameters, iceCandidates, dtlsParameters, sctpParameters } = sendTransport
+			const transportOptions: TransportOptions = {
+				id: sendTransport.id,
+				iceParameters: sendTransport.iceParameters,
+				iceCandidates: sendTransport.iceCandidates,
+				dtlsParameters: sendTransport.dtlsParameters,
+			}
 
-			callback({ id, iceParameters, iceCandidates, dtlsParameters, sctpParameters })
+			callback(transportOptions)
 		})
 
-		socket.on('createRecvTransport', (meetingId) => {})
+		socket.on('transport-connect', (transportId: string, parameters: { dtlsParameters: DtlsParameters }) => {
+			const transport = transports.get(transportId)!
+			transport.connect(parameters)
+		})
+
+		socket.on('transport-produce', async (transportId, parameters: ProducerOptions, callback) => {
+			const transport = transports.get(transportId)!
+			const producer = await transport.produce(parameters)
+
+			callback(producer.id)
+		})
+
+		socket.on('transport-producedata', async (transportId, parameters: DataProducerOptions, callback) => {
+			const transport = transports.get(transportId)!
+			const producer = await transport.produceData(parameters)
+
+			callback(producer.id)
+		})
 	})
 
 	return wss

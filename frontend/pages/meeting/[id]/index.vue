@@ -53,14 +53,68 @@
 		})
 		const sendTransport = device.createSendTransport(transportOptions)
 
-		// TODO: Set transport "connect" event handler.
-		sendTransport.on('connect', async ({ dtlsParameters }, callback, errback) => {})
+		// Set transport "connect" event handler.
+		sendTransport.on('connect', async ({ dtlsParameters }, callback, errback) => {
+			try {
+				ws.emit('transport-connect', sendTransport.id, {
+					dtlsParameters,
+				})
 
-		// TODO: Set transport "produce" event handler.
-		sendTransport.on('produce', async ({ kind, rtpParameters, appData }, callback, errback) => {})
+				callback()
+			} catch (error: any) {
+				errback(error)
+			}
+		})
 
-		// TODO: Set transport "producedata" event handler.
-		sendTransport.on('producedata', async ({ sctpStreamParameters, label, protocol, appData }, callback, errback) => {})
+		// Set transport "produce" event handler.
+		sendTransport.on('produce', async ({ kind, rtpParameters, appData }, callback, errback) => {
+			try {
+				const producerId = await new Promise<string>((resolve) => {
+					ws.emit(
+						'transport-produce',
+						sendTransport.id,
+						{
+							kind,
+							rtpParameters,
+							appData,
+						},
+						(producerId: string) => resolve(producerId),
+					)
+				})
+
+				callback({ id: producerId })
+			} catch (error: any) {
+				errback(error)
+			}
+		})
+
+		// Set transport "producedata" event handler.
+		sendTransport.on('producedata', async ({ sctpStreamParameters, label, protocol, appData }, callback, errback) => {
+			try {
+				const producerId = await new Promise<string>((resolve) => {
+					ws.emit(
+						'transport-produce',
+						sendTransport.id,
+						{
+							sctpStreamParameters,
+							label,
+							protocol,
+							appData,
+						},
+						(producerId: string) => resolve(producerId),
+					)
+				})
+
+				callback({ id: producerId })
+			} catch (error: any) {
+				errback(error)
+			}
+		})
+
+		const stream = await navigator.mediaDevices.getUserMedia({ video: true })
+		const webcamTrack = stream.getVideoTracks()[0]
+		const webcamProducer = await sendTransport.produce({ track: webcamTrack })
+		console.log(webcamProducer)
 	}
 </script>
 
