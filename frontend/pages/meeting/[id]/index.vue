@@ -1,13 +1,14 @@
 <script setup lang="ts">
 	import { io } from 'socket.io-client'
 	import { Device } from 'mediasoup-client'
-	import type { RtpCapabilities, TransportOptions } from 'mediasoup-client/lib/types'
+	import type { Producer, RtpCapabilities, TransportOptions } from 'mediasoup-client/lib/types'
+	import { storeToRefs } from 'pinia'
 
 	// Simulated array of external streams.
 	// Each item in the array represents a stream object for an external user.
 	const externalStreams = ref([
-		{ id: 'user1', stream: null },
-		{ id: 'user2', stream: null },
+		{ id: 'user1', stream: undefined },
+		{ id: 'user2', stream: undefined },
 	])
 
 	const route = useRoute()
@@ -17,7 +18,7 @@
 		layout: 'meeting',
 	})
 
-	const video = useVideoStore()
+	const mediaStore = useMediaStore()
 
 	// Computed property to determine if there are any external streams
 	const hasExternalStreams = computed(() => externalStreams.value.length > 0)
@@ -111,10 +112,31 @@
 			}
 		})
 
-		const stream = await navigator.mediaDevices.getUserMedia({ video: true })
-		const webcamTrack = stream.getVideoTracks()[0]
-		const webcamProducer = await sendTransport.produce({ track: webcamTrack })
-		console.log(webcamProducer)
+		const { stream, isVideoEnabled, isAudioEnabled } = storeToRefs(mediaStore)
+
+		let videoProducer: Producer | undefined
+		let audioProducer: Producer | undefined
+
+		watch([stream], async () => {
+			if (stream.value) {
+				if (isVideoEnabled.value) {
+					const videoTrack = stream.value.getVideoTracks()[0]
+					console.log(videoTrack)
+					videoProducer = await sendTransport.produce({ track: videoTrack })
+				}
+				if (isAudioEnabled.value) {
+					const audioTrack = stream.value.getVideoTracks()[0]
+					audioProducer = await sendTransport.produce({ track: audioTrack })
+				}
+
+				if (videoProducer && !isVideoEnabled) {
+					videoProducer.close()
+				}
+				if (audioProducer && !isAudioEnabled) {
+					audioProducer.close()
+				}
+			}
+		})
 	}
 </script>
 
@@ -123,8 +145,9 @@
 	<div class="flex min-h-[82vh] items-center justify-center bg-zinc-800">
 		<div class="grid h-[70vh] w-[80vw] grid-cols-4 grid-rows-2 gap-3">
 			<!-- Local user's video feed -->
-			<div class="relative overflow-hidden rounded-lg bg-zinc-900" v-if="video.cameraActive && !video.modalOpen">
-				<VideoPreview :cameraActive="video.cameraActive" />
+			<div class="relative overflow-hidden rounded-lg bg-zinc-900" v-if="true">
+				<!-- <VideoPreview :cameraActive="video.cameraActive" /> -->
+				<LocalVideo />
 				<p class="absolute bottom-0 left-0 bg-black px-2 py-1.5 text-white">Local User</p>
 			</div>
 
