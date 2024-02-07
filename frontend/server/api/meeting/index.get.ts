@@ -10,15 +10,25 @@ export default defineEventHandler(async (event) => {
 	if (error !== null) return error
 
 	try {
-		// Perform READ query
-		let query = fql`{Meeting.all(){id, data}}`
+		// Extract query params for external Refs (may not exist, so default to undefined)
+		const podRef = event.req.url
+			? new URL(event.req.url, `http://${event.req.headers.host}`).searchParams.get('podRef')
+			: undefined
+
+		// Default Query
+		let query = fql`Meeting.all().paginate()`
 
 		if (cursor !== undefined && count !== undefined) {
 			query = fql`Set.paginate(${cursor}, ${Number(count)})`
 		} else if (cursor !== undefined) {
 			query = fql`Set.paginate(${cursor})`
 		} else if (count !== undefined) {
-			query = fql`{Meeting.all(){id, data}}.paginate(${Number(count)})`
+			// Apply additional filter if PodRef exists, otherwise paginate without
+			query = podRef
+				? fql`let pod = Pod.byId(${podRef}); Meeting.where(.podRef == pod).paginate(${Number(count)});`
+				: fql`Meeting.all().paginate(${Number(count)})`
+		} else if (podRef !== undefined) {
+			query = fql`let pod = Pod.byId(${podRef}); Meeting.where(.podRef == pod).paginate()`
 		}
 
 		const response = await client.query(query)
