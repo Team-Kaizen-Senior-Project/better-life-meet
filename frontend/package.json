@@ -12,6 +12,7 @@
 	"devDependencies": {
 		"@nuxt/devtools": "latest",
 		"@samk-dev/nuxt-vcalendar": "^1.0.1",
+		"@sidebase/nuxt-auth": "^0.6.7",
 		"autoprefixer": "^10.4.16",
 		"nuxt": "^3.7.4",
 		"postcss": "^8.4.31",
