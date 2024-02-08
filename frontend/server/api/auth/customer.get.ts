@@ -18,17 +18,17 @@
 */
 
 export default eventHandler(async (event) => {
-  // session retrieval.
-  const authBasePath = useRuntimeConfig().public.auth.computed.pathname;
-  const session = await $fetch(authBasePath + '/session', {
-      method: 'GET',
-      headers: event.headers
-  });
-  //if user is unathenticated, return unauthenticated status
-  if (!session) {
-    return { status: "unauthenticated" };
-  } 
-  // return session and authenticated users session data
-  // i.e. user email, user id, etc.
-  return session;
-});
+	// session retrieval.
+	const authBasePath = useRuntimeConfig().public.auth.computed.pathname
+	const session = await $fetch(authBasePath + '/session', {
+		method: 'GET',
+		headers: event.headers,
+	})
+	//if user is unathenticated, return unauthenticated status
+	if (!session) {
+		return { status: 'unauthenticated' }
+	}
+	// return session and authenticated users session data
+	// i.e. user email, user id, etc.
+	return session
+})
