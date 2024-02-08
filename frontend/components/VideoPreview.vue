@@ -34,5 +34,11 @@
 </script>
 
 <template>
-	<video ref="videoElement" autoplay playsinline class="h-full w-full -scale-x-100 object-contain"></video>
+	<video
+		ref="videoElement"
+		autoplay
+		playsinline
+		class="h-full w-full -scale-x-100 object-contain"
+		@contextmenu.prevent
+	></video>
 </template>

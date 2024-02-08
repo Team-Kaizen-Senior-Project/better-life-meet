@@ -2,17 +2,17 @@
 	import { MicrophoneIcon } from '@heroicons/vue/24/outline'
 	import { VideoCameraIcon } from '@heroicons/vue/24/outline'
 
-	const video = useVideoStore()
+	const media = useMediaStore()
 </script>
 <template>
 	<footer class="absolute bottom-0 w-full bg-black py-4">
 		<inner-column>
 			<div class="mx-auto flex items-center justify-between">
 				<div class="flex gap-2">
-					<Button class="rounded px-5 py-3">
+					<Button class="rounded px-5 py-3" @click="media.toggleAudio">
 						<MicrophoneIcon class="h-5 w-5" />
 					</Button>
-					<Button class="rounded px-5 py-3">
+					<Button class="rounded px-5 py-3" @click="media.toggleVideo">
 						<VideoCameraIcon class="h-5 w-5" />
 					</Button>
 					<Button class="rounded px-5 py-3">
@@ -53,7 +53,6 @@
 					<Button
 						class="rounded-lg bg-rose-600 px-3 py-2 text-sm font-medium text-white hover:bg-rose-700"
 						isLink
-						@click="video.leaveMeeting"
 						to="/dashboard"
 					>
 						Leave
