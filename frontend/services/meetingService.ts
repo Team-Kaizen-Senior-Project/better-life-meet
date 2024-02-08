@@ -1,3 +1,10 @@
+// Interface for meeting info
+export interface MeetingInfo {
+	startTime: string
+	endTime: string
+	customerRefs: string[]
+}
+
 // Fetches a meeting from the API given a meeting ID
 export async function fetchMeeting(id: string) {
 	// Construct the URL with query parameters
@@ -10,7 +17,7 @@ export async function fetchMeeting(id: string) {
 		console.error('Error fetching meeting:', error.value)
 		return null
 	}
-
+	// @ts-ignore
 	return data.value?.data // Extract the `data` field from the response
 }
 
@@ -38,7 +45,7 @@ export async function deleteMeeting(id: string) {
 			throw new Error('Error deleting meeting')
 		}
 
-		return await response
+		return response
 	} catch (error) {
 		console.error('Error:', error)
 		throw error
@@ -46,23 +53,30 @@ export async function deleteMeeting(id: string) {
 }
 
 // Creates a meeting using the API
-export async function createMeeting(meetingInfo: any) {
-    try {
-        const response = await fetch(`/api/meeting`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(meetingInfo),
-        })
+export async function createMeeting(startTime: Date, endTime: Date, customerRefs: string[]) {
+	try {
+		const startDateString = startTime.toISOString()
+		const endDateString = endTime.toISOString()
+		const meetingInfo: MeetingInfo = {
+			startTime: startDateString,
+			endTime: endDateString,
+			customerRefs,
+		}
+		const response = await fetch(`/api/meeting`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(meetingInfo),
+		})
 
-        if (!response.ok) {
-            throw new Error('Error creating meeting')
-        }
+		if (!response.ok) {
+			throw new Error('Error creating meeting')
+		}
 
-        return await response
-    } catch (error) {
-        console.error('Error:', error)
-        throw error
-    }
+		return response
+	} catch (error) {
+		console.error('Error:', error)
+		throw error
+	}
 }
