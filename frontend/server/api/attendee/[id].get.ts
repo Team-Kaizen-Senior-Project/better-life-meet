@@ -5,26 +5,14 @@ export default defineEventHandler(async (event) => {
 	// Get ID from the URL params
 	const { id } = event.context.params as { id: string }
 
-	// Get the query parameters from the event object
-	const idType = event.req.url
-		? new URL(event.req.url, `http://${event.req.headers.host}`).searchParams.get('idType')
-		: 'customer'
-
 	// Initialize Fauna client
 	const { client, error } = useFauna()
 	if (error !== null) return error
 
 	try {
-		let query = fql``
-		// If idType is 'attendee', then query Attendee by Id
-		if (idType == 'attendee') {
-			query = fql`Attendee.byId(${id}){data}`
-		}
-
-		// If idType is 'customer', then query Attendee by Customer Id
-		else if (idType == 'customer') {
-			query = fql`Attendee.all().where(.customerRef == Customer.byId(${id}))`
-		}
+		let query = fql`let attendee = Attendee.byId(${id});
+		if (!attendee.exists()) abort({message: "Attendee with this ID does not exist." })
+		attendee`
 		const document = await client.query(query)
 
 		// Return 'Not found' 404 if document is empty
