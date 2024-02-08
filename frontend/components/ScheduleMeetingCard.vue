@@ -4,7 +4,7 @@
 	const tempAttendees = ['380615136598032449', '380615136598033473', '380615136598034497', '380615136598035521']
 
 	const isOpen = ref(false)
-	const meetingStore = useScheduleMeetingStore()
+	const meetingStore = scheduleMeeting()
 	const timeZones = [
 		'Eastern Time',
 		'Central Time',
