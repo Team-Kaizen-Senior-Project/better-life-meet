@@ -2,55 +2,50 @@ import { AbortError, ServiceError, fql } from 'fauna'
 
 // Endpoint for retrieving all attendees
 export default defineEventHandler(async (event) => {
-	const { cursor, count }: { cursor: string | undefined; count: string | undefined } = getQuery(event)
+	// Extract params from request query
+	const {
+		cursor,
+		count,
+		customerRef,
+		meetingRef,
+	}: { cursor: string; count: Number; customerRef: string; meetingRef: string } = getQuery(event)
 
 	// Initialize Fauna client
 	const { client, error } = useFauna()
 	if (error !== null) return error
 
 	try {
-		// Extract query params for external Refs (may not exist, so default to undefined)
-		const customerRef = event.req.url
-			? new URL(event.req.url, `http://${event.req.headers.host}`).searchParams.get('customerRef')
-			: undefined
-		const meetingRef = event.req.url
-			? new URL(event.req.url, `http://${event.req.headers.host}`).searchParams.get('meetingRef')
-			: undefined
-
 		// Default query
 		let query = fql`Attendee.all().paginate()`
-		const document = await client.query(query)
-		return document.data
 
 		// Check to see if client is making a paginated request
 		if (cursor !== undefined && count !== undefined) {
 			query = fql`Set.paginate(${cursor}, ${Number(count)})`
 		} else if (cursor !== undefined) {
 			query = fql`Set.paginate(${cursor})`
-		} else if (customerRef !== undefined || meetingRef !== undefined) {
-			// Apply query param as filter
-			const filterFied = customerRef !== undefined ? 'customerRef' : 'meetingRef'
-			const filterValue = customerRef !== undefined ? customerRef : meetingRef
-			const filterObject =
-				customerRef !== undefined ? fql`Customer.byId(${filterValue})` : fql`Meeting.byId(${filterValue})`
-
-			const filterClause = fql`.${filterFied} == ${filterObject}`
-
-			query =
-				count !== undefined
-					? fql`let filteredAttendees = ${filterObject};
-				Attendee.where(${filterClause}).paginate(${Number(count)})`
-					: fql`let filteredAttendees = ${filterObject};
-				Attendee.where(${filterClause}).paginate()`
-		} else {
-			query = count !== undefined ? fql`Attendee.all().paginate(${Number(count)})` : fql`Attendee.all().paginate()`
+		} else if (customerRef !== undefined) {
+			// Check if count parameter is passed for pagination
+			if (count) {
+				query = fql`let customer = Customer.byId(${customerRef}); Attendee.where(.customerRef == customer).paginate(${Number(
+					count,
+				)})`
+			} else {
+				query = fql`let customer = Customer.byId(${customerRef}); Attendee.where(.customerRef == customer).paginate()`
+			}
+		} else if (meetingRef !== undefined) {
+			if (count) {
+				query = fql`let meeting = Meeting.byId(${meetingRef}); Attendee.where(.meetingRef == meeting).paginate(${Number(
+					count,
+				)})`
+			} else {
+				query = fql`let meeting = Meeting.byId(${meetingRef}); Attendee.where(.meetingRef == meeting).paginate()`
+			}
+		} else if (count !== undefined) {
+			query = fql`Attendee.all().paginate(${Number(count)})`
 		}
 
-		// Perform query and store doc
-		//const document = await client.query(query)
-
-		// Return query result
-		//return document.data
+		const document = await client.query(query)
+		return document.data
 	} catch (error: unknown) {
 		if (error instanceof AbortError) {
 			const abortError = error as AbortError

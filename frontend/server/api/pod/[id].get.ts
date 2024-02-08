@@ -2,7 +2,7 @@ import { AbortError, ServiceError, fql } from 'fauna'
 
 // Endpoint for reading pod given an Id
 export default defineEventHandler(async (event) => {
-	// Get pod ID
+	// Extract id param from request query
 	const { id } = event.context.params as { id: string }
 
 	// Initialize Fauna client
@@ -13,11 +13,9 @@ export default defineEventHandler(async (event) => {
 		// Perform READ query
 		const query = fql`let pod = Pod.byId(${id});
 		if (!pod.exists()) abort({ message: "Pod with this ID does not exist." });
-		pod{PodInfo: .data};`
+		pod;`
 
 		const response = await client.query(query)
-
-		// Return query result
 		return response
 	} catch (error) {
 		if (error instanceof AbortError) {

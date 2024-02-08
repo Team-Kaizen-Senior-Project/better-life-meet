@@ -2,6 +2,7 @@ import { AbortError, ServiceError, fql } from 'fauna'
 
 // endpoint for retreiving all pods
 export default defineEventHandler(async (event) => {
+	// Extract params from request query
 	const { cursor, count }: { cursor: string | undefined; count: string | undefined } = getQuery(event)
 
 	// Initialize Fauna client
@@ -9,18 +10,19 @@ export default defineEventHandler(async (event) => {
 	if (error !== null) return error
 
 	try {
-		let query = fql`{Pod.all(){id, PodInfo: .data}}.paginate()`
+		// Default query
+		let query = fql`Pod.all().paginate()`
 
+		// Check to see if client is making a paginated request
 		if (cursor !== undefined && count !== undefined) {
 			query = fql`Set.paginate(${cursor}, ${Number(count)})`
 		} else if (cursor !== undefined) {
 			query = fql`Set.paginate(${cursor})`
 		} else if (count !== undefined) {
-			query = fql`{Pod.all(){id, PodInfo: .data}}.paginate(${Number(count)})`
+			query = fql`Pod.all().paginate(${Number(count)})`
 		}
 
 		const response = await client.query(query)
-
 		return response
 	} catch (error: unknown) {
 		if (error instanceof AbortError) {

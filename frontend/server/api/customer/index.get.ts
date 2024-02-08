@@ -1,18 +1,14 @@
 import { AbortError, ServiceError, fql } from 'fauna'
 
 export default defineEventHandler(async (event) => {
-	const { cursor, count }: { cursor: string | undefined; count: string | undefined } = getQuery(event)
+	// Extract params from request query
+	const { cursor, count, podRef }: { cursor: string; count: string; podRef: string } = getQuery(event)
 
 	// Initialize Fauna client
 	const { client, error } = useFauna()
 	if (error !== null) return error
 
 	try {
-		// Extract query params for external Refs (may not exist, so default to undefined)
-		const podRef = event.req.url
-			? new URL(event.req.url, `http://${event.req.headers.host}`).searchParams.get('podRef')
-			: undefined
-
 		// Default query
 		let query = fql`Customer.all().paginate()`
 
@@ -21,18 +17,20 @@ export default defineEventHandler(async (event) => {
 			query = fql`Set.paginate(${cursor}, ${Number(count)})`
 		} else if (cursor !== undefined) {
 			query = fql`Set.paginate(${cursor})`
-		} else if (count !== undefined) {
-			// Apply additional filter if podRef exists, otherwise paginate without
-			query = podRef
-				? fql`let pod = Pod.byId(${podRef}); Customer.where(.podRef == pod).paginate(${Number(count)});`
-				: fql`Customer.all().paginate(${Number(count)})`
 		} else if (podRef !== undefined) {
-			query = fql`let pod = Pod.byId(${podRef})
-			Customer.where(.podRef == pod).paginate()`
+			// Check if count parameter is passed for pagination
+			if (count !== undefined) {
+				query = fql`let pod = Pod.byId(${podRef})
+				Customer.where(.podRef == pod).paginate(${Number(count)})`
+			} else {
+				query = fql`let pod = Pod.byId(${podRef})
+				Customer.where(.podRef == pod).paginate()`
+			}
+		} else if (count !== undefined) {
+			query = fql`Customer.all().paginate(${Number(count)})`
 		}
 
 		const response = await client.query(query)
-
 		return response
 	} catch (error: unknown) {
 		if (error instanceof AbortError) {
