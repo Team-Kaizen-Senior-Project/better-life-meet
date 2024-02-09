@@ -1,0 +1,44 @@
+@startuml ERD
+
+entity Pod {
+    * podRef : string
+    --
+    * name : string
+    * leader : string
+    * meetingTime : Date
+}
+
+entity Customer {
+    * customerRef : string
+    --
+    * podRef : string
+    * firstName : string
+    * lastName : string
+    * email : string
+}
+
+entity Meeting {
+    * meetingRef : string
+    --
+    * podRef : string
+    * startTime : Date
+    * endTime : Date
+    * timeZone: string
+}
+
+entity Attendee {
+    * attendeeRef
+    --
+    * customerRef : string
+    * meetingRef : string
+    * joinTime : Date
+    * leaveTime : Date
+    * usedVideo : boolean
+    * platform : string
+}
+
+Customer }|--|| Pod
+Meeting }o--|| Pod
+Meeting --o{ Attendee
+
+@enduml
