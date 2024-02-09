@@ -158,6 +158,6 @@
 			</div>
 		</div>
 	</div>
-	<BreakoutRoomModal />
+	<BreakoutRoomModal :meetingRef="meetingId"/>
 	<PodFooter />
 </template>

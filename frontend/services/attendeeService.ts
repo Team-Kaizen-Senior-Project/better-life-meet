@@ -1,3 +1,47 @@
+import { start } from "repl"
+
+// Interface for Attendee info
+export interface Attendee {
+	joinTime: String
+	leaveTime: String
+	usedVideo: Boolean
+	platform: String
+	customerRef: String
+	meetingRef: String
+}
+
+// Created an attendee when joining a meeting
+export async function createAttendee(customerRef: String, meetingRef: String, startTime: Date, platform: String){
+	try{
+		const attendeeInfo : Attendee = {
+			joinTime: startTime.toISOString(),
+			leaveTime: null,
+			usedVideo: false,
+			platform: platform,
+			customerRef: customerRef,
+			meetingRef: meetingRef,
+		}
+		console.log(attendeeInfo)
+		const response = await fetch(`/api/attendee`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(attendeeInfo),
+		})
+		if (!response.ok) {
+			throw new Error('Error creating attendee')
+		}
+
+		return response
+	} catch (error) {
+		console.error('Error:', error)
+		throw error
+	}
+}
+
+
+
 // Fetches an attendee from the API using the ID and ID type (customer or attendee id)
 export async function fetchAttendee(id: string, idType = 'customer') {
 	// Construct the URL with query parameters

@@ -8,7 +8,9 @@
 	const modalIsOpen = ref(false)
 	const isCameraOn = ref(false)
 	const videoPreview = ref(null)
-
+	const props = defineProps({
+		meetingRef: String,
+	})
 	const customModal = ref({
 		overlay: {
 			background: 'bg-zinc-900/90',
@@ -46,7 +48,8 @@
 		videoPreview.value.srcObject.getTracks().forEach((track) => track.stop())
 		isCameraOn.value = false
 	}
-	function joinMeeting() {
+	async function joinMeeting() {
+		console.log("inside join meeting")
 		const videoElement = document.getElementById('demo-video-element')
 		modalIsOpen.value = false
 		navigator.mediaDevices
@@ -56,6 +59,7 @@
 					videoElement.srcObject = stream
 					videoElement.play()
 				}
+				
 			})
 			.catch(function (err) {
 				console.error(err)
@@ -67,6 +71,17 @@
 			},
 			false,
 		)
+		
+	}
+	async function createNewAttendee(){
+		const joinedTime = new Date()
+		const customerData = await fetchAuthenticatedCustomer()
+		const customerRef = customerData._rawValue.user.id
+		const {meetingRef} = props
+		//TODO use actual user deivce
+		const res = await createAttendee(customerRef, meetingRef, joinedTime, "Mobile") 
+		console.log(res)
+		video.joinMeeting()
 	}
 	// onMounted(() => {
 	// 	// Setting this to true in the ref initially breaks the close modal
@@ -115,7 +130,7 @@
 			<template #join>
 				<Button
 					type="button"
-					@click="video.joinMeeting"
+					@click="createNewAttendee"
 					class="rounded-md bg-sky-500 font-medium text-white hover:bg-sky-600"
 				>
 					Join
