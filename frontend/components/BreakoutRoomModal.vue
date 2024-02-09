@@ -109,7 +109,7 @@
 		</div> -->
 		<VideoSettings
 			title="Pod accountability meeting is starting"
-			description="This is your chance to make sure your camera is setup and your microphone is working"
+			description="This is your chance to make sure your camera is setup and your microphone is working!"
 			:boxLength="50"
 		>
 			<template #join>
