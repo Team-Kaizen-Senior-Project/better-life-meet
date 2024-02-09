@@ -1,5 +1,6 @@
 <script setup>
 	import { ChevronDownIcon } from '@heroicons/vue/24/outline'
+	const customer = await fetchAuthenticatedCustomer();
 </script>
 <template>
 	<header class="bg-black py-4">
@@ -14,8 +15,8 @@
 			<div class="flex items-center gap-2">
 				<button class="aspect-square h-[2rem] w-[2rem] rounded-full bg-gray-200 text-lg">U</button>
 				<div class="flex flex-col text-sm text-white">
-					<p>User</p>
-					<p>user@gmail.com</p>
+					<p>{{customer["user"]["firstName"]}}</p>
+					<p>{{customer["user"]["email"]}}</p>
 				</div>
 			</div>
 		</div>
