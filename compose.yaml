@@ -5,6 +5,8 @@ services:
     build: ./backend
     ports:
       - 3333
+    security_opt:
+      - seccomp:./seccomp-profile.json
     develop:
       watch:
         - path: ./backend

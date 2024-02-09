@@ -1,29 +1,30 @@
 import { AbortError, ServiceError, fql } from 'fauna'
 
-// endpoint for retreiving all pods
 export default defineEventHandler(async (event) => {
-	// Extract params from request query
-	const { cursor, count }: { cursor: string | undefined; count: string | undefined } = getQuery(event)
+	// Read customer email from POST in catch all route([...].ts)
+
+	const body = await readBody(event)
+	const email = body.email
 
 	// Initialize Fauna client
 	const { client, error } = useFauna()
 	if (error !== null) return error
 
 	try {
-		// Default query
-		let query = fql`Pod.all().paginate()`
-
-		// Check to see if client is making a paginated request
-		if (cursor !== undefined && count !== undefined) {
-			query = fql`Set.paginate(${cursor}, ${Number(count)})`
-		} else if (cursor !== undefined) {
-			query = fql`Set.paginate(${cursor})`
-		} else if (count !== undefined) {
-			query = fql`Pod.all().paginate(${Number(count)})`
-		}
-
+		let customerDetails = null
+		const query = fql`Customer.where(.email==${email})`
 		const response = await client.query(query)
-		return response
+		if (response) {
+			const customerData = response.data.data[0]
+			customerDetails = {
+				id: customerData['id'],
+				email: customerData['email'],
+				firstName: customerData['firstName'],
+				lastName: customerData['lastName'],
+				netWorth: customerData['netWorth'],
+			}
+		}
+		return customerDetails
 	} catch (error: unknown) {
 		if (error instanceof AbortError) {
 			const abortError = error as AbortError

@@ -1,31 +1,65 @@
-import { fql } from 'fauna'
+import { AbortError, ServiceError, fql } from 'fauna'
 
 // Endpoint for retrieving all attendees
 export default defineEventHandler(async (event) => {
+	// Extract params from request query
+	const {
+		cursor,
+		count,
+		customerRef,
+		meetingRef,
+	}: { cursor: string; count: Number; customerRef: string; meetingRef: string } = getQuery(event)
+
 	// Initialize Fauna client
 	const { client, error } = useFauna()
 	if (error !== null) return error
 
 	try {
-		// Perform READ query
-		const query = fql`Attendee.all(){data}`
-		const document = await client.query(query)
+		// Default query
+		let query = fql`Attendee.all().paginate()`
 
-		// Return 'Not found' 404 if document is empty
-		if (!document.data) {
-			return createError({
-				statusCode: 404,
-				statusMessage: 'Resource Not Found',
-			})
+		// Check to see if client is making a paginated request
+		if (cursor !== undefined && count !== undefined) {
+			query = fql`Set.paginate(${cursor}, ${Number(count)})`
+		} else if (cursor !== undefined) {
+			query = fql`Set.paginate(${cursor})`
+		} else if (customerRef !== undefined) {
+			// Check if count parameter is passed for pagination
+			if (count) {
+				query = fql`let customer = Customer.byId(${customerRef}); Attendee.where(.customerRef == customer).paginate(${Number(
+					count,
+				)})`
+			} else {
+				query = fql`let customer = Customer.byId(${customerRef}); Attendee.where(.customerRef == customer).paginate()`
+			}
+		} else if (meetingRef !== undefined) {
+			if (count) {
+				query = fql`let meeting = Meeting.byId(${meetingRef}); Attendee.where(.meetingRef == meeting).paginate(${Number(
+					count,
+				)})`
+			} else {
+				query = fql`let meeting = Meeting.byId(${meetingRef}); Attendee.where(.meetingRef == meeting).paginate()`
+			}
+		} else if (count !== undefined) {
+			query = fql`Attendee.all().paginate(${Number(count)})`
 		}
 
-		// Return query result
+		const document = await client.query(query)
 		return document.data
-	} catch (error) {
-		// Throw Server error for all other errors
-		return createError({
-			statusCode: 500,
-			statusMessage: 'Internal Error Occurred',
-		})
+	} catch (error: unknown) {
+		if (error instanceof AbortError) {
+			const abortError = error as AbortError
+			const abort = abortError.abort! as { message: string }
+			throw createError({
+				statusCode: abortError.httpStatus,
+				statusMessage: abort.message,
+			})
+		} else {
+			const serviceError = error as ServiceError
+			throw createError({
+				statusCode: serviceError.httpStatus,
+				statusMessage: serviceError.message,
+			})
+		}
 	}
 })
