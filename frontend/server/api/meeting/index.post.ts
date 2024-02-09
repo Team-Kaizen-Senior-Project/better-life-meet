@@ -1,24 +1,32 @@
 import { AbortError, ServiceError, fql } from 'fauna'
 
+// Interface for meeting
+export interface Meeting {
+	startTime: string
+	endTime: string
+	timeZone: string
+	podRef: string
+}
+
 // Endpoint for creating a meeting
 export default defineEventHandler(async (event) => {
 	// Initialize Fauna client
 	const { client, error } = useFauna()
 	if (error !== null) return error
 
-	// Read in request body (use type assertion to validate body)
-	const body = (await readBody(event)) as Body
-
 	// Create new meeting record and assign attendees
 	try {
-		// Store meeting info into seperate object
-		const meeting = {
-			meetingId: body.meetingId,
-			startTime: body.startTime,
-			endTime: body.endTime,
-		}
+		const meeting = (await readBody(event)) as Meeting
 		// Perform POST query for meeting
-		const query = fql`Meeting.create(${meeting})`
+		const query = fql`
+		let meeting = {
+			startTime: ${meeting.startTime},
+			endTime: ${meeting.endTime},
+			timeZone: ${meeting.timeZone},
+			podRef: Pod.byId(${meeting.podRef}),
+		}
+		Meeting.create(meeting)
+		`
 		const meetingDoc = await client.query(query)
 
 		// Return meeting object
