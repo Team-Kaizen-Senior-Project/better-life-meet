@@ -1,8 +1,11 @@
+import { fetchCustomerSession } from './customerService'
+
 // Interface for meeting info
 export interface MeetingInfo {
 	startTime: string
 	endTime: string
-	customerRefs: string[]
+	timeZone: string
+	podRef: string
 }
 
 // Fetches a meeting from the API given a meeting ID
@@ -53,14 +56,21 @@ export async function deleteMeeting(id: string) {
 }
 
 // Creates a meeting using the API
-export async function createMeeting(startTime: Date, endTime: Date, customerRefs: string[]) {
+export async function createMeeting(startTime: Date, endTime: Date, timeZone: string) {
 	try {
 		const startDateString = startTime.toISOString()
 		const endDateString = endTime.toISOString()
+
+		// TODO: refactor & store podRef in session to avoid this
+		const userId = (await fetchCustomerSession()).user.id
+		const user = await fetchCustomer(userId)
+		const podRef = user.podRef.id
+
 		const meetingInfo: MeetingInfo = {
 			startTime: startDateString,
 			endTime: endDateString,
-			customerRefs,
+			timeZone,
+			podRef,
 		}
 		const response = await fetch(`/api/meeting`, {
 			method: 'POST',
@@ -73,7 +83,6 @@ export async function createMeeting(startTime: Date, endTime: Date, customerRefs
 		if (!response.ok) {
 			throw new Error('Error creating meeting')
 		}
-
 		return response
 	} catch (error) {
 		console.error('Error:', error)
