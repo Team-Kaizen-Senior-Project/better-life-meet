@@ -24,8 +24,8 @@ describe('PodHeader', () => {
         expect(viewScheduleButton.exists()).toBe(true)
         // verify the button text includes "View Schedule"
         expect(viewScheduleButton.text()).toContain('View Schedule')
-
     })
+    
     it('displays the user information correctly', () => {
         expect(wrapper.text()).toContain('User');
         expect(wrapper.text()).toContain('user@gmail.com')

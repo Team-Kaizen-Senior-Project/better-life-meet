@@ -14,7 +14,7 @@ describe('Button', () => {
     const wrapper = mount(Button, {
       props: {
         isLink: true,
-        to: '/about',
+        to: '/about', // example route
         type: 'secondary',
       }
     })
