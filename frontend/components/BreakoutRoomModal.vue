@@ -78,7 +78,7 @@
 		const customerData = await fetchAuthenticatedCustomer()
 		const customerRef = customerData._rawValue.user.id
 		const {meetingRef} = props
-		//TODO use actual user deivce
+		//TODO use actual user device
 		const res = await createAttendee(customerRef, meetingRef, joinedTime, "Mobile") 
 		console.log(res)
 		video.joinMeeting()

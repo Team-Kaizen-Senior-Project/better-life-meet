@@ -8,7 +8,6 @@ export const useVideoStore = defineStore('video', () => {
 	}
 
 	const joinMeeting = () => {
-		console.log("asdasd")
 		joinedMeeting.value = true
 		modalOpen.value = !modalOpen.value
 	}
