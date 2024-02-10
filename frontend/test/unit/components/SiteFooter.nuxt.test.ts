@@ -9,7 +9,6 @@ describe('SiteFooter', () => {
     expect(wrapper.text()).toContain('© BetterLife. All rights reserved.')
   })
 
-  // Test for NuxtLink to home
   it('contains a NuxtLink to the homepage', () => {
     const wrapper = mount(SiteFooter, {
       global: {

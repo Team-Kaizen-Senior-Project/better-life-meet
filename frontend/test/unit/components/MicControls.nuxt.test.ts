@@ -9,14 +9,11 @@ describe('MicControls', () => {
         props: { boxLength: 10 }
       })
   
-      // Initially, isTestingMic should be false
       expect(wrapper.vm.isTestingMic).toBe(false)
   
-      // Trigger the toggle to start the mic test
       await wrapper.vm.toggleMicTest()
       expect(wrapper.vm.isTestingMic).toBe(true)
   
-      // Trigger the toggle to stop the mic test
       await wrapper.vm.toggleMicTest()
       expect(wrapper.vm.isTestingMic).toBe(false)
 
