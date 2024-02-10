@@ -1,10 +1,16 @@
 <script setup lang="ts">
 	import { CalendarIcon } from '@heroicons/vue/24/solid'
-	// TODO: Placeholder content: replace after user login integration
-	const tempAttendees = ['380615136598032449', '380615136598033473', '380615136598034497', '380615136598035521']
 
 	const isOpen = ref(false)
-	const meetingStore = useScheduleMeetingStore()
+	const startTimeData = ref({
+		date: '',
+		time: '',
+	})
+	const endTimeData = ref({
+		date: '',
+		time: '',
+	})
+	const meetingTimeZone = ref('Eastern Time')
 	const timeZones = [
 		'Eastern Time',
 		'Central Time',
@@ -17,10 +23,12 @@
 		e.preventDefault()
 		const form = e.target as HTMLFormElement
 		if (!form.checkValidity()) return
-		const startTime = new Date(`${meetingStore.startTimeData.date} ${meetingStore.startTimeData.time}`)
-		const endTime = new Date(`${meetingStore.endTimeData.date} ${meetingStore.endTimeData.time}`)
+		const { date: startDate, time: startTime } = startTimeData.value
+		const { date: endDate, time: endTime } = endTimeData.value
+		const start = new Date(`${startDate} ${startTime}`)
+		const end = new Date(`${endDate} ${endTime}`)
 		try {
-			createMeeting(startTime, endTime, tempAttendees)
+			createMeeting(start, end, meetingTimeZone.value)
 			isOpen.value = false
 			form.reset()
 		} catch (error) {
@@ -53,14 +61,14 @@
 					<div class="flex gap-2">
 						<input
 							required
-							v-model="meetingStore.startTimeData.date"
+							v-model="startTimeData.date"
 							id="start-time-input"
 							type="date"
 							class="min-w-0 flex-auto appearance-none rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
 						/>
 						<input
 							required
-							v-model="meetingStore.startTimeData.time"
+							v-model="startTimeData.time"
 							type="time"
 							class="min-w-0 flex-auto appearance-none rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
 						/>
@@ -74,14 +82,14 @@
 					<div class="flex gap-2">
 						<input
 							required
-							v-model="meetingStore.endTimeData.date"
+							v-model="endTimeData.date"
 							id="end-time-input"
 							type="date"
 							class="min-w-0 flex-auto appearance-none rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
 						/>
 						<input
 							required
-							v-model="meetingStore.endTimeData.time"
+							v-model="endTimeData.time"
 							type="time"
 							class="min-w-0 flex-auto appearance-none rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
 						/>
@@ -95,7 +103,7 @@
 
 					<select
 						required
-						v-model="meetingStore.meetingTimeZone"
+						v-model="meetingTimeZone"
 						name="meeting-timezone-input"
 						id="meeting-timezone-input"
 						class="min-w-0 flex-auto rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] pr-10 text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"

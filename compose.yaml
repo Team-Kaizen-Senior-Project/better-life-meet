@@ -7,24 +7,16 @@ services:
       - 3333
     security_opt:
       - seccomp:./seccomp-profile.json
-    develop:
-      watch:
-        - path: ./backend
-          target: /opt/app
-          action: sync
-        - path: ./backend/package.json
-          action: rebuild
+    volumes:
+      - ./backend:/home/node/app
+    command: bash -c "npm install && npm run watch"
   nuxt:
     build: ./frontend
     ports:
       - 3000
-    develop:
-      watch:
-        - path: ./frontend
-          target: /opt/app
-          action: sync
-        - path: ./frontend/package.json
-          action: rebuild
+    volumes:
+      - ./frontend:/home/node/app
+    command: bash -c "npm install && npm run dev"
     depends_on:
       - mediasoup
   nginx:
@@ -40,4 +32,3 @@ services:
     depends_on:
       - mediasoup
       - nuxt
-
