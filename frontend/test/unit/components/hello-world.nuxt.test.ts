@@ -1,7 +1,5 @@
 // @vitest-environment nuxt
-import { describe, it, expect } from 'vitest'
-
-import { test } from 'vitest'
+import { describe, it, expect, test } from 'vitest'
 
 test('my test', () => {
   // ... test with Nuxt environment!
