@@ -1,55 +1,36 @@
 import { AbortError, ServiceError, fql } from 'fauna'
 
+// Interface for meeting
+export interface Meeting {
+	startTime: string
+	endTime: string
+	timeZone: string
+	podRef: string
+}
+
 // Endpoint for creating a meeting
 export default defineEventHandler(async (event) => {
 	// Initialize Fauna client
 	const { client, error } = useFauna()
 	if (error !== null) return error
 
-	// Read in request body (use type assertion to validate body)
-	const body = (await readBody(event)) as Body
-
-	// Store customerRef IDs
-	const customerRefs: string[] = body.customerRefs
-
-	// Initialize array to store the created attendeeRefs
-	let attendeeRefs = []
-
 	// Create new meeting record and assign attendees
 	try {
-		// Iterates through customerRefs and creates blank attendee records for each customer
-		for (let i = 0; i < customerRefs.length; i++) {
-			// Create attendee object using customer Id
-			const query = fql`Attendee.create({customerRef: Customer.byId(${customerRefs[i]})})`
-			const attendeeDoc = await client.query(query)
-
-			// Store reference to newly created attendee object (utilized later to update meeting)
-			const attendee = {
-				customerRef: attendeeDoc.data?.id,
-			}
-			// push newly created attendees
-			attendeeRefs.push(attendee)
-		}
-
-		// Store meeting info into seperate object
-		const meeting = {
-			meetingId: body.meetingId,
-			startTime: body.startTime,
-			endTime: body.endTime,
-		}
+		const meeting = (await readBody(event)) as Meeting
 		// Perform POST query for meeting
-		const query = fql`Meeting.create(${meeting})`
+		const query = fql`
+		let meeting = {
+			startTime: ${meeting.startTime},
+			endTime: ${meeting.endTime},
+			timeZone: ${meeting.timeZone},
+			podRef: Pod.byId(${meeting.podRef}),
+		}
+		Meeting.create(meeting)
+		`
 		const meetingDoc = await client.query(query)
 
-		// Retrieve meeting Id from query (used to update meeting object with attendee info)
-		const meetingId = meetingDoc.data?.id
-
-		// Query to update meeting to include attendee info
-		const updateQuery = fql`Meeting.byId(${meetingId})!.update({attendeeRefs: ${attendeeRefs}.map(Attendee.create)})`
-		const updatedDoc = await client.query(updateQuery)
-
-		// Return the updated document (meeting + attendies)
-		return updatedDoc
+		// Return meeting object
+		return meetingDoc
 
 		// Catch error
 	} catch (error: unknown) {
