@@ -24,6 +24,17 @@ export async function fetchCustomer(id: string) {
 	return data.value?.data
 }
 
+export async function fetchCustomerSession() {
+	const url = '/api/auth/customer'
+	const response = await fetch(url, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	})
+	return await response.json()
+}
+
 // Fetches all customers from the API
 export async function fetchAllCustomers() {
 	const url = `/api/customer`
