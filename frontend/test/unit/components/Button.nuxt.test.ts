@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import Button from '@/components/Button.vue'
 
-describe('Button Component', () => {
+describe('Button', () => {
   it('renders as a button with primary style by default', () => {
     const wrapper = mount(Button)
     expect(wrapper.element.tagName).toBe('BUTTON')

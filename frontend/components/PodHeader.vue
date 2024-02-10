@@ -6,7 +6,7 @@
 		<div class="mx-auto flex w-[90vw] max-w-[1600px] items-center justify-between">
 			<div class="flex items-center gap-2">
 				<p class="text-lg font-medium text-white">Weekly Pod Accountability Meeting</p>
-				<button class="flex items-center gap-1 rounded-lg bg-sky-500 px-3 py-2 font-medium text-white hover:bg-sky-600">
+				<button class="flex items-center gap-1 rounded-lg bg-sky-500 px-3 py-2 font-medium text-white hover:bg-sky-600" data-testid="view-schedule">
 					View Schedule
 					<ChevronDownIcon class="h-3 w-3" />
 				</button>

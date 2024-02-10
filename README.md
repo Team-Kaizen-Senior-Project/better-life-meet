@@ -110,7 +110,7 @@ docker compose watch
 ```
 
 ## Testing
-Our applcation uses **[vitest](https://github.com/vitest-dev/vitest)** for testing. To install vitest, use the following commands:
+TribeMeet uses **[vitest](https://github.com/vitest-dev/vitest)** for testing. To install vitest, use the following commands:
 
 ```bash
 cd frontend
