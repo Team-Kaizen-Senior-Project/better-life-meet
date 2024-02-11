@@ -129,6 +129,13 @@
 			:boxLength="50"
 		>
 			<template #join>
+				<!-- TODO add functionality to cancel joining a meeting -->
+				<Button
+					type="button"
+					class="rounded-md bg-gray-500 mr-2 font-medium text-white hover:bg-sky-600"
+				>
+					Cancel
+				</Button>
 				<Button
 					type="button"
 					@click="createNewAttendee"
