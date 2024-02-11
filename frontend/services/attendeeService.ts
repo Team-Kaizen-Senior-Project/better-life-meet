@@ -9,36 +9,93 @@ export interface Attendee {
 	customerRef: String
 	meetingRef: String
 }
+export const useAttendeeStore = defineStore('attendee', () => {
+    const attendeeId = ref(null);
 
-// Created an attendee when joining a meeting
-export async function createAttendee(customerRef: String, meetingRef: String, startTime: Date, platform: String){
-	try{
-		const attendeeInfo : Attendee = {
-			joinTime: startTime.toISOString(),
-			leaveTime: null,
-			usedVideo: false,
-			platform: platform,
-			customerRef: customerRef,
-			meetingRef: meetingRef,
+    async function createAttendee(customerRef: String, meetingRef: String, startTime: Date, platform: String, isCameraOn: Boolean){
+		try{
+			const attendeeInfo : Attendee = {
+				joinTime:  startTime.toISOString(),
+				leaveTime: null,
+				usedVideo: isCameraOn,
+				platform: platform,
+				customerRef: customerRef,
+				meetingRef: meetingRef,
+			}
+			const response = await fetch(`/api/attendee`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(attendeeInfo),
+			})
+			if (!response.ok) {
+				throw new Error('Error creating attendee')
+			}
+			const id = await response.json();
+			attendeeId.value = id
+			console.log(attendeeId.value)
+		} catch (error) {
+			console.error('Error:', error)
+			throw error
 		}
-		console.log(attendeeInfo)
-		const response = await fetch(`/api/attendee`, {
-			method: 'POST',
+	}
+	async function logCameraUsed(attendeeId: String){
+		const url = `/api/attendee/${attendeeId}`; 
+		const body = {
+			usedVideo: true
+		};
+		// Update attendee 'usedVideo' field in the db
+		try {
+			const response = await fetch(url, {
+			method: 'PATCH',
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(attendeeInfo),
-		})
-		if (!response.ok) {
-			throw new Error('Error creating attendee')
-		}
+			body: JSON.stringify(body),
+			});
 
-		return response
-	} catch (error) {
-		console.error('Error:', error)
-		throw error
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+
+			const data = await response.json();
+			console.log('Successfully updated:', data);
+			return data; 
+		} catch (error) {
+			console.error('Error updating usedVideo:', error);
+		}
 	}
-}
+	async function logLeaveTime(attendeeId: String){
+		const url = `/api/attendee/${attendeeId}`; 
+		const body = {
+			leaveTime: new Date()
+		};
+		// Update attendee 'usedVideo' field in the db
+		try {
+			const response = await fetch(url, {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(body),
+			});
+
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+
+			const data = await response.json();
+			console.log('Successfully updated:', data);
+			return data; 
+		} catch (error) {
+			console.error('Error updating leave time:', error);
+		}
+	}
+
+    return { attendeeId, createAttendee, logCameraUsed, logLeaveTime }
+});
+// Created an attendee when joining a meeting
 
 
 

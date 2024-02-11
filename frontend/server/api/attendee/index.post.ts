@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
             Attendee.create(attendee)
         `
 		const response = await client.query(query)
-		return response
+		return response.data.id
 	} catch (error: unknown) {
 		if (error instanceof AbortError) {
 			const abortError = error as AbortError

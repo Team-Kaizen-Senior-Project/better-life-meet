@@ -3,6 +3,10 @@
 	import { VideoCameraIcon } from '@heroicons/vue/24/outline'
 
 	const media = useMediaStore()
+	const customerData = await fetchAuthenticatedCustomer()
+	const customerRef = customerData._rawValue.user.id
+	const attendee = useAttendeeStore()
+	
 </script>
 <template>
 	<footer class="absolute bottom-0 w-full bg-black py-4">
@@ -12,7 +16,7 @@
 					<Button class="rounded px-5 py-3" @click="media.toggleAudio">
 						<MicrophoneIcon class="h-5 w-5" />
 					</Button>
-					<Button class="rounded px-5 py-3" @click="media.toggleVideo">
+					<Button class="rounded px-5 py-3" @click="media.toggleVideo(customerRef)">
 						<VideoCameraIcon class="h-5 w-5" />
 					</Button>
 					<Button class="rounded px-5 py-3">

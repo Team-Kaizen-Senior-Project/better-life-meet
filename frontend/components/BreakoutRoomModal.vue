@@ -4,7 +4,7 @@
 	import { VideoCameraIcon } from '@heroicons/vue/24/outline'
 	import { MicrophoneIcon } from '@heroicons/vue/24/solid'
 	const video = useVideoStore()
-
+	const attendee = useAttendeeStore()
 	const modalIsOpen = ref(false)
 	const isCameraOn = ref(false)
 	const videoPreview = ref(null)
@@ -74,13 +74,14 @@
 		
 	}
 	async function createNewAttendee(){
-		const joinedTime = new Date()
+		const joinedTime =  new Date()
 		const customerData = await fetchAuthenticatedCustomer()
 		const customerRef = customerData._rawValue.user.id
 		const {meetingRef} = props
+		const isCameraOn = video.cameraActive
 		//TODO use actual user device
-		const res = await createAttendee(customerRef, meetingRef, joinedTime, "Mobile") 
-		console.log(res)
+		attendee.createAttendee(customerRef, meetingRef, joinedTime, "Mobile", isCameraOn) 
+		//const atRes = await fetchAttendee(customerRef)
 		video.joinMeeting()
 	}
 	// onMounted(() => {
