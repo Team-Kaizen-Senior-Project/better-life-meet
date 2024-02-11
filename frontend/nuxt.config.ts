@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	// ... other options
-	modules: ['@pinia/nuxt', '@nuxt/ui', '@samk-dev/nuxt-vcalendar','@sidebase/nuxt-auth'],
+	modules: ['@pinia/nuxt', '@nuxt/ui', '@samk-dev/nuxt-vcalendar','@sidebase/nuxt-auth', '@nuxt/test-utils/module'],
 	// css: ['~/assets/css/main.css'],
 	auth:{
 		//all pages, aside from the login page will require sign-in- this can be set to false for testing if log in stops working

@@ -110,8 +110,18 @@ docker compose watch
 ```
 
 ## Testing
+TribeMeet uses **[vitest](https://github.com/vitest-dev/vitest)** for testing. To install vitest, use the following commands:
 
-(_Placeholder for CSC 191_)
+```bash
+cd frontend
+npm install --save-dev vitest @vue/test-utils happy-dom
+```
+To run tests, use the following command:
+
+```bash
+npm run test
+```
+Any further information on testing Nuxt applications can be found here: **[Nuxt testing](https://nuxt.com/docs/getting-started/testing)**.
 
 ## Deployment
 
