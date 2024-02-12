@@ -66,7 +66,7 @@ export const useAttendeeStore = defineStore('attendee', () => {
 			console.error('Error updating usedVideo:', error);
 		}
 	}
-	async function logLeaveTime(attendeeId: String){
+	async function logLeaveTime(attendeeId){
 		const url = `/api/attendee/${attendeeId}`; 
 		const body = {
 			leaveTime: new Date()

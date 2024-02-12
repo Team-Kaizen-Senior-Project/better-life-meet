@@ -6,7 +6,11 @@
 	const customerData = await fetchAuthenticatedCustomer()
 	const customerRef = customerData._rawValue.user.id
 	const attendee = useAttendeeStore()
-	
+	async function leaveMeeting(){
+		console.log(attendee.attendeeId)
+		await attendee.logLeaveTime(attendee.attendeeId)
+		await navigateTo('/dashboard')
+	}
 </script>
 <template>
 	<footer class="absolute bottom-0 w-full bg-black py-4">
@@ -56,8 +60,7 @@
 				<div>
 					<Button
 						class="rounded-lg bg-rose-600 px-3 py-2 text-sm font-medium text-white hover:bg-rose-700"
-						isLink
-						to="/dashboard"
+						@click="leaveMeeting"
 					>
 						Leave
 					</Button>
