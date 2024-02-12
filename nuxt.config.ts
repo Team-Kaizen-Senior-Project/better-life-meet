@@ -40,6 +40,7 @@ export default defineNuxtConfig({
 	},
 	ssr: false, // mediasoup client cannot work with SSR enabled
 	nitro: {
+		serveStatic: true,
 		preset: './preset',
 		entry: process.env.NODE_ENV === 'production' ? '../preset/entry' : '../preset/entry.dev',
 	},

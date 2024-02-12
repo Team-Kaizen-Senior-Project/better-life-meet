@@ -4,6 +4,7 @@
 	"type": "module",
 	"scripts": {
 		"build": "nuxt build",
+		"start": "env-cmd node ./.output/server/index.mjs",
 		"dev": "nuxt dev",
 		"generate": "nuxt generate",
 		"preview": "nuxt preview",
@@ -17,6 +18,7 @@
 		"@sidebase/nuxt-auth": "^0.6.7",
 		"@vue/test-utils": "^2.4.4",
 		"autoprefixer": "^10.4.17",
+		"env-cmd": "^10.1.0",
 		"happy-dom": "^13.3.8",
 		"next-auth": "4.21.1",
 		"nuxt": "^3.10.1",
