@@ -1,11 +1,52 @@
-// InterFace for updating pods
+import { useApi } from '~/composables/useApi'
+import type { Numberic, Time } from '~/types'
+
 export interface Pod {
 	name?: string
-	meetingTime?: string
-	leader?: string
-	memberId?: string // allows single user updates for pod
+	meetingTime?: Time
+	leader: { id: string }
 	meetingId?: string // allows single meeting updates for pod
+	id: string
 }
+
+interface State {
+	pod?: Pod
+}
+
+export const usePodStore = defineStore('pod', () => {
+	const { state: customerState } = useCustomerStore()
+	const { getPod: getPodApi } = useApi()
+
+	const state = reactive<State>({
+		pod: undefined,
+	})
+
+	const getPod = async (id: Numberic) => {
+		try {
+			const res = await getPodApi(id)
+			state.pod = res.data
+		} catch (error) {
+			console.error('Error fetching pod:', error)
+		}
+	}
+
+	// For checking if is leader of a pod
+	const getIsLeader = (id?: Pod['id']) => {
+		if (!id || !customerState.customer?.id) return false
+		return id == customerState.customer.id
+	}
+
+	const isLeader = computed(() => {
+		return getIsLeader(state.pod?.leader.id)
+	})
+
+	return {
+		getPod,
+		getIsLeader,
+		state,
+		isLeader,
+	}
+})
 
 // Fetches a pod from the API using the provided ID
 export async function fetchPod(id: string) {

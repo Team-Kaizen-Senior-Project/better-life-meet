@@ -26,15 +26,15 @@
 	// Connect to websocket server
 	const ws = io({ path: '/wss' })
 
-	const isConnected = await new Promise<boolean>((resolve) => {
-		ws.on('connect', () => {
-			ws.emit('join', meetingId, (response: boolean) => {
-				resolve(response)
-			})
+	// const isConnected = await new Promise<boolean>((resolve) => {
+	ws.on('connect', () => {
+		ws.emit('join', meetingId, (response: boolean) => {
+			// resolve(response)
 		})
 	})
+	// })
 
-	if (isConnected) {
+	if (false) {
 		// Retrieve router RTP capabilities
 		const routerRtpCapabilities = await new Promise<RtpCapabilities>((resolve) => {
 			ws.emit('getRouterCapabilities', meetingId, (rtpCapabilities: RtpCapabilities) => {
@@ -158,6 +158,6 @@
 			</div>
 		</div>
 	</div>
-	<BreakoutRoomModal :meetingRef="meetingId"/>
+	<BreakoutRoomModal :meetingRef="meetingId" />
 	<PodFooter />
 </template>

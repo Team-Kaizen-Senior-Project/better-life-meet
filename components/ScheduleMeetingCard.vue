@@ -1,16 +1,33 @@
 <script setup lang="ts">
 	import { CalendarIcon } from '@heroicons/vue/24/solid'
+	import type { MeetingFields } from '~/types'
+
+	const { createMeeting } = useApi()
+	const { state: podState } = usePodStore()
+
+	interface State {
+		form: {
+			startData: { date?: string; time?: string }
+			endData: { date?: string; time?: string }
+			timeZone?: string
+		}
+		isLoading: boolean
+	}
+
+	const state: State = reactive({
+		form: {
+			startData: {},
+			endData: {},
+			timeZone: 'Eastern Time',
+		},
+		isLoading: false,
+	})
 
 	const isOpen = ref(false)
-	const startTimeData = ref({
-		date: '',
-		time: '',
-	})
-	const endTimeData = ref({
-		date: '',
-		time: '',
-	})
-	const meetingTimeZone = ref('Eastern Time')
+
+	const startISO = computed(() => new Date(`${state.form.startData.date} ${state.form.startData.time}`).toISOString())
+	const endISO = computed(() => new Date(`${state.form.endData.date} ${state.form.endData.time}`).toISOString())
+
 	const timeZones = [
 		'Eastern Time',
 		'Central Time',
@@ -19,27 +36,42 @@
 		'Alaska Time',
 		'Hawaii-Aleutian Time',
 	]
+
+	const reset = () => {
+		state.form = {
+			startData: {},
+			endData: {},
+			timeZone: 'Eastern Time',
+		}
+	}
+
 	async function scheduleMeeting(e: Event) {
 		e.preventDefault()
 		const form = e.target as HTMLFormElement
 		if (!form.checkValidity()) return
-		const { date: startDate, time: startTime } = startTimeData.value
-		const { date: endDate, time: endTime } = endTimeData.value
-		const start = new Date(`${startDate} ${startTime}`)
-		const end = new Date(`${endDate} ${endTime}`)
+		state.isLoading = true
 		try {
-			createMeeting(start, end, meetingTimeZone.value)
+			await createMeeting({
+				startTime: startISO.value,
+				endTime: endISO.value,
+				timeZone: state.form.timeZone,
+				podRef: podState.pod?.id,
+			})
 			isOpen.value = false
 			form.reset()
+			reset()
 		} catch (error) {
 			console.error(error)
+		} finally {
+			state.isLoading = false
 		}
 	}
-	const customModal = ref({
+
+	const customModal = {
 		overlay: {
 			background: 'bg-zinc-900/90 dark:bg-gray-800/75',
 		},
-	})
+	}
 </script>
 <template>
 	<UButton @click="isOpen = true" class="bg-sky-500 hover:bg-sky-600">
@@ -61,14 +93,14 @@
 					<div class="flex gap-2">
 						<input
 							required
-							v-model="startTimeData.date"
+							v-model="state.form.startData.date"
 							id="start-time-input"
 							type="date"
 							class="min-w-0 flex-auto appearance-none rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
 						/>
 						<input
 							required
-							v-model="startTimeData.time"
+							v-model="state.form.startData.time"
 							type="time"
 							class="min-w-0 flex-auto appearance-none rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
 						/>
@@ -82,14 +114,14 @@
 					<div class="flex gap-2">
 						<input
 							required
-							v-model="endTimeData.date"
+							v-model="state.form.endData.date"
 							id="end-time-input"
 							type="date"
 							class="min-w-0 flex-auto appearance-none rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
 						/>
 						<input
 							required
-							v-model="endTimeData.time"
+							v-model="state.form.endData.time"
 							type="time"
 							class="min-w-0 flex-auto appearance-none rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
 						/>
@@ -103,7 +135,7 @@
 
 					<select
 						required
-						v-model="meetingTimeZone"
+						v-model="state.form.timeZone"
 						name="meeting-timezone-input"
 						id="meeting-timezone-input"
 						class="min-w-0 flex-auto rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] pr-10 text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
@@ -119,15 +151,9 @@
 						Include prerecorded videos for the week?
 					</label>
 				</div>
-				<div class="mt-4 flex justify-between">
-					<button
-						type="button"
-						@click="isOpen = false"
-						class="inline-flex flex-none items-center justify-center gap-2 rounded-md bg-zinc-700 px-3 py-2 text-sm font-semibold text-zinc-100 outline-offset-2 transition hover:bg-zinc-600 active:bg-zinc-700 active:text-zinc-100/70 active:transition-none"
-					>
-						Cancel
-					</button>
-					<button class="rounded-lg bg-sky-500 px-3 py-2 font-medium text-white hover:bg-sky-600">Schedule</button>
+				<div class="mt-4 flex flex-row-reverse gap-3">
+					<UButton type="submit" :loading="state.isLoading">Schedule</UButton>
+					<UButton variant="ghost" color="gray" type="button" @click="isOpen = false">Cancel</UButton>
 				</div>
 			</form>
 		</div>

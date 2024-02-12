@@ -3,13 +3,14 @@
 	import { VideoCameraIcon } from '@heroicons/vue/24/outline'
 
 	const media = useMediaStore()
-	const customerData = await fetchAuthenticatedCustomer()
-	const customerRef = customerData._rawValue.user.id
 	const attendee = useAttendeeStore()
-	async function leaveMeeting(){
-		console.log(attendee.attendeeId)
-		await attendee.logLeaveTime(attendee.attendeeId)
-		await navigateTo('/dashboard')
+	async function leaveMeeting() {
+		try {
+			await attendee.logLeaveTime()
+			await navigateTo('/dashboard')
+		} catch (error) {
+			console.log(error)
+		}
 	}
 </script>
 <template>
@@ -20,7 +21,7 @@
 					<Button class="rounded px-5 py-3" @click="media.toggleAudio">
 						<MicrophoneIcon class="h-5 w-5" />
 					</Button>
-					<Button class="rounded px-5 py-3" @click="media.toggleVideo(customerRef)">
+					<Button class="rounded px-5 py-3" @click="media.toggleVideo()">
 						<VideoCameraIcon class="h-5 w-5" />
 					</Button>
 					<Button class="rounded px-5 py-3">

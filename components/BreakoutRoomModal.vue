@@ -1,13 +1,14 @@
-<script setup>
-	import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
-	import { VideoCameraSlashIcon } from '@heroicons/vue/24/outline'
-	import { VideoCameraIcon } from '@heroicons/vue/24/outline'
-	import { MicrophoneIcon } from '@heroicons/vue/24/solid'
+<script setup lang="ts">
+	import type { AttendeeFields } from '~/types'
+
 	const video = useVideoStore()
 	const attendee = useAttendeeStore()
+	const { state: customerState } = useCustomerStore()
+
 	const modalIsOpen = ref(false)
 	const isCameraOn = ref(false)
 	const videoPreview = ref(null)
+
 	const props = defineProps({
 		meetingRef: String,
 	})
@@ -49,7 +50,7 @@
 		isCameraOn.value = false
 	}
 	async function joinMeeting() {
-		console.log("inside join meeting")
+		console.log('inside join meeting')
 		const videoElement = document.getElementById('demo-video-element')
 		modalIsOpen.value = false
 		navigator.mediaDevices
@@ -59,7 +60,6 @@
 					videoElement.srcObject = stream
 					videoElement.play()
 				}
-				
 			})
 			.catch(function (err) {
 				console.error(err)
@@ -71,18 +71,28 @@
 			},
 			false,
 		)
-		
 	}
-	async function createNewAttendee(){
-		const joinedTime =  new Date()
-		const customerData = await fetchAuthenticatedCustomer()
-		const customerRef = customerData._rawValue.user.id
-		const {meetingRef} = props
+	async function createNewAttendee() {
+		const startTime = new Date().toISOString()
+		const { meetingRef } = props
 		const isCameraOn = video.cameraActive
-		//TODO use actual user device
-		attendee.createAttendee(customerRef, meetingRef, joinedTime, "Mobile", isCameraOn) 
-		//const atRes = await fetchAttendee(customerRef)
-		video.joinMeeting()
+
+		const fields: AttendeeFields = {
+			joinTime: startTime,
+			customerRef: customerState.customer?.id,
+			usedVideo: isCameraOn,
+			meetingRef,
+			// TODO: use actual user device
+			platform: 'Mobile',
+			leaveTime: null,
+		}
+
+		try {
+			await attendee.createAttendee(fields)
+			video.joinMeeting()
+		} catch (error) {
+			console.log('error creating attendee', error)
+		}
 	}
 	// onMounted(() => {
 	// 	// Setting this to true in the ref initially breaks the close modal
@@ -130,10 +140,7 @@
 		>
 			<template #join>
 				<!-- TODO add functionality to cancel joining a meeting -->
-				<Button
-					type="button"
-					class="rounded-md bg-gray-500 mr-2 font-medium text-white hover:bg-sky-600"
-				>
+				<Button type="button" class="mr-2 rounded-md bg-gray-500 font-medium text-white hover:bg-sky-600">
 					Cancel
 				</Button>
 				<Button

@@ -1,8 +1,12 @@
-<script setup>
+<script setup lang="ts">
 	import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
 	import { VideoCameraSlashIcon } from '@heroicons/vue/24/outline'
 	import { MicrophoneIcon } from '@heroicons/vue/24/solid'
 	import MeetingCard from '@/components/MeetingCard.vue'
+
+	const { getMettings } = useApi()
+	const { state: podState } = usePodStore()
+
 	const meetings = [
 		{
 			title: 'Week 16 Accountability Meeting',
@@ -24,6 +28,19 @@
 			dates: new Date(),
 		},
 	])
+
+	const { data, refresh, pending } = await useAsyncData('dashboard', async () => {
+		const [meetings] = await Promise.all([
+			getMettings({
+				podRef: podState.pod?.id,
+				count: 3,
+			}),
+		])
+
+		return {
+			meetings,
+		}
+	})
 </script>
 
 <template>
@@ -62,8 +79,8 @@
 					<div class="rounded-lg bg-zinc-900 p-4">
 						<h2 class="mb-4 text-lg font-medium text-white">Meetings for today</h2>
 						<div class="grid grid-cols-1 gap-4">
-							<div v-for="meeting in meetings" :key="meeting.title" class="">
-								<MeetingCard :meeting="meeting" :isLive="meeting.isLive" />
+							<div v-for="meeting in data?.meetings" class="">
+								<MeetingCard :meeting="meeting" @refresh="refresh" />
 							</div>
 						</div>
 					</div>

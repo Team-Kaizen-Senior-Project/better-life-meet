@@ -11,7 +11,7 @@ export default defineNuxtConfig({
 		cssPath: '~/assets/css/main.css',
 	},
 	imports: {
-		dirs: ['./services'],
+		dirs: ['./stores'],
 	},
 	// @ts-ignore
 	colorMode: {
@@ -21,7 +21,7 @@ export default defineNuxtConfig({
 		autoImports: ['defineStore', 'acceptHMRUpdate'],
 	},
 	devtools: {
-		enabled: true,
+		enabled: false,
 	},
 	vue: {
 		compilerOptions: {

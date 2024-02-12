@@ -13,7 +13,6 @@ export default defineEventHandler(async (event) => {
 	// Initialize Fauna client
 	const { client, error } = useFauna()
 	if (error !== null) return error
-
 	// Create new meeting record and assign attendees
 	try {
 		const meeting = (await readBody(event)) as Meeting
@@ -27,6 +26,7 @@ export default defineEventHandler(async (event) => {
 		}
 		Meeting.create(meeting)
 		`
+
 		const meetingDoc = await client.query(query)
 
 		// Return meeting object
