@@ -8,6 +8,7 @@ interface Customer {
 	firstName: string
 	lastName: string
 	netWorth: string
+	podRef: string
 }
 
 async function getCustomer(email: string) {
@@ -36,6 +37,7 @@ export default NuxtAuthHandler({
 						firstName: customer.firstName,
 						lastName: customer.lastName,
 						netWorth: customer.netWorth,
+						podRef: customer.podRef
 					}
 					return user
 				} else {
@@ -60,6 +62,8 @@ export default NuxtAuthHandler({
 					session.user.lastName = customerData.lastName
 					//@ts-expect-error
 					session.user.netWorth = customerData.netWorth
+					//@ts-expect-error
+					session.user.podRef = customerData.podRef
 				} else {
 					console.log('Token Email Invalid: ', token.email)
 				}

@@ -12,6 +12,7 @@ export const useMediaStore = defineStore('media', () => {
 	}
 
 	const toggleVideo = async () => {
+		console.log("inside toggle video")
 		isVideoEnabled.value = !isVideoEnabled.value
 
 		if (isVideoEnabled.value) {

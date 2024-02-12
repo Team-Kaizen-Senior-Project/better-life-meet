@@ -4,11 +4,13 @@
 	import { VideoCameraIcon } from '@heroicons/vue/24/outline'
 	import { MicrophoneIcon } from '@heroicons/vue/24/solid'
 	const video = useVideoStore()
-
+	const attendee = useAttendeeStore()
 	const modalIsOpen = ref(false)
 	const isCameraOn = ref(false)
 	const videoPreview = ref(null)
-
+	const props = defineProps({
+		meetingRef: String,
+	})
 	const customModal = ref({
 		overlay: {
 			background: 'bg-zinc-900/90',
@@ -46,7 +48,8 @@
 		videoPreview.value.srcObject.getTracks().forEach((track) => track.stop())
 		isCameraOn.value = false
 	}
-	function joinMeeting() {
+	async function joinMeeting() {
+		console.log("inside join meeting")
 		const videoElement = document.getElementById('demo-video-element')
 		modalIsOpen.value = false
 		navigator.mediaDevices
@@ -56,6 +59,7 @@
 					videoElement.srcObject = stream
 					videoElement.play()
 				}
+				
 			})
 			.catch(function (err) {
 				console.error(err)
@@ -67,6 +71,18 @@
 			},
 			false,
 		)
+		
+	}
+	async function createNewAttendee(){
+		const joinedTime =  new Date()
+		const customerData = await fetchAuthenticatedCustomer()
+		const customerRef = customerData._rawValue.user.id
+		const {meetingRef} = props
+		const isCameraOn = video.cameraActive
+		//TODO use actual user device
+		attendee.createAttendee(customerRef, meetingRef, joinedTime, "Mobile", isCameraOn) 
+		//const atRes = await fetchAttendee(customerRef)
+		video.joinMeeting()
 	}
 	// onMounted(() => {
 	// 	// Setting this to true in the ref initially breaks the close modal
@@ -109,13 +125,20 @@
 		</div> -->
 		<VideoSettings
 			title="Pod accountability meeting is starting"
-			description="This is your chance to make sure your camera is setup and your microphone is working"
+			description="This is your chance to make sure your camera is setup and your microphone is working!"
 			:boxLength="50"
 		>
 			<template #join>
+				<!-- TODO add functionality to cancel joining a meeting -->
 				<Button
 					type="button"
-					@click="video.joinMeeting"
+					class="rounded-md bg-gray-500 mr-2 font-medium text-white hover:bg-sky-600"
+				>
+					Cancel
+				</Button>
+				<Button
+					type="button"
+					@click="createNewAttendee"
 					class="rounded-md bg-sky-500 font-medium text-white hover:bg-sky-600"
 				>
 					Join

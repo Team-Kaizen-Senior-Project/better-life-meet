@@ -1,4 +1,17 @@
 // Fetches a customer from the API given a customer ID
+
+export async function fetchAuthenticatedCustomer() {
+	const url = `/api/auth/customer`
+	const { data, error } = await useFetch(url)
+
+	if (error.value) {
+		console.error('Error fetching authenticated customer:', error.value)
+		return null
+	}
+
+	return data
+}
+
 export async function fetchCustomer(id: string) {
 	const url = `/api/customer/${id}`
 	const { data, error } = await useFetch(url)
