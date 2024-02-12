@@ -1,67 +1,60 @@
-import "#internal/nitro/virtual/polyfill";
-import { Server } from "node:http";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
-import { mkdirSync } from "node:fs";
-import { threadId, parentPort } from "node:worker_threads";
-import { isWindows, provider } from "std-env";
-import { toNodeListener } from "h3";
-const nitroApp = useNitroApp();
-import { trapUnhandledNodeErrors } from "#internal/nitro/utils";
+import '#internal/nitro/virtual/polyfill'
+import { Server } from 'node:http'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { mkdirSync } from 'node:fs'
+import { threadId, parentPort } from 'node:worker_threads'
+import { isWindows, provider } from 'std-env'
+import { toNodeListener } from 'h3'
+const nitroApp = useNitroApp()
+import { trapUnhandledNodeErrors } from '#internal/nitro/utils'
 
-import { Server as SocketServer } from "socket.io";
-import socketEventHandler from "~/socket/event-handler";
+import { Server as SocketServer } from 'socket.io'
+import socketEventHandler from '~/socket/event-handler'
 
-const server = new Server(toNodeListener(nitroApp.h3App));
+const server = new Server(toNodeListener(nitroApp.h3App))
 
 function getAddress() {
-  if (
-    provider === "stackblitz" ||
-    process.env.NITRO_NO_UNIX_SOCKET ||
-    process.versions.bun
-  ) {
-    return 0;
-  }
-  const socketName = `worker-${process.pid}-${threadId}.sock`;
-  if (isWindows) {
-    return join("\\\\.\\pipe\\nitro", socketName);
-  } else {
-    const socketDir = join(tmpdir(), "nitro");
-    mkdirSync(socketDir, { recursive: true });
-    return join(socketDir, socketName);
-  }
+	if (provider === 'stackblitz' || process.env.NITRO_NO_UNIX_SOCKET || process.versions.bun) {
+		return 0
+	}
+	const socketName = `worker-${process.pid}-${threadId}.sock`
+	if (isWindows) {
+		return join('\\\\.\\pipe\\nitro', socketName)
+	} else {
+		const socketDir = join(tmpdir(), 'nitro')
+		mkdirSync(socketDir, { recursive: true })
+		return join(socketDir, socketName)
+	}
 }
 
-const listenAddress = getAddress();
+const listenAddress = getAddress()
 const listener = server.listen(listenAddress, () => {
-  const _address = server.address();
-  parentPort!.postMessage({
-    event: "listen",
-    address:
-      typeof _address === "string"
-        ? { socketPath: _address }
-        : { host: "localhost", port: _address!.port },
-  });
+	const _address = server.address()
+	parentPort!.postMessage({
+		event: 'listen',
+		address: typeof _address === 'string' ? { socketPath: _address } : { host: 'localhost', port: _address!.port },
+	})
 
-  console.log(`Listening on ${listenAddress} (custom dev preset)`);
-});
+	console.log(`Listening on ${listenAddress} (custom dev preset)`)
+})
 
 const wss = new SocketServer(server, {
-  transports: ["polling"],
-});
-socketEventHandler(wss);
+	transports: ['polling'],
+})
+socketEventHandler(wss)
 
 // Trap unhandled errors
-trapUnhandledNodeErrors();
+trapUnhandledNodeErrors()
 
 // Graceful shutdown
 async function onShutdown(signal?: NodeJS.Signals) {
-  await nitroApp.hooks.callHook("close");
+	await nitroApp.hooks.callHook('close')
 }
 
-parentPort!.on("message", async (msg) => {
-  if (msg && msg.event === "shutdown") {
-    await onShutdown();
-    parentPort!.postMessage({ event: "exit" });
-  }
-});
+parentPort!.on('message', async (msg) => {
+	if (msg && msg.event === 'shutdown') {
+		await onShutdown()
+		parentPort!.postMessage({ event: 'exit' })
+	}
+})

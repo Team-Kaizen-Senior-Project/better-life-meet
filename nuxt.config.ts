@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	// ... other options
-	modules: ['@pinia/nuxt', '@nuxt/ui', '@samk-dev/nuxt-vcalendar','@sidebase/nuxt-auth', '@nuxt/test-utils/module'],
+	modules: ['@pinia/nuxt', '@nuxt/ui', '@samk-dev/nuxt-vcalendar', '@sidebase/nuxt-auth', '@nuxt/test-utils/module'],
 	// css: ['~/assets/css/main.css'],
 	auth: {
 		//all pages, aside from the login page will require sign-in- this can be set to false for testing if log in stops working
@@ -13,12 +13,11 @@ export default defineNuxtConfig({
 	imports: {
 		dirs: ['./stores'],
 	},
-	// @ts-ignore
 	colorMode: {
 		preference: 'light',
 	},
 	pinia: {
-		autoImports: ['defineStore', 'acceptHMRUpdate'],
+		storesDirs: ['./stores/**'],
 	},
 	devtools: {
 		enabled: false,
@@ -44,5 +43,4 @@ export default defineNuxtConfig({
 		preset: './preset',
 		entry: process.env.NODE_ENV === 'production' ? '../preset/entry' : '../preset/entry.dev',
 	},
-	plugins: ['~/plugins/socket-client'],
 })

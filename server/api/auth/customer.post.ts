@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
 				firstName: customerData['firstName'],
 				lastName: customerData['lastName'],
 				netWorth: customerData['netWorth'],
-				podRef: customerData['podRef']['id']
+				podRef: customerData['podRef']['id'],
 			}
 		}
 		return customerDetails

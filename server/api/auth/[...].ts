@@ -37,7 +37,7 @@ export default NuxtAuthHandler({
 						firstName: customer.firstName,
 						lastName: customer.lastName,
 						netWorth: customer.netWorth,
-						podRef: customer.podRef
+						podRef: customer.podRef,
 					}
 					return user
 				} else {
