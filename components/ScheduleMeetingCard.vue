@@ -4,6 +4,7 @@
 
 	const { createMeeting } = useApi()
 	const { state: podState } = usePodStore()
+	const validationMessage = ref('')
 
 	interface State {
 		form: {
@@ -54,14 +55,17 @@
 		const meetingEndTime = new Date(endISO.value)
 		const currentTime = new Date()
 
+		// Reset validation message
+		validationMessage.value = ''
+
 		// Check if meeting start time is in the past
 		if (meetingStartTime < currentTime) {
-			alert('Cannot schedule a meeting in the past. Please select a future time.')
+			validationMessage.value = 'Cannot schedule a meeting in the past.'
 			return
 		}
-		// Check if meeting end time is after start time
+		// Check if meeting end time is greater than start time
 		if (meetingEndTime <= meetingStartTime) {
-			alert('Meeting end time must be after the start time. Please select a valid end time.')
+			validationMessage.value = 'The meeting end time must be after the start time.'
 			return
 		}
 		state.isLoading = true
@@ -77,6 +81,7 @@
 			reset()
 		} catch (error) {
 			console.error(error)
+			validationMessage.value = "Failed to schedule the meeting. Please try again.";
 		} finally {
 			state.isLoading = false
 		}
@@ -165,6 +170,9 @@
 					<label for="record-check" class="text-md font-medium text-white">
 						Include prerecorded videos for the week?
 					</label>
+				</div>
+				<div v-if="validationMessage" class="mb-2 text-sm text-red-500">
+					{{ validationMessage }}
 				</div>
 				<div class="mt-4 flex flex-row-reverse gap-3">
 					<UButton type="submit" :loading="state.isLoading">Schedule</UButton>
