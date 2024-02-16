@@ -49,6 +49,21 @@
 		e.preventDefault()
 		const form = e.target as HTMLFormElement
 		if (!form.checkValidity()) return
+
+		const meetingStartTime = new Date(startISO.value)
+		const meetingEndTime = new Date(endISO.value)
+		const currentTime = new Date()
+
+		// Check if meeting start time is in the past
+		if (meetingStartTime < currentTime) {
+			alert('Cannot schedule a meeting in the past. Please select a future time.')
+			return
+		}
+		// Check if meeting end time is after start time
+		if (meetingEndTime <= meetingStartTime) {
+			alert('Meeting end time must be after the start time. Please select a valid end time.')
+			return
+		}
 		state.isLoading = true
 		try {
 			await createMeeting({
