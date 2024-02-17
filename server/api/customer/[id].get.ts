@@ -9,11 +9,11 @@ export default defineEventHandler(async (event) => {
 	if (error !== null) return error
 
 	try {
-		const query = fql`let customer = Customer.byId(${id}); 
+		const query = fql`
+		let customer = Customer.byId(${id}); 
 		if (!customer.exists()) 
 		abort({ message: "Customer with this ID does not exist." });
-		customer;
-		`
+		customer;`
 		const response = await client.query(query)
 
 		return response

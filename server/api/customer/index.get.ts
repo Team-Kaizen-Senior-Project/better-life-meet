@@ -2,7 +2,7 @@ import { AbortError, ServiceError, fql } from 'fauna'
 
 export default defineEventHandler(async (event) => {
 	// Extract params from request query
-	const { cursor, count, podRef, email }: any = getQuery(event)
+	const { cursor, count, podId, email }: any = getQuery(event)
 
 	// Initialize Fauna client
 	const { client, error } = useFauna()
@@ -13,17 +13,19 @@ export default defineEventHandler(async (event) => {
 		let query = fql`Customer.all().paginate()`
 
 		// Check to see if client is making a paginated request
-		if (cursor && count) {
-			query = fql`Set.paginate(${cursor}, ${Number(count)})`
-		} else if (cursor) {
-			query = fql`Set.paginate(${cursor})`
-		} else if (podRef) {
+		if (cursor) {
+			if (count) {
+				query = fql`Set.paginate(${cursor}, ${Number(count)})`
+			} else {
+				query = fql`Set.paginate(${cursor})`
+			}
+		} else if (podId) {
 			// Check if count parameter is passed for pagination
 			if (count) {
-				query = fql`let pod = Pod.byId(${podRef})
+				query = fql`let pod = Pod.byId(${podId})
 				Customer.where(.podRef == pod).paginate(${Number(count)})`
 			} else {
-				query = fql`let pod = Pod.byId(${podRef})
+				query = fql`let pod = Pod.byId(${podId})
 				Customer.where(.podRef == pod).paginate()`
 			}
 		} else if (count) {
