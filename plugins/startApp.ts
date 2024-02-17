@@ -12,8 +12,8 @@ export default defineNuxtPlugin(async () => {
 
 		// FIXME: customerState.podId should be available, we doing this because it's not
 		if (customerState.customer) {
-			const res = await getCustomer(customerState.customer?.id)
-			if (res.data.podRef) await getPod(res.data.podRef.id)
+			const customer = await getCustomer(customerState.customer.id)
+			if (customer.podRef) await getPod(customer.podRef.id)
 		}
 	})
 })

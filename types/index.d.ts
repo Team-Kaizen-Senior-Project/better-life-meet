@@ -8,44 +8,37 @@ export interface Time {
 }
 
 export interface Customer {
+	id: string
 	firstName: string
 	lastName: string
 	email: string
-	id: string
+	netWorth: number
 	podRef?: GeneralRef
 }
 
-export interface Meeting {
-	startTime: string
-	endTime: string
-	timeZone: string
-	podRef: GeneralRef
+export interface Pod {
 	id: string
+	name: string
+	meetingTime: Time
+	leader: GeneralRef
 }
 
-export interface MeetingFields {
-	startTime?: string
-	endTime?: string
-	timeZone?: string
-	podRef?: string
+export interface Meeting {
+	id: string
+	startTime: Time
+	endTime: Time
+	timeZone: string
+	podRef: GeneralRef
 }
 
 export interface Attendee {
+	id: string
 	joinTime: string
 	leaveTime: string
 	usedVideo: boolean
 	platform: string
 	customerRef: GeneralRef
 	meetingRef: GeneralRef
-}
-
-export interface AttendeeFields {
-	joinTime?: string
-	leaveTime?: string | null
-	customerRef?: string
-	meetingRef?: string
-	platform?: string
-	usedVideo?: boolean
 }
 
 export type Numberic = string | number
