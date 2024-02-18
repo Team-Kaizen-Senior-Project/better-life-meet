@@ -1,15 +1,44 @@
 <script setup lang="ts">
 	import { io } from 'socket.io-client'
+	import { useRouter, useRoute } from 'vue-router'
+	import useConfirmNavigation from '../../../composables/useConfirmationNavigation' // Adjust the path as necessary
 
 	definePageMeta({
 		layout: 'meeting',
 	})
 
+	const router = useRouter()
 	const route = useRoute()
 	const meetingId = route.params.id
 
 	// Connect to websocket server
 	const ws = io()
+	const { setupConfirmNavigation, removeConfirmNavigation } = useConfirmNavigation(
+		'You pressed a Back button! Are you sure?!',
+	)
+
+	onMounted(() => {
+		setupConfirmNavigation()
+	})
+
+	onBeforeUnmount(() => {
+		removeConfirmNavigation()
+	})
+
+	// const beforeUnload = (event) => {
+	// 	const message = 'Are you sure you want to leave the meeting?'
+	// 	event.returnValue = message
+	// 	return message
+	// }
+
+	// // Add and remove the beforeunload listener
+	// onMounted(() => {
+	// 	window.addEventListener('beforeunload', beforeUnload)
+	// })
+
+	// onBeforeUnmount(() => {
+	// 	window.removeEventListener('beforeunload', beforeUnload)
+	// })
 </script>
 
 <template>

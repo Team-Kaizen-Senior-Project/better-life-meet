@@ -88,7 +88,7 @@
 		}
 
 		try {
-			await attendee.createAttendee(fields)
+			//await attendee.createAttendee(fields)
 			video.joinMeeting()
 		} catch (error) {
 			console.log('error creating attendee', error)
