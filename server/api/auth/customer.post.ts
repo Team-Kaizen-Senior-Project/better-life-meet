@@ -1,9 +1,12 @@
 import { AbortError, ServiceError, fql } from 'fauna'
+import { useApi } from '~/composables/useApi'
+import type { Customer } from '~/types'
 
-export default defineEventHandler(async (event) => {
-	// Read customer email from POST in catch all route([...].ts)
+// Extract getCustomerByEmail() function for conducting query
+const { getCustomerByEmail } = useApi()
 
-	const body = await readBody(event)
+export default defineEventHandler(async (event: any): Promise<Customer | Error> => {
+	const body = (await readBody(event)) as Customer
 	const email = body.email
 
 	// Initialize Fauna client
@@ -11,20 +14,9 @@ export default defineEventHandler(async (event) => {
 	if (error !== null) return error
 
 	try {
-		let customerDetails = null
-		const query = fql`Customer.where(.email==${email})`
-		const response = await client.query(query)
-		if (response) {
-			const customerData = response.data.data[0]
-			customerDetails = {
-				id: customerData['id'],
-				email: customerData['email'],
-				firstName: customerData['firstName'],
-				lastName: customerData['lastName'],
-				netWorth: customerData['netWorth'],
-				podRef: customerData['podRef']['id'],
-			}
-		}
+		// Query by customer email
+		const customerDetails = (await getCustomerByEmail(email)) as Customer
+		// Return query result
 		return customerDetails
 	} catch (error: unknown) {
 		if (error instanceof AbortError) {
