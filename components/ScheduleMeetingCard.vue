@@ -51,23 +51,8 @@
 		const form = e.target as HTMLFormElement
 		if (!form.checkValidity()) return
 
-		const meetingStartTime = new Date(startISO.value)
-		const meetingEndTime = new Date(endISO.value)
-		const currentTime = new Date()
-
 		// Reset validation message
 		validationMessage.value = ''
-
-		// Check if meeting start time is in the past
-		if (meetingStartTime < currentTime) {
-			validationMessage.value = 'Cannot schedule a meeting in the past.'
-			return
-		}
-		// Check if meeting end time is greater than start time
-		if (meetingEndTime <= meetingStartTime) {
-			validationMessage.value = 'The meeting end time must be after the start time.'
-			return
-		}
 		state.isLoading = true
 		try {
 			await createMeeting({
