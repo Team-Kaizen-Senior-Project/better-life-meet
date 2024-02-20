@@ -1,28 +1,42 @@
 export default function useConfirmNavigation(message = 'Are you sure you want to leave this page?') {
-    const confirmNavigation = (event) => {
-        // Prevent the default browser dialog
-        event.preventDefault(); 
-        // Chrome requires returnValue to be set
-        event.returnValue = ''; 
-        if (!confirm(message)) {
-            // User confirmed navigation, remove the listener to avoid triggering it again
-            window.removeEventListener('popstate', confirmNavigation, false);
-            // Go back if it was a back navigation
-            history.back();
-        } else {
-            console.log("here")
-            // User canceled navigation, manipulate history to stay on the page
-            history.pushState(null, null, window.location.pathname);
-        }
-    };
+	let isLeavingConfirmed = false // Flag to track confirmation status
+	const confirmNavigation = (event) => {
+		if (event.type === 'beforeunload') {
+			console.log('tab closed triggered')
 
-    const setupConfirmNavigation = () => {
-        window.addEventListener('popstate', confirmNavigation, false);
-    };
+			// Triggered on tab close
+			if (!isLeavingConfirmed) {
+				if (!confirm(message)) {
+					event.preventDefault()
+					event.returnValue = ''
+				} else {
+					isLeavingConfirmed = true
+				}
+			}
+		} else if (event.type === 'popstate') {
+			// Triggered on back button
+			console.log('back buttib triggered')
 
-    const removeConfirmNavigation = () => {
-        window.removeEventListener('popstate', confirmNavigation, false);
-    };
+			if (!isLeavingConfirmed) {
+				if (confirm(message)) {
+					history.back()
+				} else {
+					event.preventDefault()
+				}
+			}
+		}
+	}
 
-    return { setupConfirmNavigation, removeConfirmNavigation };
+	const setupConfirmNavigation = () => {
+		console.log('setting up event listeners')
+		window.addEventListener('beforeunload', confirmNavigation, false)
+		window.addEventListener('popstate', confirmNavigation, false)
+	}
+
+	const removeConfirmNavigation = () => {
+		window.removeEventListener('beforeunload', confirmNavigation, false)
+		window.removeEventListener('popstate', false)
+	}
+
+	return { setupConfirmNavigation, removeConfirmNavigation }
 }

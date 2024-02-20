@@ -13,9 +13,7 @@
 
 	// Connect to websocket server
 	const ws = io()
-	const { setupConfirmNavigation, removeConfirmNavigation } = useConfirmNavigation(
-		'You pressed a Back button! Are you sure?!',
-	)
+	const { setupConfirmNavigation, removeConfirmNavigation } = useConfirmNavigation()
 
 	onMounted(() => {
 		setupConfirmNavigation()
@@ -24,21 +22,6 @@
 	onBeforeUnmount(() => {
 		removeConfirmNavigation()
 	})
-
-	// const beforeUnload = (event) => {
-	// 	const message = 'Are you sure you want to leave the meeting?'
-	// 	event.returnValue = message
-	// 	return message
-	// }
-
-	// // Add and remove the beforeunload listener
-	// onMounted(() => {
-	// 	window.addEventListener('beforeunload', beforeUnload)
-	// })
-
-	// onBeforeUnmount(() => {
-	// 	window.removeEventListener('beforeunload', beforeUnload)
-	// })
 </script>
 
 <template>
