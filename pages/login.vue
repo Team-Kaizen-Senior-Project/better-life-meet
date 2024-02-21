@@ -1,8 +1,22 @@
 <script setup lang="ts">
 	const { signIn } = useAuth()
-
 	const email = ref('')
 	const password = ref('')
+	const errorMessage = ref('')
+
+	const mySignInHandler = async () => {
+		const { error, url } = await signIn('credentials', {
+			email: email.value,
+			password: password.value,
+			redirect: false,
+		})
+		if (error) {
+			errorMessage.value = 'The username or password is incorrect.'
+		} else {
+			// No error, continue with the sign in, e.g., by following the returned redirect:
+			return navigateTo(url, { external: true })
+		}
+	}
 
 	definePageMeta({
 		auth: {
@@ -16,7 +30,7 @@
 </script>
 
 <template>
-	<form class="space-y-4 md:space-y-6" @submit.prevent="signIn('credentials', { email, password })">
+	<form class="space-y-4 md:space-y-6" @submit.prevent="mySignInHandler('credentials', { email, password })">
 		<div class="flex h-screen">
 			<!-- Left Side (Logo) -->
 			<div class="bg-better-life-bg flex w-1/2 items-center justify-center">
@@ -38,6 +52,9 @@
 							placeholder="Password"
 							class="w-full rounded border border-gray-300 p-2"
 						/>
+						<div v-if="errorMessage" class="mt-2 text-sm text-red-500">
+							{{ errorMessage }}
+						</div>
 					</div>
 
 					<button class="mt-6 w-full rounded bg-blue-500 p-2 text-white hover:bg-blue-600">Sign in</button>
