@@ -53,7 +53,7 @@
 				</li>
 			</ul>
 			<div>
-				<UButton @click="toggleEditMode" class="mt-4 bg-zinc-700 text-xs font-medium hover:bg-zinc-700/60">
+				<UButton data-testid ="edit-button" @click="toggleEditMode" class="mt-4 bg-zinc-700 text-xs font-medium hover:bg-zinc-700/60">
 					Edit habits
 				</UButton>
 			</div>
