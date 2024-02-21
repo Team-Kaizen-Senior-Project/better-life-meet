@@ -3,7 +3,6 @@ import { setActivePinia, createPinia } from 'pinia'
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 import HabitsList from '@/components/HabitsList.vue'
 import { nextTick } from 'vue'
-import { useHabitStore } from '@/stores/habitStore'
 
 console.log('\x1b[94m%s\x1b[0m', '-'.repeat(100))
 console.log('\x1b[94m%s\x1b[0m', '-'.repeat(100))
@@ -21,7 +20,6 @@ describe('HabitsList', () => {
     })
 
     it('toggles editMode on button click', async () => {
-        const store = useHabitStore()
         const wrapper = await mountSuspended(HabitsList, {
             global: {
                 plugins: [createPinia()],
@@ -31,6 +29,6 @@ describe('HabitsList', () => {
         await editButton.trigger('click') 
         await nextTick() 
         
-        expect(wrapper.findAll('input').length).toBeGreaterThan(0)
+        expect(wrapper.findAll('input').length).toBeGreaterThan(3)
     })
 })
