@@ -1,6 +1,7 @@
 <script setup>
 	import { ChevronDownIcon } from '@heroicons/vue/24/outline'
-	const customer = await fetchAuthenticatedCustomer()
+	const { me } = useApi()
+	const customer = await me()
 </script>
 <template>
 	<header class="bg-black py-4">
