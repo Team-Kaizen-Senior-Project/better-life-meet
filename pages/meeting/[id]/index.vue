@@ -1,5 +1,6 @@
 <script setup lang="ts">
 	import { io } from 'socket.io-client'
+	const recordedVideoIsPlaying = ref(true)
 
 	definePageMeta({
 		layout: 'meeting',
@@ -10,11 +11,22 @@
 
 	// Connect to websocket server
 	const ws = io()
+	/*
+	TODO:
+	- Incorporate start video after meeting has started from countdown
+	- Start meeting & external videos after prerecorded video end (websockets)
+	- Replace placeholder video with Vimeo API
+	*/
+	function toggleVideo() {
+		setTimeout(() => {
+			recordedVideoIsPlaying.value = !recordedVideoIsPlaying.value
+		}, 1000)
+	}
 </script>
 
 <template>
 	<PodHeader />
-	<div class="flex min-h-[82vh] items-center justify-center bg-zinc-800">
+	<div v-if="!recordedVideoIsPlaying" class="flex min-h-[82vh] items-center justify-center bg-zinc-800">
 		<div class="grid h-[70vh] w-[80vw] grid-cols-4 grid-rows-2 gap-3">
 			<!-- Local user's video feed -->
 			<div class="relative overflow-hidden rounded-lg bg-zinc-900" v-if="true">
@@ -29,6 +41,7 @@
 			</div> -->
 		</div>
 	</div>
+	<PrerecordedVideo @toggle-video="toggleVideo" v-if="recordedVideoIsPlaying" />
 	<BreakoutRoomModal :meetingRef="meetingId" />
 	<PodFooter />
 </template>
