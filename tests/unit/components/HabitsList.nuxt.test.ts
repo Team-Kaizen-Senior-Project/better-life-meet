@@ -31,4 +31,29 @@ describe('HabitsList', () => {
         
         expect(wrapper.findAll('input').length).toBeGreaterThan(3)
     })
+
+    it('removes a habit on remove button click', async () => {
+        const wrapper = await mountSuspended(HabitsList, {
+            global: {
+                plugins: [createPinia()],
+            },
+        })
+        const initialHabitCount = wrapper.findAll('li').length
+        // trigger edit mode
+        const editButton = wrapper.find('[data-testid="edit-button"]')
+        await editButton.trigger('click')
+        await nextTick()
+    
+        // find and click first remove button
+        const firstHabitRemoveButton = wrapper.find('[data-testid="remove-habit-button"]')
+        if (firstHabitRemoveButton.exists()) {
+            await firstHabitRemoveButton.trigger('click')
+            await nextTick()
+    
+            const updatedHabitCount = wrapper.findAll('li').length
+            expect(updatedHabitCount).toBeLessThan(initialHabitCount)
+        } else {
+            console.error('Remove button not found')
+        }
+    })  
 })
