@@ -16,9 +16,22 @@ describe('MicControls', () => {
 
 		await wrapper.vm.toggleMicTest()
 		expect(wrapper.vm.isTestingMic.value).toBe(false)
-
-		// TODO: Add a test to check that the mic icon changes when the mic is toggled
-
-		// TODO: Add a test for mic volume changes
 	})
+	it('changes the mic icon text when the mic is toggled', async () => {
+		const wrapper = await mountSuspended(MicControls, {
+			props: { boxLength: 10 },
+		})
+		
+		const testButton = wrapper.find('button')
+		expect(testButton.text()).toBe('Test Mic')
+		
+		await wrapper.vm.toggleMicTest()
+		await wrapper.vm.$nextTick()
+		expect(testButton.text()).toBe('Stop Test')
+		
+		await wrapper.vm.toggleMicTest()
+		await wrapper.vm.$nextTick()
+		expect(testButton.text()).toBe('Test Mic')
+	})
+	// TODO: Add a test for mic control changes
 })
