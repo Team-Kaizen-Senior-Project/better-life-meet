@@ -4,13 +4,9 @@ import { mountSuspended } from '@nuxt/test-utils/runtime'
 import HabitsList from '@/components/HabitsList.vue'
 import { nextTick } from 'vue'
 
-console.log('\x1b[94m%s\x1b[0m', '-'.repeat(100))
-console.log('\x1b[94m%s\x1b[0m', '-'.repeat(100))
-console.log('\x1b[94m%s\x1b[0m', '-'.repeat(100))
 
 describe('HabitsList', () => {
     beforeEach(() => {
-        // reset pinia state before each test to avoid state leakage
         setActivePinia(createPinia())
     })
 
