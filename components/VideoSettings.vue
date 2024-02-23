@@ -36,6 +36,7 @@
 					@click="video.toggleCamera"
 					v-if="!video.cameraActive"
 					class="relative border border-transparent"
+					data-testid="video-icon"
 				>
 					<div
 						class="h-4 w-4 after:absolute after:left-1/2 after:top-1/2 after:h-12 after:w-[2px] after:-translate-x-1/2 after:-translate-y-1/2 after:rotate-45 after:rounded-xl after:bg-red-500 after:shadow-2xl"
@@ -46,7 +47,7 @@
 				<Button v-else @click="video.toggleCamera" type="primary" class="border border-green-500">
 					<div class="h-4 w-4"><VideoCameraIcon /></div>
 				</Button>
-				<Button type="primary">
+				<Button type="primary" data-testid="microphone-icon">
 					<div class="h-4 w-4"><MicrophoneIcon /></div>
 				</Button>
 			</div>
