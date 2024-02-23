@@ -11,11 +11,11 @@ export const usePodStore = defineStore('pod', () => {
 		pod: undefined,
 	})
 
-	const getPod = async (): Promise<Pod> => {
+	const getMyPod = async (): Promise<Pod> => {
 		const { getPod } = useApi()
-		const { getMe } = useCustomerStore()
-		const customer = await getMe()
-		const pod: Pod = await getPod(customer.podRef?.id!)
+		const { state: customerState } = useCustomerStore()
+		const customer = customerState.customer!
+		const pod: Pod = await getPod(customer.podRef!.id!)
 
 		state.pod = pod
 
@@ -31,7 +31,7 @@ export const usePodStore = defineStore('pod', () => {
 	})
 
 	return {
-		getPod,
+		getMyPod,
 		state,
 		isLeader,
 	}

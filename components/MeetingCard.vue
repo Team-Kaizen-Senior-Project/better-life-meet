@@ -2,8 +2,8 @@
 	import type { Meeting } from '~/types'
 	const { display: displayDate, dayjs } = useDate()
 	const { deleteMeeting: deleteMeetingApi } = useApi()
-	const { getPod, isLeader } = usePodStore()
-	const pod = await getPod()
+	const { getMyPod, isLeader } = usePodStore()
+	const pod = await getMyPod()
 
 	const deleting = ref<boolean>(false)
 
