@@ -4,6 +4,7 @@
 
 	const { createMeeting } = useApi()
 	const { state: podState } = usePodStore()
+	const validationMessage = ref('')
 
 	interface State {
 		form: {
@@ -49,6 +50,9 @@
 		e.preventDefault()
 		const form = e.target as HTMLFormElement
 		if (!form.checkValidity()) return
+
+		// Reset validation message
+		validationMessage.value = ''
 		state.isLoading = true
 		try {
 			await createMeeting({
@@ -62,6 +66,7 @@
 			reset()
 		} catch (error) {
 			console.error(error)
+			validationMessage.value = "Failed to schedule the meeting. Please try again.";
 		} finally {
 			state.isLoading = false
 		}
@@ -150,6 +155,9 @@
 					<label for="record-check" class="text-md font-medium text-white">
 						Include prerecorded videos for the week?
 					</label>
+				</div>
+				<div v-if="validationMessage" class="mb-2 text-sm text-red-500">
+					{{ validationMessage }}
 				</div>
 				<div class="mt-4 flex flex-row-reverse gap-3">
 					<UButton type="submit" :loading="state.isLoading">Schedule</UButton>
