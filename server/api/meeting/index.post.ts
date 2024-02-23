@@ -1,12 +1,6 @@
 import { AbortError, ServiceError, fql } from 'fauna'
+import type { Meeting } from '~/types'
 
-// Interface for meeting
-export interface Meeting {
-	startTime: string
-	endTime: string
-	timeZone: string
-	podRef: string
-}
 
 // Endpoint for creating a meeting
 export default defineEventHandler(async (event) => {
@@ -16,13 +10,14 @@ export default defineEventHandler(async (event) => {
 	// Create new meeting record and assign attendees
 	try {
 		const meeting = (await readBody(event)) as Meeting
+
 		// Perform POST query for meeting
 		const query = fql`
 		let meeting = {
-			startTime: ${meeting.startTime},
-			endTime: ${meeting.endTime},
+			startTime: Time(${String(meeting.startTime)}),
+			endTime: Time(${String(meeting.endTime)}),
 			timeZone: ${meeting.timeZone},
-			podRef: Pod.byId(${meeting.podRef}),
+			podRef: Pod.byId(${String(meeting.podRef)}),
 		}
 		Meeting.create(meeting)
 		`

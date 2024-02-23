@@ -13,7 +13,7 @@ export interface Customer {
 	lastName: string
 	email: string
 	netWorth: number
-	podRef?: GeneralRef
+	podRef: GeneralRef
 }
 
 export interface Pod {

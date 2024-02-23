@@ -1,16 +1,25 @@
 import { AbortError, ServiceError, fql } from 'fauna'
+import type { Customer } from '~/types'
 
 export default defineEventHandler(async (event) => {
-	// Get Customer ID
-	const { id } = event.context.params as { id: string }
-	const body = await readBody(event)
-
 	// Initialize Fauna client
 	const { client, error } = useFauna()
 	if (error !== null) return error
 
 	try {
-		const query = fql`Customer.create(${body})`
+		const customer = (await readBody(event)) as Omit<Customer, 'id'>
+
+		const query = fql`
+			let customer = {
+				firstName: ${customer.firstName},
+				lastName: ${customer.lastName},
+				email: ${customer.email},
+				netWorth: ${customer.netWorth},
+				podRef: Pod.byId(${String(customer.podRef)})
+			};
+			Customer.create(customer);
+
+		`
 		const response = await client.query(query)
 
 		return response
