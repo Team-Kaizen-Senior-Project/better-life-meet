@@ -2,7 +2,8 @@
 	import type { Meeting } from '~/types'
 	const { display: displayDate, dayjs } = useDate()
 	const { deleteMeeting: deleteMeetingApi } = useApi()
-	const podStore = usePodStore()
+	const { getPod, isLeader } = usePodStore()
+	const pod = await getPod()
 
 	const deleting = ref<boolean>(false)
 
@@ -45,7 +46,7 @@
 		<div class="grid gap-2">
 			<div class="text-sm font-medium text-white">{{ meeting?.timeZone }}</div>
 			<div class="grid gap-1">
-				<p class="text-sm text-zinc-300">{{ displayDate(meeting?.startTime) }}</p>
+				<p class="text-sm text-zinc-300">{{ displayDate(meeting?.startTime?.isoString) }}</p>
 			</div>
 		</div>
 		<div class="mt-4 flex w-full items-center justify-between">
@@ -58,7 +59,7 @@
 				Join
 			</NuxtLink>
 			<button
-				v-if="podStore.isLeader"
+				v-if="isLeader && pod.id === meeting?.podRef?.id"
 				class="rounded-md bg-red-600 px-3 py-2 text-sm font-medium leading-tight text-white shadow"
 				@click="deleteMeeting"
 			>

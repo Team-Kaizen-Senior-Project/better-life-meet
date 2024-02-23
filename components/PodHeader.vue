@@ -1,7 +1,8 @@
-<script setup>
+<script setup lang="ts">
 	import { ChevronDownIcon } from '@heroicons/vue/24/outline'
-	const { me } = useApi()
-	const customer = await me()
+	import type { Customer } from '~/types'
+	const { getMe } = useCustomerStore()
+	const customer: Customer = await getMe()
 </script>
 <template>
 	<header class="bg-black py-4">
@@ -19,8 +20,8 @@
 			<div class="flex items-center gap-2">
 				<button class="aspect-square h-[2rem] w-[2rem] rounded-full bg-gray-200 text-lg">U</button>
 				<div class="flex flex-col text-sm text-white">
-					<p>{{ customer['user']['firstName'] }}</p>
-					<p>{{ customer['user']['email'] }}</p>
+					<p>{{ customer.firstName }}</p>
+					<p>{{ customer.email }}</p>
 				</div>
 			</div>
 		</div>

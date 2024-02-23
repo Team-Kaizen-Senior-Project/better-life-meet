@@ -21,7 +21,7 @@
 					<Button class="rounded px-5 py-3" @click="media.toggleAudio">
 						<MicrophoneIcon class="h-5 w-5" />
 					</Button>
-					<Button class="rounded px-5 py-3" @click="media.toggleVideo()">
+					<Button class="rounded px-5 py-3" @click="media.toggleVideo">
 						<VideoCameraIcon class="h-5 w-5" />
 					</Button>
 					<Button class="rounded px-5 py-3">

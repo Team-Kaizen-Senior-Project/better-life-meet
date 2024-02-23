@@ -1,21 +1,9 @@
 <script setup lang="ts">
-	import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
-	import { VideoCameraSlashIcon } from '@heroicons/vue/24/outline'
-	import { MicrophoneIcon } from '@heroicons/vue/24/solid'
 	import MeetingCard from '@/components/MeetingCard.vue'
+	import type { Meeting } from '~/types'
 
-	const { getMettings } = useApi()
-	const { state: podState } = usePodStore()
+	const { getMeetings } = useApi()
 
-	const meetings = [
-		{
-			title: 'Week 16 Accountability Meeting',
-			id: 2,
-			date: 'Wednesday October 4th',
-			time: '4:00pm',
-			isLive: true,
-		},
-	]
 	const date = ref(new Date())
 
 	const attrs = ref([
@@ -30,13 +18,7 @@
 	])
 
 	const { data, refresh, pending } = await useAsyncData('dashboard', async () => {
-		const [meetings] = await Promise.all([
-			getMettings({
-				podRef: podState.pod?.id,
-				count: 3,
-			}),
-		])
-
+		const meetings: Meeting[] = await getMeetings({ count: 3 })
 		return {
 			meetings,
 		}

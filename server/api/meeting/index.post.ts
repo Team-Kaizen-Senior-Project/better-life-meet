@@ -1,7 +1,6 @@
 import { AbortError, ServiceError, fql } from 'fauna'
 import type { Meeting } from '~/types'
 
-
 // Endpoint for creating a meeting
 export default defineEventHandler(async (event) => {
 	// Initialize Fauna client
@@ -14,18 +13,17 @@ export default defineEventHandler(async (event) => {
 		// Perform POST query for meeting
 		const query = fql`
 		let meeting = {
-			startTime: Time(${String(meeting.startTime)}),
-			endTime: Time(${String(meeting.endTime)}),
+			startTime: ${meeting.startTime.isoString},
+			endTime: ${meeting.endTime.isoString},
 			timeZone: ${meeting.timeZone},
-			podRef: Pod.byId(${String(meeting.podRef)}),
+			podRef: Pod.byId(${meeting.podRef.id}),
 		}
 		Meeting.create(meeting)
 		`
 
-		const meetingDoc = await client.query(query)
+		const response = await client.query(query)
 
-		// Return meeting object
-		return meetingDoc
+		return response
 
 		// Catch error
 	} catch (error: unknown) {

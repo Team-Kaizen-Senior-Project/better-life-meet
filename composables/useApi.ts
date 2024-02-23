@@ -7,8 +7,6 @@ type MeetingQueryParams =
 	| { podId: Numberic; count?: number; cursor?: undefined }
 
 export const useApi = () => {
-	const me = () => $fetch<{ user: Customer }>('/api/auth/customer')
-
 	const createCustomer = async (customer: Omit<Customer, 'id'>) => {
 		const response = await $fetch('/api/customer', {
 			method: 'POST',
@@ -99,7 +97,7 @@ export const useApi = () => {
 		return meeting
 	}
 
-	const getMeetings = async (meetingQueryParams: MeetingQueryParams): Promise<Meeting[]> => {
+	const getMeetings = async (meetingQueryParams?: MeetingQueryParams): Promise<Meeting[]> => {
 		const response = await $fetch(`/api/meeting`, { query: meetingQueryParams })
 
 		const meetings = response.data as unknown as Meeting[]
@@ -157,7 +155,6 @@ export const useApi = () => {
 
 	return {
 		// Customer
-		me,
 		createCustomer,
 		getCustomer,
 		getCustomerByEmail,
