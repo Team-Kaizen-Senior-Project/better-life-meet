@@ -22,9 +22,14 @@ export const useApi = () => {
 		return response
 	}
 
-	const getMettings = async (params?: any) => {
+	const getMeetings = async (params?: any) => {
 		const response = await $fetch<{ data: { data: Meeting[] } }>(`/api/meeting`, { params })
+		console.log(response.data.data)
+		// filter out meetings that have already ended
+		// sort the meetings by start time so newest is first
 		return response.data.data
+			.filter((meeting: any) => new Date(meeting.endTime) > new Date())
+			.sort((a: any, b: any) => a.startTime.localeCompare(b.startTime))
 	}
 
 	const deleteMeeting = async (id: Numberic) => {
@@ -64,7 +69,7 @@ export const useApi = () => {
 		getPod,
 
 		// MEETINGS
-		getMettings,
+		getMeetings,
 		deleteMeeting,
 		createMeeting,
 
