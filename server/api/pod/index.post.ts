@@ -1,5 +1,5 @@
 import { AbortError, ServiceError, fql } from 'fauna'
-import type { Pod } from '~/types'
+import type { PodFields } from '~/types'
 
 export default defineEventHandler(async (event) => {
 	// Initialize Fauna client
@@ -7,13 +7,13 @@ export default defineEventHandler(async (event) => {
 	if (error !== null) return error
 
 	try {
-		const pod = (await readBody(event)) as Omit<Pod, 'id'>
+		const pod = (await readBody(event)) as Required<PodFields>
 
 		const query = fql`
 			let pod = {
 				name: ${pod.name},
-				meetingTime: Time(${String(pod.meetingTime)}),
-				leader: Customer.byId(${String(pod.leader)})
+				meetingTime: Time(${pod.meetingTime}),
+				leader: Customer.byId(${pod.leader})
 			};
 			Pod.create(pod);
 		`

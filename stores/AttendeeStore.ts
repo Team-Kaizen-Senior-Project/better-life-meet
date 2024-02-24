@@ -1,10 +1,10 @@
-import type { Attendee } from '~/types'
+import type { AttendeeFields } from '~/types'
 export const useAttendeeStore = defineStore('attendee', () => {
 	const { createAttendee: createAttendeeApi, updateAttendee: updateAttendeeApi } = useApi()
 
 	const attendeeId = ref<string | undefined>()
 
-	const createAttendee = async (fields: Attendee) => {
+	const createAttendee = async (fields: AttendeeFields) => {
 		const response = await createAttendeeApi(fields)
 		attendeeId.value = response.id
 	}

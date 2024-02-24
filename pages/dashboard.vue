@@ -1,6 +1,7 @@
 <script setup lang="ts">
 	import MeetingCard from '@/components/MeetingCard.vue'
 	import type { Meeting } from '~/types'
+	import type {} from '@samk-dev/nuxt-vcalendar'
 
 	const { getMeetings } = useApi()
 
@@ -8,7 +9,7 @@
 
 	const date = ref(new Date())
 
-	const attrs = ref([
+	const attrs = ref<any>([
 		{
 			key: 'today',
 			highlight: {
@@ -61,7 +62,7 @@
 							</div>
 						</ClientOnly>
 						<div class="mt-4">
-							<ScheduleMeetingCard />
+							<ScheduleMeetingCard @refresh="refresh" />
 						</div>
 					</div>
 

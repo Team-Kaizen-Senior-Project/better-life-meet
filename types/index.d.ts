@@ -1,7 +1,13 @@
+// The types that are followed by 'fields' key are used in create and update types instead of the actual type
+// AttendeeFields is the create/update type of Attendee
+
 // for ref fields like meetingRef, customerRef, etc
 export interface GeneralRef {
 	id: string
 }
+
+export type GeneralRefField = Numberic
+export type Numberic = string | number
 
 export interface Time {
 	isoString: string
@@ -16,11 +22,25 @@ export interface Customer {
 	podRef: GeneralRef
 }
 
+export interface CustomerFields {
+	firstName?: string
+	lastName?: string
+	email?: string
+	netWorth?: number
+	podRef?: GeneralRefField
+}
+
 export interface Pod {
 	id: string
 	name: string
 	meetingTime: Time
 	leader: GeneralRef
+}
+
+export interface PodFields {
+	name?: string
+	meetingTime?: string
+	leader?: GeneralRefField
 }
 
 export interface Meeting {
@@ -29,6 +49,13 @@ export interface Meeting {
 	endTime: Time
 	timeZone: string
 	podRef: GeneralRef
+}
+
+export interface MeetingFields {
+	startTime?: string
+	endTime?: string
+	timeZone?: string
+	podRef?: string
 }
 
 export interface Attendee {
@@ -41,4 +68,11 @@ export interface Attendee {
 	meetingRef: GeneralRef
 }
 
-export type Numberic = string | number
+export interface AttendeeFields {
+	joinTime?: string
+	leaveTime?: string | null
+	customerRef?: string
+	meetingRef?: string
+	platform?: string
+	usedVideo?: boolean
+}
