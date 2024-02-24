@@ -17,9 +17,12 @@
 					<p>{{ state.customer?.firstName }}</p>
 					<p>{{ state.customer?.email }}</p>
 				</div>
-				<button class="rounded bg-blue-500 px-3 py-2 text-sm text-white hover:bg-blue-600" @click="() => signOut()">
+				<UButton
+					class="bg-sky-500 hover:bg-blue-600 hover:bg-sky-600"
+					@click="() => signOut()"
+				>
 					Sign Out
-				</button>
+				</UButton>
 			</div>
 		</div>
 	</header>

@@ -6,6 +6,7 @@ export interface Meeting {
 	endTime: string
 	timeZone: string
 	podRef: string
+	vimeoId: string
 }
 
 // Endpoint for creating a meeting
@@ -20,9 +21,9 @@ export default defineEventHandler(async (event) => {
 		// Convert the start and end time to date objects
 		const startTime = new Date(meeting.startTime)
 		const endTime = new Date(meeting.endTime)
-		
+
 		//Get current time
-		const currentTime = new Date();
+		const currentTime = new Date()
 
 		// Check if meeting start time is in the past
 		if (startTime < currentTime) {
@@ -47,6 +48,7 @@ export default defineEventHandler(async (event) => {
 			endTime: ${meeting.endTime},
 			timeZone: ${meeting.timeZone},
 			podRef: Pod.byId(${meeting.podRef}),
+			vimeoId: ${meeting.vimeoId},
 		}
 		Meeting.create(meeting)
 		`
