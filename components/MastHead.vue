@@ -1,6 +1,7 @@
 <script setup lang="ts">
 	const { signOut } = useAuth()
-	const { state } = useCustomerStore()
+	const { state: customerState } = useCustomerStore()
+	const customer = computed(() => customerState.customer)
 </script>
 
 <template>
@@ -14,8 +15,8 @@
 			<div class="flex items-center gap-2">
 				<button class="h-[2rem] w-[2rem] rounded-full bg-gray-200 text-lg">U</button>
 				<div class="flex flex-col text-sm text-white">
-					<p>{{ state.customer?.firstName }}</p>
-					<p>{{ state.customer?.email }}</p>
+					<p>{{ customer?.firstName }}</p>
+					<p>{{ customer?.email }}</p>
 				</div>
 				<UButton
 					class="bg-sky-500 hover:bg-blue-600 hover:bg-sky-600"

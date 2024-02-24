@@ -1,13 +1,5 @@
 import { AbortError, ServiceError, fql } from 'fauna'
 
-// Interface for updating Attendee info
-export interface updatedAttendee {
-	joinTime?: string
-	leaveTime?: string
-	usedVideo?: boolean
-	platform?: string
-}
-
 export default defineEventHandler(async (event) => {
 	// Get ID from the URL params
 	const { id } = event.context.params as { id: string }

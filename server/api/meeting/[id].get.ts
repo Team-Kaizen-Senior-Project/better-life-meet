@@ -1,4 +1,5 @@
 import { AbortError, ServiceError, fql } from 'fauna'
+import type { Customer } from '~/types'
 
 // Endpoint for reading meeting given an Id
 export default defineEventHandler(async (event) => {

@@ -1,14 +1,5 @@
 import { AbortError, ServiceError, fql } from 'fauna'
-
-// Interface for Attendee info
-export interface Attendee {
-	joinTime: string
-	leaveTime: string
-	usedVideo: false
-	platform: string
-	customerRef: string
-	meetingRef: string
-}
+import type { AttendeeFields } from '~/types'
 
 export default defineEventHandler(async (event) => {
 	// Initialize Fauna client
@@ -17,22 +8,22 @@ export default defineEventHandler(async (event) => {
 	if (error !== null) return error
 
 	try {
-		const attendee = (await readBody(event)) as Attendee
+		const attendee = (await readBody(event)) as Required<AttendeeFields>
 
 		const query = fql`
             let attendee = {
-                joinTime: ${attendee.joinTime},
-                leaveTime: ${attendee.leaveTime},
+                joinTime: Time(${attendee.joinTime}),
+                leaveTime: Time(${attendee.leaveTime}),
                 usedVideo: ${attendee.usedVideo},
                 platform: ${attendee.platform},
-                customerRef: Customer.byId(${attendee.customerRef}),
-                meetingRef: Meeting.byId(${attendee.meetingRef})
+                customerRef: Customer.byId(${String(attendee.customerRef)}),
+                meetingRef: Meeting.byId(${String(attendee.meetingRef)})
 
             }
             Attendee.create(attendee)
         `
 		const response = await client.query(query)
-		return response.data.id
+		return response
 	} catch (error: unknown) {
 		if (error instanceof AbortError) {
 			const abortError = error as AbortError

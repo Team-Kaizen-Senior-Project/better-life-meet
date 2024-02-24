@@ -1,39 +1,24 @@
 import { AbortError, ServiceError, fql } from 'fauna'
+import type { PodFields } from '~/types'
 
-// Endpoint for creating a pod
 export default defineEventHandler(async (event) => {
 	// Initialize Fauna client
 	const { client, error } = useFauna()
 	if (error !== null) return error
 
-	// Read in request body (use type assertion to validate body)
-	const body = (await readBody(event)) as Body
-
-	// Store customer IDs
-	const members: string[] = body.members
-
-	// Create new meeting record and assign attendees
 	try {
-		// Store pod info into seperate object
-		const Pod = {
-			name: body.name,
-			meetingTime: body.meetingTime,
-		}
-		// Perform POST query for meeting
-		const query = fql`Pod.create(${Pod})`
-		const podDoc = await client.query(query)
+		const pod = (await readBody(event)) as Required<PodFields>
 
-		// Retrieve pod Id from query (used to update pod object with customer info)
-		const podId = podDoc.data?.id
-
-		// Query to update pod to include leader and member customerRefs
-		const updateQuery = fql`Pod.byId(${podId})!.update({leader: Customer.byId(${body.leader}), members: ${members}.map(Customer.byId), meetings: []})`
-		const updatedDoc = await client.query(updateQuery)
-
-		// Return the updated document
-		return updatedDoc
-
-		// Catch error
+		const query = fql`
+			let pod = {
+				name: ${pod.name},
+				meetingTime: Time(${pod.meetingTime}),
+				leader: Customer.byId(${pod.leader})
+			};
+			Pod.create(pod);
+		`
+		const response = await client.query(query)
+		return response
 	} catch (error: unknown) {
 		if (error instanceof AbortError) {
 			const abortError = error as AbortError

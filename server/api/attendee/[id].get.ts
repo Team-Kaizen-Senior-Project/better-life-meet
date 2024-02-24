@@ -1,4 +1,4 @@
-import { fql } from 'fauna'
+import { AbortError, ServiceError, fql } from 'fauna'
 
 // Endpoint for reading attendee given an Customer Id or an Attendee Id
 export default defineEventHandler(async (event) => {
@@ -10,28 +10,28 @@ export default defineEventHandler(async (event) => {
 	if (error !== null) return error
 
 	try {
-		let query = fql`let attendee = Attendee.byId(${id});
-		if (!attendee.exists()) abort({message: "Attendee with this ID does not exist." })
-		attendee`
-		const document = await client.query(query)
+		const query = fql`
+		let attendee = Attendee.byId(${id}); 
+		if (!attendee.exists()) 
+		abort({ message: "Attendee with this ID does not exist." });
+		attendee;`
+		const response = await client.query(query)
 
-		// Return 'Not found' 404 if document is empty
-		if (document.data == null) {
-			return createError({
-				statusCode: 404,
-				statusMessage: 'Resource Not Found',
+		return response
+	} catch (error: unknown) {
+		if (error instanceof AbortError) {
+			const abortError = error as AbortError
+			const abort = abortError.abort! as { message: string }
+			throw createError({
+				statusCode: abortError.httpStatus,
+				statusMessage: abort.message,
+			})
+		} else {
+			const serviceError = error as ServiceError
+			throw createError({
+				statusCode: serviceError.httpStatus,
+				statusMessage: serviceError.message,
 			})
 		}
-
-		// Return query result
-		return document.data
-	} catch (error) {
-		console.log(error)
-
-		// Throw Server error for all other errors
-		return createError({
-			statusCode: 500,
-			statusMessage: 'Internal Error Occurred',
-		})
 	}
 })

@@ -2,15 +2,13 @@ import { AbortError, ServiceError, fql } from 'fauna'
 
 // Endpoint for deleting a pod given an Id
 export default defineEventHandler(async (event) => {
-	// Get Pod ID
-	const { id } = event.context.params as { id: string }
-
 	// Initialize Fauna client
 	const { client, error } = useFauna()
 	if (error !== null) return error
 
 	try {
-		// Perform READ query (print error if resource not found)
+		const { id } = event.context.params as { id: string }
+
 		const query = fql`let pod = Pod.byId(${id});
 		if (!pod.exists()) abort({ message: "Pod with this ID does not exist." });
 		pod!.delete();`
