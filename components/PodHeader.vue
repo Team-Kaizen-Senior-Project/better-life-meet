@@ -1,8 +1,7 @@
 <script setup lang="ts">
 	import { ChevronDownIcon } from '@heroicons/vue/24/outline'
-	import type { Customer } from '~/types'
-	const { getMe } = useCustomerStore()
-	const customer: Customer = await getMe()
+	const { state: customerState } = useCustomerStore()
+	const customer = customerState.customer!
 </script>
 <template>
 	<header class="bg-black py-4">

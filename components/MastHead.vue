@@ -1,9 +1,7 @@
 <script setup lang="ts">
-	import type { Customer } from '~/types'
-
 	const { signOut } = useAuth()
-	const { getMe } = useCustomerStore()
-	const customer: Customer = await getMe()
+	const { state: customerState } = useCustomerStore()
+	const customer = customerState.customer!
 </script>
 
 <template>

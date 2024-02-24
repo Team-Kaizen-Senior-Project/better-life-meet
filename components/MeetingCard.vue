@@ -2,8 +2,8 @@
 	import type { Meeting } from '~/types'
 	const { display: displayDate, dayjs } = useDate()
 	const { deleteMeeting: deleteMeetingApi } = useApi()
-	const { getMyPod, isLeader } = usePodStore()
-	const pod = await getMyPod()
+	const { state: customerState, isLeader } = usePodStore()
+	const pod = customerState.pod!
 
 	const deleting = ref<boolean>(false)
 
@@ -21,7 +21,7 @@
 		if (!props.meeting) return false
 		const start = props.meeting.startTime
 		const end = props.meeting.endTime
-		return dayjs().isBetween(start, end)
+		return dayjs().isBetween(start.isoString, end.isoString)
 	})
 
 	const borderClass = computed(() => (isLive.value ? 'border-emerald-600' : 'border-white'))
