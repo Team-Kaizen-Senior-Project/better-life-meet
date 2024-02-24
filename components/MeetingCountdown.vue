@@ -10,7 +10,7 @@
 	const countdown = ref('')
 
 	const updateCountdown = () => {
-		const startTime = dayjs(props.meetingStartTime)
+		const startTime = dayjs(props.meetingStartTime.isoString)
 		const now = dayjs()
 		if (startTime.isBefore(now)) {
 			console.log('countdown has finished')
@@ -20,7 +20,7 @@
 			clearInterval(interval) // Stop the countdown
 		} else {
 			const duration = dayjs.duration(startTime.diff(now))
-			countdown.value = `${duration.days()}d ${duration.hours()}h ${duration.minutes()}m ${duration.seconds()}s`
+			countdown.value = `${duration.hours()}h ${duration.minutes()}m ${duration.seconds()}s`
 		}
 	}
 	let interval: any = null
