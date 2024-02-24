@@ -7,7 +7,7 @@
 
 	const modalIsOpen = ref(false)
 	const isCameraOn = ref(false)
-	const videoPreview = ref(null)
+	const videoPreview = ref<HTMLVideoElement | null>(null)
 
 	const props = defineProps({
 		meetingRef: String,
@@ -25,9 +25,9 @@
 			.getUserMedia({ video: true, audio: false })
 			.then(function (stream) {
 				if (!isCameraOn.value) {
-					videoElement.classList.remove('hidden')
-					videoElement.srcObject = stream
-					videoElement.play()
+					videoElement?.classList.remove('hidden')
+					if (videoElement) videoElement.srcObject = stream
+					videoElement?.play()
 				} else {
 					stopRecording()
 				}
@@ -36,7 +36,7 @@
 				console.error(err)
 			})
 
-		videoElement.addEventListener(
+		videoElement?.addEventListener(
 			'canplay',
 			function (ev) {
 				isCameraOn.value = true
@@ -45,20 +45,20 @@
 		)
 	}
 	function stopRecording() {
-		videoPreview.value.classList.add('hidden')
-		videoPreview.value.srcObject.getTracks().forEach((track) => track.stop())
+		videoPreview.value?.classList.add('hidden')
+		;(videoPreview.value?.srcObject as MediaStream).getTracks().forEach((track) => track.stop())
 		isCameraOn.value = false
 	}
 	async function joinMeeting() {
 		console.log('inside join meeting')
-		const videoElement = document.getElementById('demo-video-element')
+		const videoElement = document.getElementById('demo-video-element') as HTMLVideoElement
 		modalIsOpen.value = false
 		navigator.mediaDevices
 			.getUserMedia({ video: true, audio: false })
 			.then(function (stream) {
 				if (isCameraOn.value) {
 					videoElement.srcObject = stream
-					videoElement.play()
+					videoElement?.play()
 				}
 			})
 			.catch(function (err) {

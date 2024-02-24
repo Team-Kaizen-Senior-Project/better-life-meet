@@ -1,15 +1,15 @@
 <script setup lang="ts">
-	import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
-	import { VideoCameraSlashIcon } from '@heroicons/vue/24/outline'
-	import { MicrophoneIcon } from '@heroicons/vue/24/solid'
 	import MeetingCard from '@/components/MeetingCard.vue'
+	import type { Meeting } from '~/types'
+	import type {} from '@samk-dev/nuxt-vcalendar'
 
 	const { getMeetings } = useApi()
+
 	const { state: podState } = usePodStore()
 
 	const date = ref(new Date())
 
-	const attrs = ref([
+	const attrs = ref<any>([
 		{
 			key: 'today',
 			highlight: {
@@ -23,7 +23,7 @@
 	const { data, refresh, pending } = await useAsyncData('dashboard', async () => {
 		const [meetings] = await Promise.all([
 			getMeetings({
-				podRef: podState.pod?.id,
+				podId: podState.pod?.id,
 			}),
 		])
 
@@ -31,8 +31,6 @@
 			meetings,
 		}
 	})
-
-	console.log(data.value)
 </script>
 
 <template>
@@ -64,14 +62,14 @@
 							</div>
 						</ClientOnly>
 						<div class="mt-4">
-							<ScheduleMeetingCard />
+							<ScheduleMeetingCard @refresh="refresh" />
 						</div>
 					</div>
 
 					<div class="rounded-lg bg-zinc-900 p-4">
 						<h2 class="mb-4 text-lg font-medium text-white">Meetings this week</h2>
 						<div class="grid grid-cols-1 gap-4">
-							<div v-if="data?.meetings.length" v-for="(meeting, index) in data?.meetings" class="">
+							<div v-if="data?.meetings?.length" v-for="(meeting, index) in data?.meetings" class="">
 								<MeetingCard :meeting="meeting" :isFirst="index === 0" @refresh="refresh" />
 							</div>
 							<div v-else>
