@@ -48,6 +48,7 @@
 	const showJoinButton = computed(() => {
 		if (!props.meeting) return false
 		const startTime = dayjs(props.meeting.startTime.isoString)
+
 		const endTime = dayjs(props.meeting.endTime.isoString)
 		const now = dayjs()
 		const fifteenMinutesBeforeStart = startTime.subtract(15, 'minute')

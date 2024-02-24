@@ -15,6 +15,10 @@
 		isLoading: boolean
 	}
 
+	const emit = defineEmits<{
+		refresh: []
+	}>()
+
 	const state: State = reactive({
 		form: {
 			startData: {},
@@ -64,9 +68,10 @@
 			isOpen.value = false
 			form.reset()
 			reset()
+			emit('refresh')
 		} catch (error) {
 			console.error(error)
-			validationMessage.value = "Failed to schedule the meeting. Please try again.";
+			validationMessage.value = 'Failed to schedule the meeting. Please try again.'
 		} finally {
 			state.isLoading = false
 		}
@@ -91,7 +96,7 @@
 			</div>
 			<form @submit="scheduleMeeting" class="mt-4 grid gap-4">
 				<div class="grid gap-1">
-					<label for="start-time-input" class="text-sm text-sm font-medium text-white">
+					<label for="start-time-input" class="text-sm font-medium text-white">
 						Start
 						<span class="text-red-400">*</span>
 					</label>

@@ -1,47 +1,42 @@
-// file: ~/server/api/auth/[...].ts
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { NuxtAuthHandler } from '#auth'
-
-interface Customer {
-	email: string
-	id: string
-	firstName: string
-	lastName: string
-	netWorth: string
-	podRef: string
-}
-
-async function getCustomer(email: string) {
-	return await $fetch<Customer>('/api/auth/customer', {
-		method: 'POST',
-		body: {
-			email: email,
-		},
-	})
-}
+import { useApi } from '~/composables/useApi'
+import type { Customer } from '~/types'
 
 export default NuxtAuthHandler({
-	// A secret string you define, to ensure correct encryption - required in production
-	secret: process.env.AUTH_SECRET,
+	secret: useRuntimeConfig().AUTH_SECRET,
 	providers: [
-		// @ts-expect-error You need to use .default here for it to work during SSR. May be fixed via Vite at some point\
+		// @ts-expect-error You need to use .default here for it to work during SSR. May be fixed via Vite at some point
 		CredentialsProvider.default({
+			// The name to display on the sign in form (e.g. 'Sign in with...')
 			name: 'Credentials',
+			// The credentials is used to generate a suitable form on the sign in page.
+			// You can specify whatever fields you are expecting to be submitted.
+			// e.g. domain, username, password, 2FA token, etc.
+			// You can pass any HTML attribute to the <input> tag through the object.
+			// credentials: {
+			// 	username: { label: 'Username', type: 'text', placeholder: '(hint: jsmith)' },
+			// 	password: { label: 'Password', type: 'password', placeholder: '(hint: hunter2)' },
+			// },
 			async authorize(credentials: any) {
-				const customer = await getCustomer(credentials.email)
-				let user: Customer
-				if (credentials.email === customer.email && credentials.password === 'password') {
-					user = {
-						email: customer.email,
-						id: customer.id,
-						firstName: customer.firstName,
-						lastName: customer.lastName,
-						netWorth: customer.netWorth,
-						podRef: customer.podRef,
+				// You need to provide your own logic here that takes the credentials
+				// submitted and returns either a object representing a user or value
+				// that is false/null if the credentials are invalid.
+				// NOTE: THE BELOW LOGIC IS NOT SAFE OR PROPER FOR AUTHENTICATION!
+
+				try {
+					const { getCustomerByEmail } = useApi()
+					const customer: Customer = await getCustomerByEmail(credentials?.email)
+
+					if (credentials?.email === customer.email && credentials?.password === 'password') {
+						// Any object returned will be saved in `user` property of the JWT
+						return customer
+					} else {
+						// If you return null then an error will be displayed advising the user to check their details.
+						return null
 					}
-					return user
-				} else {
-					console.log('Invalid username or password')
+				} catch (err) {
+					return null
 				}
 			},
 		}),
@@ -51,26 +46,11 @@ export default NuxtAuthHandler({
 	},
 	callbacks: {
 		session: async ({ session, token }) => {
-			try {
-				if (token.email) {
-					const customerData = await getCustomer(token.email)
-					//@ts-expect-error
-					session.user.id = customerData.id
-					//@ts-expect-error
-					session.user.firstName = customerData.firstName
-					//@ts-expect-error
-					session.user.lastName = customerData.lastName
-					//@ts-expect-error
-					session.user.netWorth = customerData.netWorth
-					//@ts-expect-error
-					session.user.podRef = customerData.podRef
-				} else {
-					console.log('Token Email Invalid: ', token.email)
-				}
-			} catch (error) {
-				console.error('Error fetching user data:', error)
-			}
-			return Promise.resolve(session)
+			const { getCustomerByEmail } = useApi()
+			const customer: Customer = await getCustomerByEmail(session.user?.email!)
+			session.user = customer
+
+			return session
 		},
 	},
 })
