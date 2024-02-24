@@ -4,6 +4,8 @@
 
 	const { getMeetings } = useApi()
 
+	const { state: podState } = usePodStore()
+
 	const date = ref(new Date())
 
 	const attrs = ref([
@@ -18,7 +20,12 @@
 	])
 
 	const { data, refresh, pending } = await useAsyncData('dashboard', async () => {
-		const meetings: Meeting[] = await getMeetings({ count: 3 })
+		const [meetings] = await Promise.all([
+			getMeetings({
+				podId: podState.pod?.id,
+			}),
+		])
+
 		return {
 			meetings,
 		}
@@ -59,10 +66,13 @@
 					</div>
 
 					<div class="rounded-lg bg-zinc-900 p-4">
-						<h2 class="mb-4 text-lg font-medium text-white">Meetings for today</h2>
+						<h2 class="mb-4 text-lg font-medium text-white">Meetings this week</h2>
 						<div class="grid grid-cols-1 gap-4">
-							<div v-for="meeting in data?.meetings" class="">
-								<MeetingCard :meeting="meeting" @refresh="refresh" />
+							<div v-if="data?.meetings?.length" v-for="(meeting, index) in data?.meetings" class="">
+								<MeetingCard :meeting="meeting" :isFirst="index === 0" @refresh="refresh" />
+							</div>
+							<div v-else>
+								<p>No meetings scheduled this week</p>
 							</div>
 						</div>
 					</div>

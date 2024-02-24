@@ -97,11 +97,14 @@ export const useApi = () => {
 		return meeting
 	}
 
-	const getMeetings = async (meetingQueryParams?: MeetingQueryParams): Promise<Meeting[]> => {
-		const response = await $fetch(`/api/meeting`, { query: meetingQueryParams })
-
-		const meetings = response.data as unknown as Meeting[]
-		return meetings
+	const getMeetings = async (params?: MeetingQueryParams) => {
+		const response = await $fetch<{ data: { data: Meeting[] } }>(`/api/meeting`, { params })
+		console.log(response.data.data)
+		// filter out meetings that have already ended
+		// sort the meetings by start time so newest is first
+		return response.data.data
+			.filter((meeting: any) => new Date(meeting.endTime) > new Date())
+			.sort((a: any, b: any) => a.startTime.localeCompare(b.startTime))
 	}
 
 	const updateMeeting = async (id: Numberic, meeting: Partial<Omit<Meeting, 'id'>>): Promise<Meeting> => {
@@ -167,12 +170,12 @@ export const useApi = () => {
 		updatePod,
 		deletePod,
 
-		// Meeting
-		createMeeting,
+		// MEETINGS
 		getMeetings,
+		deleteMeeting,
+		createMeeting,
 		getMeeting,
 		updateMeeting,
-		deleteMeeting,
 
 		// Attendee
 		createAttendee,
