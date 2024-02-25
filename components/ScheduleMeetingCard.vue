@@ -87,7 +87,7 @@
 	}
 </script>
 <template>
-	<UButton @click="isOpen = true" class="bg-sky-500 hover:bg-sky-600">
+	<UButton @click="isOpen = true" class="bg-sky-500 hover:bg-sky-600" data-testid="schedule-meeting-button">
 		Schedule Meeting
 		<CalendarIcon class="h-5 w-5" />
 	</UButton>

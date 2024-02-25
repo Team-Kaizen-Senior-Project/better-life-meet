@@ -4,7 +4,9 @@
 			"#internal/nitro": ["./node_modules/nitropack/dist/runtime"],
 			"#internal/nitro/*": ["./node_modules/nitropack/dist/runtime/*"],
 			"~/*": ["./*"]
-		}
+		},
+		"types": ["vitest/globals"],
+		"moduleResolution": "node"
 	},
 	// https://nuxt.com/docs/guide/concepts/typescript
 	"extends": "./.nuxt/tsconfig.json"

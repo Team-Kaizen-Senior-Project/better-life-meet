@@ -25,7 +25,7 @@
 				></div>
 				<div class="absolute inset-0 flex flex-col items-center justify-center gap-4">
 					<div class="text-center text-base font-medium leading-snug text-white">Lone ranger pod</div>
-					<Button type="primary" class="bg-sky-500 hover:bg-sky-600">Join</Button>
+					<Button type="primary" class="bg-sky-500 hover:bg-sky-600" data-testid="join-button">Join</Button>
 				</div>
 			</div>
 		</div>

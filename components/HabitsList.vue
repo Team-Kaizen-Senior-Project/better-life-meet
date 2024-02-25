@@ -27,6 +27,7 @@
 						<XCircleIcon
 							@click="habits.removeHabit(habit.id)"
 							class="h-5 w-5 rounded text-red-500 hover:cursor-pointer"
+							data-testid="remove-habit-button"
 						/>
 						<input
 							class="min-w-0 flex-auto appearance-none rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
@@ -36,7 +37,7 @@
 				</li>
 			</ul>
 			<div class="flex justify-between">
-				<UButton @click="habits.addHabit()" class="bg-zinc-700 text-xs font-medium hover:bg-zinc-700/60">
+				<UButton data-testid="add-habit-button" @click="habits.addHabit()" class="bg-zinc-700 text-xs font-medium hover:bg-zinc-700/60">
 					<PlusCircleIcon class="h-5 w-5" />
 					Add Habit
 				</UButton>
@@ -53,7 +54,7 @@
 				</li>
 			</ul>
 			<div>
-				<UButton @click="toggleEditMode" class="mt-4 bg-zinc-700 text-xs font-medium hover:bg-zinc-700/60">
+				<UButton data-testid ="edit-button" @click="toggleEditMode" class="mt-4 bg-zinc-700 text-xs font-medium hover:bg-zinc-700/60">
 					Edit habits
 				</UButton>
 			</div>
