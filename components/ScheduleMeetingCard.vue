@@ -1,6 +1,5 @@
 <script setup lang="ts">
 	import { CalendarIcon } from '@heroicons/vue/24/solid'
-	import type { MeetingFields } from '~/types'
 
 	const { createMeeting } = useApi()
 	const { state: podState } = usePodStore()
@@ -11,15 +10,21 @@
 			startData: { date?: string; time?: string }
 			endData: { date?: string; time?: string }
 			timeZone?: string
+			vimeoId: ''
 		}
 		isLoading: boolean
 	}
+
+	const emit = defineEmits<{
+		refresh: []
+	}>()
 
 	const state: State = reactive({
 		form: {
 			startData: {},
 			endData: {},
 			timeZone: 'Eastern Time',
+			vimeoId: '',
 		},
 		isLoading: false,
 	})
@@ -43,6 +48,7 @@
 			startData: {},
 			endData: {},
 			timeZone: 'Eastern Time',
+			vimeoId: '',
 		}
 	}
 
@@ -60,13 +66,15 @@
 				endTime: endISO.value,
 				timeZone: state.form.timeZone,
 				podRef: podState.pod?.id,
+				vimeoId: state.form.vimeoId,
 			})
 			isOpen.value = false
 			form.reset()
 			reset()
+			emit('refresh')
 		} catch (error) {
 			console.error(error)
-			validationMessage.value = "Failed to schedule the meeting. Please try again.";
+			validationMessage.value = 'Failed to schedule the meeting. Please try again.'
 		} finally {
 			state.isLoading = false
 		}
@@ -91,7 +99,7 @@
 			</div>
 			<form @submit="scheduleMeeting" class="mt-4 grid gap-4">
 				<div class="grid gap-1">
-					<label for="start-time-input" class="text-sm text-sm font-medium text-white">
+					<label for="start-time-input" class="text-sm font-medium text-white">
 						Start
 						<span class="text-red-400">*</span>
 					</label>
@@ -134,7 +142,7 @@
 				</div>
 				<div class="grid gap-1">
 					<label for="meeting-timezone-input" class="text-sm font-medium text-white">
-						Time Zone
+						Timezone
 						<span class="text-red-400">*</span>
 					</label>
 
@@ -150,11 +158,19 @@
 						</option>
 					</select>
 				</div>
-				<div class="flex items-center gap-1">
-					<input id="record-check" type="checkbox" />
+				<div class="flex flex-col items-start gap-1">
+					<!-- <input id="record-check" type="checkbox" />
 					<label for="record-check" class="text-md font-medium text-white">
 						Include prerecorded videos for the week?
-					</label>
+					</label> -->
+					<label for="video-id" class="text-md font-medium text-white">Video ID for this week's meeting</label>
+					<input
+						id="video-id"
+						type="text"
+						v-model="state.form.vimeoId"
+						placeholder="Enter Video ID"
+						class="min-w-0 flex-auto rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] pr-10 text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
+					/>
 				</div>
 				<div v-if="validationMessage" class="mb-2 text-sm text-red-500">
 					{{ validationMessage }}

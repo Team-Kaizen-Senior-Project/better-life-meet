@@ -3,15 +3,6 @@
 	import { VideoCameraIcon } from '@heroicons/vue/24/outline'
 
 	const media = useMediaStore()
-	const attendee = useAttendeeStore()
-	async function leaveMeeting() {
-		try {
-			await attendee.logLeaveTime()
-			await navigateTo('/dashboard')
-		} catch (error) {
-			console.log(error)
-		}
-	}
 </script>
 <template>
 	<footer class="absolute bottom-0 w-full bg-black py-4">
@@ -21,7 +12,7 @@
 					<Button class="rounded px-5 py-3" @click="media.toggleAudio">
 						<MicrophoneIcon class="h-5 w-5" />
 					</Button>
-					<Button class="rounded px-5 py-3" @click="media.toggleVideo()">
+					<Button class="rounded px-5 py-3" @click="media.toggleVideo">
 						<VideoCameraIcon class="h-5 w-5" />
 					</Button>
 					<Button class="rounded px-5 py-3">
@@ -59,12 +50,7 @@
 					</button>
 				</div>
 				<div>
-					<Button
-						class="rounded-lg bg-rose-600 px-3 py-2 text-sm font-medium text-white hover:bg-rose-700"
-						@click="leaveMeeting"
-					>
-						Leave
-					</Button>
+					<LeaveMeetingModal />
 				</div>
 			</div>
 		</inner-column>

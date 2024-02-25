@@ -1,31 +1,23 @@
 import { AbortError, ServiceError, fql } from 'fauna'
 
 export default defineEventHandler(async (event) => {
-	// Read customer email from POST in catch all route([...].ts)
-
+	// Get Meeting ID
+	const { id } = event.context.params as { id: string }
 	const body = await readBody(event)
-	const email = body.email
 
 	// Initialize Fauna client
 	const { client, error } = useFauna()
 	if (error !== null) return error
 
 	try {
-		let customerDetails = null
-		const query = fql`Customer.where(.email==${email})`
+		const query = fql`
+    let meeting = Meeting.byId(${id});
+    if (!meeting.exists()) abort({ message: "Meeting with this ID does not exist." });
+    meeting!.update(${body});
+    `
 		const response = await client.query(query)
-		if (response) {
-			const customerData = response.data.data[0]
-			customerDetails = {
-				id: customerData['id'],
-				email: customerData['email'],
-				firstName: customerData['firstName'],
-				lastName: customerData['lastName'],
-				netWorth: customerData['netWorth'],
-				podRef: customerData['podRef']['id'],
-			}
-		}
-		return customerDetails
+
+		return response
 	} catch (error: unknown) {
 		if (error instanceof AbortError) {
 			const abortError = error as AbortError

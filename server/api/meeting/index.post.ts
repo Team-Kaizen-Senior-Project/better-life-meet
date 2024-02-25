@@ -1,12 +1,6 @@
 import { AbortError, ServiceError, fql } from 'fauna'
 
-// Interface for meeting
-export interface Meeting {
-	startTime: string
-	endTime: string
-	timeZone: string
-	podRef: string
-}
+import type { MeetingFields } from '~/types'
 
 // Endpoint for creating a meeting
 export default defineEventHandler(async (event) => {
@@ -15,14 +9,14 @@ export default defineEventHandler(async (event) => {
 	if (error !== null) return error
 	// Create new meeting record and assign attendees
 	try {
-		const meeting = (await readBody(event)) as Meeting
+		const meeting = (await readBody(event)) as Required<MeetingFields>
 
 		// Convert the start and end time to date objects
 		const startTime = new Date(meeting.startTime)
 		const endTime = new Date(meeting.endTime)
-		
+
 		//Get current time
-		const currentTime = new Date();
+		const currentTime = new Date()
 
 		// Check if meeting start time is in the past
 		if (startTime < currentTime) {
@@ -43,18 +37,18 @@ export default defineEventHandler(async (event) => {
 		// Perform POST query for meeting
 		const query = fql`
 		let meeting = {
-			startTime: ${meeting.startTime},
-			endTime: ${meeting.endTime},
+			startTime: Time(${meeting.startTime}),
+			endTime: Time(${meeting.endTime}),
 			timeZone: ${meeting.timeZone},
 			podRef: Pod.byId(${meeting.podRef}),
+			vimeoId: ${meeting.vimeoId},
 		}
 		Meeting.create(meeting)
 		`
 
-		const meetingDoc = await client.query(query)
+		const response = await client.query(query)
 
-		// Return meeting object
-		return meetingDoc
+		return response
 
 		// Catch error
 	} catch (error: unknown) {

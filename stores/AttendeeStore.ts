@@ -6,7 +6,7 @@ export const useAttendeeStore = defineStore('attendee', () => {
 
 	const createAttendee = async (fields: AttendeeFields) => {
 		const response = await createAttendeeApi(fields)
-		attendeeId.value = response
+		attendeeId.value = response.id
 	}
 
 	async function logCameraUsed() {

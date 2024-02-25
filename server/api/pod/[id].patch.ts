@@ -2,27 +2,20 @@ import { AbortError, ServiceError, fql } from 'fauna'
 
 // Endpoint for adding new meeting references for a pod
 export default defineEventHandler(async (event) => {
-	// Get Pod ID
-	const { id } = event.context.params as { id: string }
-	const body = await readBody(event)
-
 	// Initialize Fauna client
 	const { client, error } = useFauna()
 	if (error !== null) return error
 
 	try {
+		// Get Pod ID
+		const { id } = event.context.params as { id: string }
+		const updatedPod = await readBody(event) //as String
+
 		const query = fql`
-        let pod = Pod.byId(${id});
-        if (!pod.exists()) abort({ message: "Pod with this ID does not exist." });
-        
-        let meetingsList = pod!.meetings
-        let updatedList = if (meetingsList != Null){
-            meetingsList.append({Meeting.byId(${body.meetingId})})
-        } else{
-            [Meeting.byId(${body.meetingId})]
-        }
-        pod!.update({meetings: updatedList})
-    `
+        let pod = Pod.byId(${id})
+		if (!pod.exists()) abort({ message: "Pod with this ID does not exist." });
+    	pod!.update(${updatedPod});
+    	`
 		const response = await client.query(query)
 
 		return response

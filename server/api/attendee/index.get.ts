@@ -3,12 +3,7 @@ import { AbortError, ServiceError, fql } from 'fauna'
 // Endpoint for retrieving all attendees
 export default defineEventHandler(async (event) => {
 	// Extract params from request query
-	const {
-		cursor,
-		count,
-		customerRef,
-		meetingRef,
-	}: { cursor: string; count: Number; customerRef: string; meetingRef: string } = getQuery(event)
+	const { cursor, count, customerId, meetingId }: any = getQuery(event)
 
 	// Initialize Fauna client
 	const { client, error } = useFauna()
@@ -19,33 +14,35 @@ export default defineEventHandler(async (event) => {
 		let query = fql`Attendee.all().paginate()`
 
 		// Check to see if client is making a paginated request
-		if (cursor !== undefined && count !== undefined) {
-			query = fql`Set.paginate(${cursor}, ${Number(count)})`
-		} else if (cursor !== undefined) {
-			query = fql`Set.paginate(${cursor})`
-		} else if (customerRef !== undefined) {
+		if (cursor) {
+			if (count) {
+				query = fql`Set.paginate(${cursor}, ${Number(count)})`
+			} else {
+				query = fql`Set.paginate(${cursor})`
+			}
+		} else if (customerId) {
 			// Check if count parameter is passed for pagination
 			if (count) {
-				query = fql`let customer = Customer.byId(${customerRef}); Attendee.where(.customerRef == customer).paginate(${Number(
+				query = fql`let customer = Customer.byId(${customerId}); Attendee.where(.customerRef == customer).paginate(${Number(
 					count,
 				)})`
 			} else {
-				query = fql`let customer = Customer.byId(${customerRef}); Attendee.where(.customerRef == customer).paginate()`
+				query = fql`let customer = Customer.byId(${customerId}); Attendee.where(.customerRef == customer).paginate()`
 			}
-		} else if (meetingRef !== undefined) {
+		} else if (meetingId) {
 			if (count) {
-				query = fql`let meeting = Meeting.byId(${meetingRef}); Attendee.where(.meetingRef == meeting).paginate(${Number(
+				query = fql`let meeting = Meeting.byId(${meetingId}); Attendee.where(.meetingRef == meeting).paginate(${Number(
 					count,
 				)})`
 			} else {
-				query = fql`let meeting = Meeting.byId(${meetingRef}); Attendee.where(.meetingRef == meeting).paginate()`
+				query = fql`let meeting = Meeting.byId(${meetingId}); Attendee.where(.meetingRef == meeting).paginate()`
 			}
-		} else if (count !== undefined) {
+		} else if (count) {
 			query = fql`Attendee.all().paginate(${Number(count)})`
 		}
 
-		const document = await client.query(query)
-		return document.data
+		const response = await client.query(query)
+		return response
 	} catch (error: unknown) {
 		if (error instanceof AbortError) {
 			const abortError = error as AbortError
