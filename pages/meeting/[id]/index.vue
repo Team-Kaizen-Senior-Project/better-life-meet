@@ -48,7 +48,10 @@
 			<p class="font-semibold">Please wait</p>
 			<p>The meeting will start shortly</p>
 		</div>
-		<PrerecordedVideo @toggle-video="toggleVideo" v-if="recordedVideoIsPlaying && !showBufferText" />
+		<PrerecordedVideo
+			@toggle-video="toggleVideo"
+			v-if="recordedVideoIsPlaying && !showBufferText && !countdown.showCountdown"
+		/>
 		<div v-else-if="!recordedVideoIsPlaying" class="grid h-[70vh] w-[80vw] grid-cols-4 grid-rows-2 gap-3">
 			<!-- Local user's video feed -->
 			<div class="relative overflow-hidden rounded-lg bg-zinc-900" v-if="true">
