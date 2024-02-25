@@ -30,7 +30,7 @@ export const useAttendeeStore = defineStore('attendee', () => {
 		attendeeId.value = undefined
 
 		return response
-		// Update attendee 'usedVideo' field in the db
+		// Update attendee 'leaveTime' field in the db
 	}
 
 	return { attendeeId, createAttendee, logCameraUsed, logLeaveTime }

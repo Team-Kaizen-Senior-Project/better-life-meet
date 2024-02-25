@@ -1,6 +1,12 @@
 <script setup lang="ts">
 	import { io } from 'socket.io-client'
+
+	import { useRouter, useRoute } from 'vue-router'
+	import { onBeforeRouteLeave } from 'vue-router'
+	const attendee = useAttendeeStore()
+
 	import { useCountdownStore } from '~/stores/CountdownStore'
+	import type { Meeting } from '~/types'
 	const { display: displayDate, dayjs } = useDate()
 
 	definePageMeta({
@@ -24,6 +30,26 @@
 	console.log('Start Time', startTime)
 	// Connect to websocket server
 	const ws = io()
+
+	// When user attempts to close the tab
+	window.onbeforeunload = function (e) {
+		e.preventDefault()
+		const answer = window.confirm('Are you ')
+		if (!answer) {
+			return false
+		} else {
+			attendee.logLeaveTime
+		}
+	}
+	// when user attempts to press the back button
+	onBeforeRouteLeave(async (to, from) => {
+		const answer = window.confirm('Are you sure you want to leave the meeting?')
+		if (!answer) {
+			return false
+		} else {
+			attendee.logLeaveTime()
+		}
+	})
 </script>
 
 <template>
