@@ -79,15 +79,16 @@
 
 		const fields: AttendeeFields = {
 			joinTime: startTime,
+			leaveTime: startTime,
 			customerRef: customerState.customer?.id,
 			usedVideo: isCameraOn,
 			meetingRef,
 			// TODO: use actual user device
 			platform: 'Mobile',
-			leaveTime: null,
 		}
 
 		try {
+			console.log(fields)
 			await attendee.createAttendee(fields)
 			video.joinMeeting()
 		} catch (error) {

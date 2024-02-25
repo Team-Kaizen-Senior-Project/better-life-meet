@@ -6,7 +6,9 @@ export const useVideoStore = defineStore('video', () => {
 	const toggleCamera = () => {
 		cameraActive.value = !cameraActive.value
 	}
-
+	const setModalOpen = (value) => {
+		modalOpen.value = value
+	}
 	const joinMeeting = () => {
 		joinedMeeting.value = true
 		modalOpen.value = !modalOpen.value
@@ -19,5 +21,5 @@ export const useVideoStore = defineStore('video', () => {
 			toggleCamera()
 		}
 	}
-	return { cameraActive, toggleCamera, joinedMeeting, joinMeeting, leaveMeeting, modalOpen }
+	return { cameraActive, toggleCamera, joinedMeeting, joinMeeting, leaveMeeting, modalOpen, setModalOpen }
 })
