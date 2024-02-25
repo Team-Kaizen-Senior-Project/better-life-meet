@@ -2,7 +2,9 @@
 	import { io } from 'socket.io-client'
 	const recordedVideoIsPlaying = ref(true)
 	import { useCountdownStore } from '~/stores/CountdownStore'
+	import { useVideoStore } from '~/stores/videoService'
 	const { display: displayDate, dayjs } = useDate()
+	const video = useVideoStore()
 
 	definePageMeta({
 		layout: 'meeting',
@@ -12,6 +14,7 @@
 	const meetingId = route.params.id
 	const { getMeeting } = useApi()
 	const meeting: Meeting = await getMeeting(meetingId)
+	const showBufferText = ref(false)
 
 	const startTime = dayjs(meeting.startTime.isoString)
 	const now = dayjs()
@@ -25,25 +28,28 @@
 	console.log('Start Time', startTime)
 	// Connect to websocket server
 	const ws = io()
-	/*
-	TODO:
-	- Incorporate start video after meeting has started from countdown
-	- Start meeting & external videos after prerecorded video end (websockets)
-	- Replace placeholder video with Vimeo API
-	*/
 	function toggleVideo() {
+		showBufferText.value = true
+		// Temp buffer for video end
+		const BUFFER = 5 // seconds
 		setTimeout(() => {
-			recordedVideoIsPlaying.value = !recordedVideoIsPlaying.value
-		}, 1000)
+			recordedVideoIsPlaying.value = false
+			video.setModalOpen(true)
+			showBufferText.value = false
+		}, BUFFER * 1000)
 	}
 </script>
 
 <template>
 	<PodHeader />
-	<!-- v-if="!recordedVideoIsPlaying" -->
 	<div class="flex min-h-[82vh] items-center justify-center bg-zinc-800">
 		<MeetingCountdown v-if="countdown.showCountdown" :meetingStartTime="meeting.startTime" />
-		<div v-else class="grid h-[70vh] w-[80vw] grid-cols-4 grid-rows-2 gap-3">
+		<div v-if="showBufferText" class="rounded-lg bg-zinc-900 p-6 text-center text-white">
+			<p class="font-semibold">Please wait</p>
+			<p>The meeting will start shortly</p>
+		</div>
+		<PrerecordedVideo @toggle-video="toggleVideo" v-if="recordedVideoIsPlaying && !showBufferText" />
+		<div v-else-if="!recordedVideoIsPlaying" class="grid h-[70vh] w-[80vw] grid-cols-4 grid-rows-2 gap-3">
 			<!-- Local user's video feed -->
 			<div class="relative overflow-hidden rounded-lg bg-zinc-900" v-if="true">
 				<LocalVideo />
@@ -57,7 +63,6 @@
 			</div> -->
 		</div>
 	</div>
-	<PrerecordedVideo @toggle-video="toggleVideo" v-if="recordedVideoIsPlaying" />
-	<BreakoutRoomModal v-if="!countdown.showCountdown" :meetingRef="meetingId" />
+	<BreakoutRoomModal v-if="!recordedVideoIsPlaying" :meetingRef="meetingId" />
 	<PodFooter />
 </template>
