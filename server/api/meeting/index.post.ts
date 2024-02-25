@@ -1,4 +1,5 @@
 import { AbortError, ServiceError, fql } from 'fauna'
+
 import type { MeetingFields } from '~/types'
 
 // Endpoint for creating a meeting
@@ -40,6 +41,7 @@ export default defineEventHandler(async (event) => {
 			endTime: Time(${meeting.endTime}),
 			timeZone: ${meeting.timeZone},
 			podRef: Pod.byId(${meeting.podRef}),
+			vimeoId: ${meeting.vimeoId},
 		}
 		Meeting.create(meeting)
 		`
