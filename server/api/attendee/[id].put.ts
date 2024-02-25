@@ -1,12 +1,7 @@
 import { fql } from 'fauna'
+import type { AttendeeFields } from '~/types'
 
 // Attendee update information interface
-interface AttendeeUpdateInfo {
-	joinTime: string
-	leaveTime: string
-	usedVideo: boolean
-	platform: string
-}
 
 // Endpoint for updating an attendee
 export default defineEventHandler(async (event) => {
@@ -18,7 +13,7 @@ export default defineEventHandler(async (event) => {
 	const { id } = event.context.params as { id: string }
 
 	// Read in request body and assert the type to AttendeeUpdateInfo
-	const updateInfo = (await readBody(event)) as AttendeeUpdateInfo
+	const updateInfo = (await readBody(event)) as Required<AttendeeFields>
 
 	// Update the attendee record with new information
 	try {
@@ -26,8 +21,8 @@ export default defineEventHandler(async (event) => {
 		const updateQuery = fql`
         Attendee.byId(${id})!.update({
           {
-            joinTime: ${updateInfo.joinTime},
-            leaveTime: ${updateInfo.leaveTime},
+            joinTime: Time(${updateInfo.joinTime}),
+            leaveTime: Time(${updateInfo.leaveTime}),
             usedVideo: ${updateInfo.usedVideo},
             platform: ${updateInfo.platform}
           }
