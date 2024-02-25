@@ -11,16 +11,11 @@ export const useDate = () => {
 	dayjs.extend(duration)
 
 	const display = (date?: string) => {
-		return dayjs(date).tz().format('MMM DD YYYY')
-	}
-
-	const displayHours = (date?: string) => {
-		return dayjs(date).tz().format('h:mm A')
+		return dayjs(date).tz().format('MMM DD YYYY hh:mm a')
 	}
 
 	return {
 		display,
-		displayHours,
 		dayjs,
 	}
 }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import type { Meeting } from '~/types'
-	const { display: displayDate, displayHours, dayjs } = useDate()
+	const { display: displayDate, dayjs } = useDate()
 	const { deleteMeeting: deleteMeetingApi } = useApi()
 	const { state: customerState } = usePodStore()
 	// computed and refs should not be directly destructed, instead use whole store or `storeToRefs`
@@ -48,11 +48,9 @@
 	const showJoinButton = computed(() => {
 		if (!props.meeting) return false
 		const startTime = dayjs(props.meeting.startTime.isoString)
-
-		const endTime = dayjs(props.meeting.endTime.isoString)
 		const now = dayjs()
 		const fifteenMinutesBeforeStart = startTime.subtract(15, 'minute')
-		return now.isAfter(fifteenMinutesBeforeStart) && now.isBefore(endTime)
+		return now.isAfter(fifteenMinutesBeforeStart) && now.isBefore(startTime)
 	})
 
 	const countdown = ref('')
@@ -90,9 +88,6 @@
 			<div class="text-sm font-medium text-white">Pod accountability meeting</div>
 			<div class="grid gap-2">
 				<p class="text-sm text-zinc-300">{{ displayDate(meeting?.startTime.isoString) }}</p>
-				<p class="text-sm text-zinc-300">
-					<span>{{ displayHours(meeting?.startTime.isoString) }} - {{ displayHours(meeting?.endTime.isoString) }}</span>
-				</p>
 				<p
 					v-if="props.isFirst"
 					class="inline-flex max-w-fit items-center rounded-md bg-green-500/10 px-2 py-1 text-xs font-medium text-green-400 ring-1 ring-inset ring-green-500/20"
@@ -103,7 +98,6 @@
 		</div>
 		<div class="mt-4 flex w-full items-center" :class="showJoinButton ? 'justify-between' : 'justify-end'">
 			<NuxtLink
-				v-if="showJoinButton"
 				:to="`/meeting/${meeting?.id}`"
 				class="flex gap-2 rounded-md px-3 py-2 text-sm font-medium leading-tight text-white shadow"
 				:class="buttonClass"

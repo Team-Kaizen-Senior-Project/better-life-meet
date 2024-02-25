@@ -50,7 +50,7 @@
 
 				<!-- column 2 -->
 				<div class="col-span-1 grid gap-4 md:col-span-6">
-					<VideoSettings title="Video settings" :boxLength="55" />
+					<VideoSettings title="Video settings" boxLength="55" />
 				</div>
 				<!-- column 3 -->
 				<div class="col-span-1 grid gap-4 self-start lg:col-span-3">
