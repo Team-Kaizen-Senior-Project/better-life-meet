@@ -56,6 +56,7 @@ export interface MeetingFields {
 	endTime?: string
 	timeZone?: string
 	podRef?: string
+	vimeoId?: string
 }
 
 export interface Attendee {
