@@ -10,14 +10,28 @@ export const usePodStore = defineStore('pod', () => {
 	const state = reactive<State>({
 		pod: undefined,
 	})
-
-	const getMyPod = async (): Promise<Pod> => {
+	const getMyPod = async (): Promise<Pod | null> => {
 		const { getPod } = useApi()
 		const { state: customerState } = useCustomerStore()
-		const customer = customerState.customer!
-		const pod: Pod = await getPod(customer.podRef!.id!)
 
+		// Check if customer exists
+		if (!customerState.customer) {
+			console.error('Customer does not exist')
+			return null
+		}
+
+		const customer = customerState.customer
+
+		// Proceed with existing checks for podRef and podRef.id
+		if (!customer.podRef || !customer.podRef.id) {
+			console.error('Customer podRef or podRef.id is undefined')
+			return null
+		}
+
+		const pod: Pod = await getPod(customer.podRef.id)
 		state.pod = pod
+
+		console.log(state.pod)
 
 		return pod
 	}
