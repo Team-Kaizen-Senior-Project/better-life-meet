@@ -24,6 +24,7 @@
 		const [meetings] = await Promise.all([
 			getMeetings({
 				podId: podState.pod?.id,
+				count: 100
 			}),
 		])
 
