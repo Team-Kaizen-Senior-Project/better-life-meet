@@ -1,4 +1,6 @@
 import { Server as SocketServer } from 'socket.io'
+import type { Customer } from '~/types'
+import dayjs from 'dayjs'
 
 const socketEventHandler = async (wss: SocketServer) => {
 	console.log('✔ Socket.io server is listening')
@@ -6,9 +8,22 @@ const socketEventHandler = async (wss: SocketServer) => {
 	wss.on('connection', (ws) => {
 		console.log(`Socket [${ws.id}] has connected.`)
 
+		// Join chat room
+		ws.on('joinChat', ({ roomId, customer }) => {
+			ws.join(roomId)
+
+			ws.to(roomId).emit('message', `${customer} joined chat: ${roomId}`)
+			console.log(`${customer} joined Chat: ${roomId}`)
+		})
+		// Handle messages
+		ws.on('chatMessage', ({roomId, chat}) =>{
+			ws.to(roomId).emit('message', chat)
+			console.log(chat)
+		})
 		ws.on('disconnect', () => {
 			console.log(`Socket [${ws.id}] has disconnected.`)
 		})
+		
 	})
 }
 
