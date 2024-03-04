@@ -16,14 +16,13 @@ const socketEventHandler = async (wss: SocketServer) => {
 			console.log(`${customer} joined Chat: ${roomId}`)
 		})
 		// Handle messages
-		ws.on('chatMessage', ({roomId, chat}) =>{
-			ws.to(roomId).emit('message', chat)
+		ws.on('chatMessage', ({roomId, chat, isCurrentUser}) =>{
+			ws.to(roomId).emit('message', chat, isCurrentUser)
 			console.log(chat)
 		})
 		ws.on('disconnect', () => {
 			console.log(`Socket [${ws.id}] has disconnected.`)
 		})
-		
 	})
 }
 
