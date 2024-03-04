@@ -1,22 +1,16 @@
 <script setup lang="ts">
-	import { io, type Socket } from 'socket.io-client'
+	import { io } from 'socket.io-client'
 	const recordedVideoIsPlaying = ref(true)
-	import { useCustomerStore } from '~/stores/CustomerStore'
 	import { useCountdownStore } from '~/stores/CountdownStore'
 	import { useVideoStore } from '~/stores/videoService'
-	import type { Meeting, Chat } from '~/types'
-	import dayjs from 'dayjs'
-	const { display: displayDate } = useDate()
+	const { display: displayDate, dayjs } = useDate()
 	const video = useVideoStore()
-	const { state: customerState } = useCustomerStore()
-	const customer = computed(() => customerState.customer)
 
 	definePageMeta({
 		layout: 'meeting',
 	})
 	const countdown = useCountdownStore()
 	const route = useRoute()
-	//const ws = ref<Socket>()
 	const meetingId = route.params.id
 	const { getMeeting } = useApi()
 	const meeting: Meeting = await getMeeting(meetingId)
@@ -24,9 +18,6 @@
 
 	const startTime = dayjs(meeting.startTime.isoString)
 	const now = dayjs()
-
-	const message = `Hellooo it's meeee, ${customer.value?.email}` // replace with ref later
-	const chats = [] as string[] // replace with refs later
 
 	if (now.isBefore(startTime)) {
 		countdown.setShowCountdown(true)
@@ -37,25 +28,6 @@
 	console.log('Start Time', startTime)
 	// Connect to websocket server
 	const ws = io()
-	
-	// Join Chat room
-	ws.emit('joinChat', { roomId: meetingId, customer: `${customer.value?.email}` })
-	
-	// Listen for chat messages
-	ws.on('message', (chat) => {
-		console.log(chat)
-		chats.push(chat)
-	})
-	// Send chat message
-	ws.emit('chatMessage', {roomId: meetingId, chat: message})
-
-	/* Send message utilize refs
-	const sendMessage = async () => {
-		ws.value?.emit('chatMessage', message)
-		nextTick(() => {
-			message = ''
-		})
-	}*/
 	function toggleVideo() {
 		showBufferText.value = true
 		// Temp buffer for video end
