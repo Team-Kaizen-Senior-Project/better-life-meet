@@ -15,6 +15,9 @@
 	const { getMeeting } = useApi()
 	const meeting: Meeting = await getMeeting(meetingId)
 	const showBufferText = ref(false)
+	
+	const { state: customerState } = useCustomerStore()
+	const customerRef = customerState.customer?.id
 
 	const startTime = dayjs(meeting.startTime.isoString)
 	const now = dayjs()
@@ -38,6 +41,7 @@
 			showBufferText.value = false
 		}, BUFFER * 1000)
 	}
+	ws.emit('joinMeeting', { customerRef, meetingId, isCameraOn: video.cameraActive })
 </script>
 
 <template>

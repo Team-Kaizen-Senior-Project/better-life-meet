@@ -14,7 +14,7 @@
 		},
 	})
 	async function createNewAttendee() {
-		const startTime = new Date().toISOString()
+/* 		const startTime = new Date().toISOString()
 		const { meetingRef } = props
 		const isCameraOn = video.cameraActive
 
@@ -26,11 +26,11 @@
 			meetingRef,
 			// TODO: use actual user device
 			platform: 'Mobile',
-		}
+		} */
 
 		try {
-			console.log(fields)
-			await attendee.createAttendee(fields)
+			//console.log(fields)
+			//await attendee.createAttendee(fields)
 			video.joinMeeting()
 		} catch (error) {
 			console.log('error creating attendee', error)
