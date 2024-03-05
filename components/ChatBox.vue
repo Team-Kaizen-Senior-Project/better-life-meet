@@ -14,7 +14,7 @@
 	}
 	const isChatBoxVisible = computed(() => chatbox.isChatBoxVisible)
 
-  const customer = customerStore.state.customer
+	const customer = customerStore.state.customer
 	const ws = io()
 	const messages = ref([])
 	const newMessage = ref('')
@@ -29,6 +29,13 @@
 			const isCurrentUser = chat.author === `${customer?.firstName} ${customer?.lastName}`
 			messages.value.push({ ...chat, isCurrentUser })
 		})
+		ws.on('notification', (message) => {
+			const chatMessage = {
+				text: message,
+				isNotification: true,
+			}
+			messages.value.push(chatMessage)
+		})
 	})
 
 	function sendMessage() {
@@ -37,6 +44,7 @@
 				author: `${customer?.firstName} ${customer?.lastName}`,
 				text: newMessage.value,
 				isCurrentUser: true, // This message is from the current user
+				isNotification: false,
 			}
 
 			ws.emit('chatMessage', { roomId: meetingID, chat: chatMessage })
@@ -54,23 +62,32 @@
 		<div class="mb-4 flex items-center justify-between rounded-md bg-zinc-700 p-2">
 			<h1 class="text-white">Meeting Chat</h1>
 			<button @click="closeChatBox" class="ml-2">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="h-8">
-          <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z" clip-rule="evenodd" />
-        </svg>
-      </button>
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="h-8">
+					<path
+						fill-rule="evenodd"
+						d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
+						clip-rule="evenodd"
+					/>
+				</svg>
+			</button>
 		</div>
 		<div class="mb-4 flex flex-1 flex-col overflow-y-auto">
 			<!-- Dynamically display messages -->
 			<div v-for="(msg, index) in messages" :key="index" class="mb-4">
+				<div v-if="msg.isNotification" class="flex justify-center">
+					<div class="max-w-xs  px-3 py-2 text-white">
+						{{ msg.text }}
+					</div>
+				</div>
 				<div v-if="msg.isCurrentUser" class="flex justify-end">
 					<div class="max-w-xs rounded-lg bg-sky-500 px-4 py-2 text-white">
 						<div class="text-xs text-white">{{ msg.author }}</div>
 						{{ msg.text }}
 					</div>
 				</div>
-				<div v-else class="flex">
+				<div v-else-if="msg.isNotification == false" class="flex">
 					<div class="max-w-xs rounded-lg bg-gray-300 px-4 py-2">
-						<div class="text-gray-500 text-xs">{{ msg.author }}</div>
+						<div class="text-xs text-gray-500">{{ msg.author }}</div>
 						{{ msg.text }}
 					</div>
 				</div>
@@ -83,13 +100,13 @@
 				placeholder="Type a message..."
 				class="form-input mr-1 mt-auto flex-1 rounded-md border px-4 py-2"
 			/>
-      <button @click="sendMessage" class="h-10 rounded-full">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-6 h-6">
-          <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
-        </svg>
-
-      </button>
-
+			<button @click="sendMessage" class="h-10 rounded-full">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="h-6 w-6">
+					<path
+						d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z"
+					/>
+				</svg>
+			</button>
 		</div>
 	</div>
 </template>

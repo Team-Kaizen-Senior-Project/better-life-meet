@@ -12,7 +12,7 @@ const socketEventHandler = async (wss: SocketServer) => {
 		ws.on('joinChat', ({ roomId, customer }) => {
 			ws.join(roomId)
 
-			//ws.to(roomId).emit('message', `${customer} joined chat: ${roomId}`)
+			ws.to(roomId).emit('notification', `${customer} joined`)
 			console.log(`${customer} joined Chat: ${roomId}`)
 		})
 		// Handle messages
@@ -21,6 +21,7 @@ const socketEventHandler = async (wss: SocketServer) => {
 			console.log(chat)
 		})
 		ws.on('disconnect', () => {
+			// TODO add user has left meeting
 			console.log(`Socket [${ws.id}] has disconnected.`)
 		})
 	})
