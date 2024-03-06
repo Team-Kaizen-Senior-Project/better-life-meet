@@ -15,7 +15,7 @@
 	const { getMeeting } = useApi()
 	const meeting: Meeting = await getMeeting(meetingId)
 	const showBufferText = ref(false)
-	
+
 	const { state: customerState } = useCustomerStore()
 	const customerRef = customerState.customer?.id
 
@@ -29,8 +29,10 @@
 	console.log(meeting)
 	console.log('Now', now)
 	console.log('Start Time', startTime)
-	// Connect to websocket server
-	const ws = io()
+
+	// Initiate socket connection
+	const ws = ref(io())
+
 	function toggleVideo() {
 		showBufferText.value = true
 		// Temp buffer for video end
@@ -41,7 +43,11 @@
 			showBufferText.value = false
 		}, BUFFER * 1000)
 	}
-	ws.emit('joinMeeting', { customerRef, meetingId, isCameraOn: video.cameraActive })
+	ws.value.emit('joinMeeting', { customerRef, meetingId, isCameraOn: video.cameraActive })
+
+	onUnmounted(() => {
+		ws.value.close()
+	})
 </script>
 
 <template>

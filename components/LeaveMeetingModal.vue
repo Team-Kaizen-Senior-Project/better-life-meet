@@ -3,11 +3,10 @@
 
 	const isLeaveModalOpen = ref(false)
 	const attendee = useAttendeeStore()
-	const ws = io()
 
 	const customModal = {
 		overlay: {
-			background: 'bg-zinc-900/90 dark:bg-gray-800/75'
+			background: 'bg-zinc-900/90 dark:bg-gray-800/75',
 		},
 	}
 
@@ -21,10 +20,6 @@
 			console.log(error)
 		}
 	}
-
-	onUnmounted(() => {
-		ws.close()
-	})
 </script>
 
 <template>
