@@ -35,13 +35,15 @@
 		<div class="mx-auto flex w-[90vw] max-w-[1600px] items-center justify-between">
 			<div class="flex items-center gap-4">
 				<p class="text-lg font-medium text-white">Weekly Pod Accountability Meeting</p>
-				<UDropdown :items="podMeetings" :popper="{ placement: 'bottom-start' }" class="!whitespace-normal">
-					<UButton
-						class="bg-sky-500 hover:bg-sky-600"
-						label="View Schedule"
-						trailing-icon="i-heroicons-chevron-down-20-solid"
-					/>
-				</UDropdown>
+				 <div class="schedule-dropdown"> <!-- Used to override width -->
+					<UDropdown :items="podMeetings" :popper="{ placement: 'bottom-start' }">
+						<UButton
+							class="bg-sky-500 hover:bg-sky-600"
+							label="View Schedule"
+							trailing-icon="i-heroicons-chevron-down-20-solid"
+						/>
+					</UDropdown>
+				</div>
 			</div>
 			<div class="flex items-center gap-2">
 				<button class="aspect-square h-[2rem] w-[2rem] rounded-full bg-gray-200 text-lg">U</button>
@@ -54,4 +56,11 @@
 	</header>
 </template>
 
-<style scoped></style>
+<style>
+	.schedule-dropdown .group.w-48 {
+		width: 250px;
+		overflow-x: hidden;
+		overflow-y: auto;
+		max-width: 40vh;
+	}
+</style>
