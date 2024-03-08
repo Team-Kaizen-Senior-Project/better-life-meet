@@ -1,11 +1,10 @@
 <script setup lang="ts">
+	import { io } from 'socket.io-client'
 	const recordedVideoIsPlaying = ref(true)
-	import { useCustomerStore } from '~/stores/CustomerStore'
 	import { useCountdownStore } from '~/stores/CountdownStore'
 	import { useVideoStore } from '~/stores/videoService'
 	import type { Meeting} from '~/types'
 	import dayjs from 'dayjs'
-	import { io } from 'socket.io-client'
 	const { display: displayDate } = useDate()
 	const video = useVideoStore()
 	const { state: customerState } = useCustomerStore()
@@ -35,7 +34,7 @@
 
 	// Initiate socket connection
 	const ws = io()
-
+	
 	function toggleVideo() {
 		showBufferText.value = true
 		// Temp buffer for video end

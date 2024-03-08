@@ -52,7 +52,7 @@
 			newMessage.value = '' // Clear input after sending
 		}
 	}
-  onUnmounted(() => {
+	onUnmounted(() => {
 		ws.close()
 	})
 </script>
@@ -78,7 +78,7 @@
 			<!-- Dynamically display messages -->
 			<div v-for="(msg, index) in messages" :key="index" class="mb-4">
 				<div v-if="msg.isNotification" class="flex justify-center">
-					<div class="max-w-xs  px-3 py-2 text-white">
+					<div class="max-w-xs px-3 py-2 text-white">
 						{{ msg.text }}
 					</div>
 				</div>
