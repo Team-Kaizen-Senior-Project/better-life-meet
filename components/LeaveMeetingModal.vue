@@ -14,7 +14,6 @@
 		// Close the modal
 		isLeaveModalOpen.value = false
 		try {
-			//await attendee.logLeaveTime()
 			await navigateTo('/dashboard')
 		} catch (error) {
 			console.log(error)
