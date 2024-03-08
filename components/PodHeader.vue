@@ -25,7 +25,6 @@
 				},
 			]
 		})
-		console.log('formattedMeetings', formattedMeetings)
 		podMeetings.value = formattedMeetings
 	}
 	onMounted(getPodMeetings)
@@ -35,7 +34,8 @@
 		<div class="mx-auto flex w-[90vw] max-w-[1600px] items-center justify-between">
 			<div class="flex items-center gap-4">
 				<p class="text-lg font-medium text-white">Weekly Pod Accountability Meeting</p>
-				 <div class="schedule-dropdown"> <!-- Used to override width -->
+				<div class="schedule-dropdown">
+					<!-- Used to override width -->
 					<UDropdown :items="podMeetings" :popper="{ placement: 'bottom-start' }">
 						<UButton
 							class="bg-sky-500 hover:bg-sky-600"
