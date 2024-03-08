@@ -46,6 +46,18 @@ const socketEventHandler = async (wss: SocketServer) => {
 				socketAttendeeMap.delete(ws.id)
 			}
 		})
+		ws.on('toggleVideo', async () => {
+			const attendeeId = socketAttendeeMap.get(ws.id)
+			if (attendeeId) {
+				try {
+					await updateAttendee(attendeeId, {
+						usedVideo: true,
+					})
+				} catch (error) {
+					console.log('error updating attendee usedVideo', error)
+				}
+			}
+		})
 	})
 }
 

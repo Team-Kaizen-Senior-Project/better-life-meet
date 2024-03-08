@@ -45,6 +45,16 @@
 	}
 	ws.value.emit('joinMeeting', { customerRef, meetingId, isCameraOn: video.cameraActive })
 
+	//watch video camera status
+	watch(
+		() => ({ cameraActive: video.cameraActive }),
+		(newVal) => {
+			if (newVal.cameraActive) {
+				ws.value.emit('toggleVideo')
+			}
+		},
+	)
+
 	onUnmounted(() => {
 		ws.value.close()
 	})
