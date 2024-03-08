@@ -3,23 +3,24 @@
 	import { useCustomerStore } from '~/stores/CustomerStore'
 	import { useCountdownStore } from '~/stores/CountdownStore'
 	import { useVideoStore } from '~/stores/videoService'
-	import type { Meeting, Chat } from '~/types'
+	import type { Meeting} from '~/types'
 	import dayjs from 'dayjs'
+	import { io } from 'socket.io-client'
 	const { display: displayDate } = useDate()
 	const video = useVideoStore()
 	const { state: customerState } = useCustomerStore()
-	const customer = computed(() => customerState.customer)
 
 	definePageMeta({
 		layout: 'meeting',
 	})
 	const countdown = useCountdownStore()
 	const route = useRoute()
-	//const ws = ref<Socket>()
 	const meetingId = route.params.id
 	const { getMeeting } = useApi()
 	const meeting: Meeting = await getMeeting(meetingId)
 	const showBufferText = ref(false)
+
+	const customerRef = customerState.customer?.id
 
 	const startTime = dayjs(meeting.startTime.isoString)
 	const now = dayjs()
@@ -32,6 +33,9 @@
 	console.log('Now', now)
 	console.log('Start Time', startTime)
 
+	// Initiate socket connection
+	const ws = io()
+
 	function toggleVideo() {
 		showBufferText.value = true
 		// Temp buffer for video end
@@ -42,6 +46,21 @@
 			showBufferText.value = false
 		}, BUFFER * 1000)
 	}
+	ws.emit('joinMeeting', { customerRef, meetingId, isCameraOn: video.cameraActive })
+
+	//watch video camera status
+	watch(
+		() => ({ cameraActive: video.cameraActive }),
+		(newVal) => {
+			if (newVal.cameraActive) {
+				ws.emit('toggleVideo')
+			}
+		},
+	)
+
+	onUnmounted(() => {
+		ws.close()
+	})
 </script>
 
 <template>
@@ -67,7 +86,7 @@
 			<ChatBox />
 		</div>
 	</div>
-	
+
 	<BreakoutRoomModal v-if="!recordedVideoIsPlaying" :meetingRef="meetingId" />
 	<PodFooter />
 </template>

@@ -52,6 +52,9 @@
 			newMessage.value = '' // Clear input after sending
 		}
 	}
+  onUnmounted(() => {
+		ws.close()
+	})
 </script>
 
 <template>
