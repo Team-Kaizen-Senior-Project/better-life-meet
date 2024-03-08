@@ -55,32 +55,8 @@
 		return now.isAfter(fifteenMinutesBeforeStart) && now.isBefore(endTime)
 	})
 
-	const countdown = ref('')
-
-	const updateCountdown = () => {
-		if (!props.meeting) {
-			countdown.value = ''
-			return
-		}
-		const startTime = dayjs(props.meeting.startTime.isoString)
-		const now = dayjs()
-		if (now.isAfter(startTime)) {
-			countdown.value = 'Meeting has started'
-			return
-		}
-		const duration = dayjs.duration(startTime.diff(now))
-		countdown.value = `Starts in ${duration.days()}d ${duration.hours()}h ${duration.minutes()}m ${duration.seconds()}s`
-	}
-
-	const interval = ref<NodeJS.Timeout | undefined>()
-
-	onMounted(() => {
-		updateCountdown()
-		interval.value = setInterval(updateCountdown, 1000)
-	})
-
-	onUnmounted(() => {
-		clearInterval(interval.value)
+	const { renderText } = useMeetingCountdown({
+		startTime: computed(() => props.meeting.startTime.isoString),
 	})
 </script>
 
@@ -97,7 +73,7 @@
 					v-if="props.isFirst"
 					class="inline-flex max-w-fit items-center rounded-md bg-green-500/10 px-2 py-1 text-xs font-medium text-green-400 ring-1 ring-inset ring-green-500/20"
 				>
-					{{ countdown }}
+					{{ renderText }}
 				</p>
 			</div>
 		</div>
