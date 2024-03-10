@@ -1,10 +1,12 @@
 <script setup lang="ts">
+	import { io } from 'socket.io-client'
+
 	const isLeaveModalOpen = ref(false)
 	const attendee = useAttendeeStore()
 
 	const customModal = {
 		overlay: {
-			background: 'bg-zinc-900/90 dark:bg-gray-800/75'
+			background: 'bg-zinc-900/90 dark:bg-gray-800/75',
 		},
 	}
 
@@ -12,7 +14,6 @@
 		// Close the modal
 		isLeaveModalOpen.value = false
 		try {
-			await attendee.logLeaveTime()
 			await navigateTo('/dashboard')
 		} catch (error) {
 			console.log(error)
