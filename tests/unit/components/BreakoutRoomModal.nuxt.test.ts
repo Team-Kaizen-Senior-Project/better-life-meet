@@ -23,6 +23,6 @@ describe('BreakoutRoomModal', () => {
         const wrapper = await mountSuspended(BreakoutRoomModal)
         await nextTick()
         expect(wrapper.html()).toMatchSnapshot()
-    });
+    })
     
 })
