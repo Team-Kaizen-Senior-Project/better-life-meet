@@ -18,9 +18,14 @@ export const useDate = () => {
 		return dayjs(date).tz().format('h:mm A')
 	}
 
+	const displayMonthDay = (date?: string) => {
+		return dayjs(date).tz().format('MMM DD')
+	}
+
 	return {
 		display,
 		displayHours,
+		displayMonthDay,
 		dayjs,
 	}
 }
