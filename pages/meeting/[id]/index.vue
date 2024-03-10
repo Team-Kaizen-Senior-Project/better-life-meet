@@ -16,6 +16,9 @@
 	const meeting: Meeting = await getMeeting(meetingId)
 	const showBufferText = ref(false)
 
+	const { state: customerState } = useCustomerStore()
+	const customerRef = customerState.customer?.id
+
 	const startTime = dayjs(meeting.startTime.isoString)
 	const now = dayjs()
 
@@ -26,8 +29,10 @@
 	console.log(meeting)
 	console.log('Now', now)
 	console.log('Start Time', startTime)
-	// Connect to websocket server
-	const ws = io()
+
+	// Initiate socket connection
+	const ws = ref(io())
+
 	function toggleVideo() {
 		showBufferText.value = true
 		// Temp buffer for video end
@@ -38,6 +43,21 @@
 			showBufferText.value = false
 		}, BUFFER * 1000)
 	}
+	ws.value.emit('joinMeeting', { customerRef, meetingId, isCameraOn: video.cameraActive })
+
+	//watch video camera status
+	watch(
+		() => ({ cameraActive: video.cameraActive }),
+		(newVal) => {
+			if (newVal.cameraActive) {
+				ws.value.emit('toggleVideo')
+			}
+		},
+	)
+
+	onUnmounted(() => {
+		ws.value.close()
+	})
 </script>
 
 <template>
