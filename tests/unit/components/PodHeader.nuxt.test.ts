@@ -38,7 +38,7 @@ describe('PodHeader', async () => {
 	})
 
 	it('displays the user information correctly', async () => {
-		expect(wrapper.text()).toContain('User');
+		expect(wrapper.text()).toContain('User')
 		expect(wrapper.text()).toContain('user@gmail.com')
 	})
 })
