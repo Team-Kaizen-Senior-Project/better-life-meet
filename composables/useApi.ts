@@ -167,6 +167,13 @@ export const useApi = () => {
 		return response
 	}
 
+	const getVimeoVideo = async (id: Numberic): Promise<unknown> => {
+		const response = await $fetch<{ data: any }>(`/api/vimeo/${id}`)
+
+		const video = response
+		return video
+	}
+
 	return {
 		// Customer
 		createCustomer,
@@ -193,5 +200,8 @@ export const useApi = () => {
 		getAttendee,
 		updateAttendee,
 		deleteAttendee,
+
+		// vimeo
+		getVimeoVideo,
 	}
 }
