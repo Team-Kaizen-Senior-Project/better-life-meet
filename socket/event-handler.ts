@@ -3,7 +3,6 @@ import type { Attendee, AttendeeFields, Numberic } from '~/types'
 
 const socketEventHandler = async (wss: SocketServer) => {
 	console.log('✔ Socket.io server is listening')
-
 	const socketAttendeeMap = new Map()
 
 	wss.on('connection', (ws) => {
@@ -30,10 +29,25 @@ const socketEventHandler = async (wss: SocketServer) => {
 				console.log('error creating attendee', error)
 			}
 		})
+
+		// Join chat room
+		ws.on('joinChat', ({ roomId, customer }) => {
+			ws.join(roomId)
+
+			ws.to(roomId).emit('notification', `${customer} joined`)
+			console.log(`${customer} joined Chat: ${roomId}`)
+		})
+		// Handle messages
+		ws.on('chatMessage', ({ roomId, chat, isCurrentUser }) => {
+			ws.to(roomId).emit('message', chat, isCurrentUser)
+			console.log(chat)
+		})
+
 		ws.on('disconnect', async () => {
 			console.log(`Socket [${ws.id}] has disconnected.`)
 
 			const attendeeId = socketAttendeeMap.get(ws.id)
+
 			// if ws.id is in the map
 			if (attendeeId) {
 				try {
