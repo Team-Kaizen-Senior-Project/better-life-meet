@@ -3,7 +3,6 @@ import type { Attendee, AttendeeFields, Numberic } from '~/types'
 
 const socketEventHandler = async (wss: SocketServer) => {
 	console.log('✔ Socket.io server is listening')
-
 	const socketAttendeeMap = new Map()
 
 	wss.on('connection', (ws) => {
@@ -76,12 +75,6 @@ const socketEventHandler = async (wss: SocketServer) => {
 	})
 }
 
-const getAttendee = async (id: Numberic): Promise<Attendee> => {
-	const response = await $fetch<{ data: Attendee }>(`/api/attendee/${id}`)
-
-	const attendee = response.data
-	return attendee
-}
 const createAttendee = async (attendee: AttendeeFields): Promise<Attendee> => {
 	const response = await $fetch<{ data: Attendee }>('/api/attendee', {
 		method: 'POST',

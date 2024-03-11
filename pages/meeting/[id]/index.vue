@@ -7,8 +7,7 @@
 	import dayjs from 'dayjs'
 	const { display: displayDate } = useDate()
 	const video = useVideoStore()
-	const { state: customerState } = useCustomerStore()
-
+	
 	definePageMeta({
 		layout: 'meeting',
 	})
@@ -19,6 +18,7 @@
 	const meeting: Meeting = await getMeeting(meetingId)
 	const showBufferText = ref(false)
 
+	const { state: customerState } = useCustomerStore()
 	const customerRef = customerState.customer?.id
 
 	const startTime = dayjs(meeting.startTime.isoString)
@@ -33,8 +33,8 @@
 	console.log('Start Time', startTime)
 
 	// Initiate socket connection
-	const ws = io()
-	
+	const ws = ref(io())
+
 	function toggleVideo() {
 		showBufferText.value = true
 		// Temp buffer for video end
@@ -45,20 +45,20 @@
 			showBufferText.value = false
 		}, BUFFER * 1000)
 	}
-	ws.emit('joinMeeting', { customerRef, meetingId, isCameraOn: video.cameraActive })
+	ws.value.emit('joinMeeting', { customerRef, meetingId, isCameraOn: video.cameraActive })
 
 	//watch video camera status
 	watch(
 		() => ({ cameraActive: video.cameraActive }),
 		(newVal) => {
 			if (newVal.cameraActive) {
-				ws.emit('toggleVideo')
+				ws.value.emit('toggleVideo')
 			}
 		},
 	)
 
 	onUnmounted(() => {
-		ws.close()
+		ws.value.close()
 	})
 </script>
 
