@@ -7,16 +7,16 @@ import { ChevronDownIcon } from '@heroicons/vue/24/outline'
 
 vi.mock('@/stores/CustomerStore', () => ({
 	useCustomerStore: () => ({
-	  state: reactive({
-		customer: {
-		  firstName: 'User',
-		  email: 'user@gmail.com',
-		},
-	  }),
-	  getMe: vi.fn(),
+		state: reactive({
+			customer: {
+				firstName: 'User',
+				email: 'user@gmail.com',
+			},
+		}),
+		getMe: vi.fn(),
 	}),
-  }))
-  
+}))
+
 describe('PodHeader', async () => {
 	const wrapper = await mountSuspended(PodHeader)
 

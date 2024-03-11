@@ -1,13 +1,12 @@
 <script setup lang="ts">
-	import { io } from 'socket.io-client'
 	const recordedVideoIsPlaying = ref(true)
 	import { useCountdownStore } from '~/stores/CountdownStore'
 	import { useVideoStore } from '~/stores/videoService'
-	import type { Meeting} from '~/types'
+	import type { Meeting } from '~/types'
 	import dayjs from 'dayjs'
 	const { display: displayDate } = useDate()
 	const video = useVideoStore()
-	
+
 	definePageMeta({
 		layout: 'meeting',
 	})
@@ -33,7 +32,7 @@
 	console.log('Start Time', startTime)
 
 	// Initiate socket connection
-	const ws = ref(io())
+	// const ws = ref(io())
 
 	function toggleVideo() {
 		showBufferText.value = true
@@ -45,20 +44,20 @@
 			showBufferText.value = false
 		}, BUFFER * 1000)
 	}
-	ws.value.emit('joinMeeting', { customerRef, meetingId, isCameraOn: video.cameraActive })
+	// ws.value.emit('joinMeeting', { customerRef, meetingId, isCameraOn: video.cameraActive })
 
 	//watch video camera status
 	watch(
 		() => ({ cameraActive: video.cameraActive }),
 		(newVal) => {
 			if (newVal.cameraActive) {
-				ws.value.emit('toggleVideo')
+				// ws.value.emit('toggleVideo')
 			}
 		},
 	)
 
 	onUnmounted(() => {
-		ws.value.close()
+		// ws.value.close()
 	})
 </script>
 
@@ -80,9 +79,6 @@
 				<p class="absolute bottom-0 left-0 bg-black px-2 py-1.5 text-white">Local User</p>
 			</div>
 			<!-- External users' video feeds placeholder -->
-		</div>
-		<div class="flex justify-end p-4">
-			<ChatBox />
 		</div>
 	</div>
 

@@ -26,7 +26,11 @@
 		>
 			<template #join>
 				<!-- TODO add functionality to cancel joining a meeting -->
-				<Button type="button" class="mr-2 rounded-md bg-gray-500 font-medium text-white hover:bg-sky-600" data-testid="br-cancel-button">
+				<Button
+					type="button"
+					class="mr-2 rounded-md bg-gray-500 font-medium text-white hover:bg-sky-600"
+					data-testid="br-cancel-button"
+				>
 					Cancel
 				</Button>
 				<Button
