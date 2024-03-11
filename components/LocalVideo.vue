@@ -11,7 +11,7 @@
 		></video>
 		<div v-else class="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 transform">
 			<!-- Display this icon when there is no stream -->
-			<VideoCameraSlashIcon />
+			<VideoCameraSlashIcon data-testid="video-camera-slash-icon" />
 		</div>
 	</div>
 </template>
