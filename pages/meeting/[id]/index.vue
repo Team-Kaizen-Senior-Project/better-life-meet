@@ -7,6 +7,18 @@
 	const { display: displayDate } = useDate()
 	const video = useVideoStore()
 
+	import { useHMS } from '~/composables/useHMS'
+
+	const { joinRoom, leaveRoom, peers, isConnected } = useHMS()
+
+	// Example usage
+	const userName = ref('hello')
+	const roomCode = ref('qas-jmqz-old')
+
+	function handleJoin() {
+		joinRoom(userName.value, roomCode.value)
+	}
+
 	definePageMeta({
 		layout: 'meeting',
 	})
@@ -73,6 +85,11 @@
 			<PrerecordedVideo @toggle-video="toggleVideo" />
 		</div>
 		<div v-else-if="!recordedVideoIsPlaying" class="grid h-[70vh] w-[80vw] grid-cols-4 grid-rows-2 gap-3">
+			<div class="join-controls">
+				<button @click="handleJoin" v-if="!isConnected">Join Meeting</button>
+			</div>
+			<!-- Iterate over peers to display their video -->
+			<PeerVideo v-for="peer in peers" :key="peer.id" :peer="peer" />
 			<!-- Local user's video feed -->
 			<div class="relative overflow-hidden rounded-lg bg-zinc-900" v-if="true">
 				<LocalVideo />
@@ -83,5 +100,6 @@
 	</div>
 
 	<BreakoutRoomModal v-if="!recordedVideoIsPlaying" :meetingRef="meetingId" />
+	<div v-if="!recordedVideoIsPlaying" class="grid h-[70vh] w-[80vw] grid-cols-4 grid-rows-2 gap-3"></div>
 	<PodFooter />
 </template>
