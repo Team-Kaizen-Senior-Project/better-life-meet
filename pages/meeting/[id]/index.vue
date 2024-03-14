@@ -72,7 +72,7 @@
 		<div v-if="recordedVideoIsPlaying && !showBufferText && !countdown.showCountdown" class="flex flex-row">
 			<PrerecordedVideo @toggle-video="toggleVideo" />
 		</div>
-		<div v-else-if="!recordedVideoIsPlaying" class="grid h-[70vh] w-[80vw] grid-cols-4 grid-rows-2 gap-3">
+		<div v-else-if="!recordedVideoIsPlaying">
 			<!-- Local user's video feed -->
 			<div class="relative overflow-hidden rounded-lg bg-zinc-900" v-if="true">
 				<MeetingVideo/>

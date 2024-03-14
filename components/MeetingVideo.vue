@@ -33,7 +33,7 @@
 
 	<div v-if="isConnected" class="conference-section">
 		<h2>Conference</h2>
-		<div>
+		<div class = "grid h-[70vh] w-[80vw] grid-cols-4 grid-rows-2 gap-3">
 			<div v-for="peer in peers" :key="peer.id" class="peer-tile">
 				<video ref="videoRefs" class="peer-video" autoplay muted playsinline></video>
 				<div class="peer-name">{{ peer.name }}</div>
