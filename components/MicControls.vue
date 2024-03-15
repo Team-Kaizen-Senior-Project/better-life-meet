@@ -95,7 +95,7 @@
 		<!-- Volume Control Slider -->
 		<div class="grid max-w-[515px] gap-2 self-start">
 			<label class="whitespace-nowrap text-white">Mic volume</label>
-			<input type="range" min="0" max="100" class="hover:cursor-pointer" data-testid="slider-id"/>
+			<input type="range" min="0" max="100" class="hover:cursor-pointer" data-testid="slider-id" />
 		</div>
 	</div>
 </template>

@@ -9,7 +9,8 @@
 		"generate": "nuxt generate",
 		"preview": "nuxt preview",
 		"postinstall": "nuxt prepare",
-		"test": "vitest --watch"
+		"test": "vitest --watch",
+		"format": "prettier . --write"
 	},
 	"devDependencies": {
 		"@nuxt/devtools": "latest",
@@ -31,6 +32,7 @@
 		"vitest": "^1.2.2"
 	},
 	"dependencies": {
+		"@100mslive/hms-video-store": "^0.12.1",
 		"@fortawesome/fontawesome-svg-core": "^6.5.1",
 		"@fortawesome/free-solid-svg-icons": "^6.5.1",
 		"@fortawesome/vue-fontawesome": "^3.0.6",
@@ -43,11 +45,7 @@
 		"dayjs": "^1.11.10",
 		"dotenv": "^16.4.2",
 		"fauna": "^1.3.1",
-		"mediasoup": "^3.13.18",
-		"mediasoup-client": "^3.7.2",
 		"pinia": "^2.1.7",
-		"socket.io": "^4.7.4",
-		"socket.io-client": "^4.7.4",
 		"tailwind-merge": "^2.2.1",
 		"tailwindcss-animate": "^1.0.7"
 	},

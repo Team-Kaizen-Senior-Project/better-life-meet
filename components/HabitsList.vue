@@ -37,7 +37,11 @@
 				</li>
 			</ul>
 			<div class="flex justify-between">
-				<UButton data-testid="add-habit-button" @click="habits.addHabit()" class="bg-zinc-700 text-xs font-medium hover:bg-zinc-700/60">
+				<UButton
+					data-testid="add-habit-button"
+					@click="habits.addHabit()"
+					class="bg-zinc-700 text-xs font-medium hover:bg-zinc-700/60"
+				>
 					<PlusCircleIcon class="h-5 w-5" />
 					Add Habit
 				</UButton>
@@ -54,7 +58,11 @@
 				</li>
 			</ul>
 			<div>
-				<UButton data-testid ="edit-button" @click="toggleEditMode" class="mt-4 bg-zinc-700 text-xs font-medium hover:bg-zinc-700/60">
+				<UButton
+					data-testid="edit-button"
+					@click="toggleEditMode"
+					class="mt-4 bg-zinc-700 text-xs font-medium hover:bg-zinc-700/60"
+				>
 					Edit habits
 				</UButton>
 			</div>

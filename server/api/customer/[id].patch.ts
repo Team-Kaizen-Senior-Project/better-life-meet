@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
 
 	try {
 		// Get Customer ID
-	const { id } = event.context.params as { id: string }
+		const { id } = event.context.params as { id: string }
 		const body = await readBody(event)
 
 		const query = fql`

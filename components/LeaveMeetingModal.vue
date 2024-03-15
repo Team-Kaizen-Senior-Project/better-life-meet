@@ -1,6 +1,4 @@
 <script setup lang="ts">
-	import { io } from 'socket.io-client'
-
 	const isLeaveModalOpen = ref(false)
 	const attendee = useAttendeeStore()
 
@@ -35,7 +33,15 @@
 				<p class="text-lg font-semibold">Are you sure you want to leave the meeting?</p>
 			</div>
 			<div class="mt-4 flex justify-center gap-4">
-				<UButton type="button" variant="ghost" color="gray" @click="isLeaveModalOpen = false" data-testid="cancel-button">Cancel</UButton>
+				<UButton
+					type="button"
+					variant="ghost"
+					color="gray"
+					@click="isLeaveModalOpen = false"
+					data-testid="cancel-button"
+				>
+					Cancel
+				</UButton>
 				<UButton type="button" color="red" @click="confirmLeave">Yes, leave meeting</UButton>
 			</div>
 		</div>
