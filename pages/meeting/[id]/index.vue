@@ -75,11 +75,9 @@
 			<PrerecordedVideo @toggle-video="toggleVideo" />
 		</div>
 		<div v-else-if="!recordedVideoIsPlaying">
-			<div class="join-controls">
-				<button @click="handleJoin" v-if="!isConnected">Join Meeting</button>
-			</div>
+			<!-- Local user's video feed -->
 			<div class="relative overflow-hidden rounded-lg bg-zinc-900" v-if="true">
-				<MeetingVideo />
+				<MeetingVideo/>
 			</div>
 			<!-- External users' video feeds placeholder -->
 		</div>
