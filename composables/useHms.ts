@@ -7,8 +7,10 @@ import {
     selectIsConnectedToRoom,
     selectVideoTrackByID,
 } from '@100mslive/hms-video-store'
+import type { HmsInstance } from '~/types'
 
-export function useHms() {
+export function useHms() : HmsInstance {
+	console.log("Initializing useHms instance");
 	const hmsManager = new HMSReactiveStore()
 	hmsManager.triggerOnSubscribe()
 	const hmsStore = hmsManager.getStore()
@@ -34,24 +36,26 @@ export function useHms() {
 		leaveRoom()
 	})
 
-	const joinRoom = async () => {
-		const authToken = await hmsActions.getAuthTokenByRoomCode({ roomCode: roomCode.value })
-		await hmsActions.join({
-			userName: userName.value,
-			authToken,
-		})
-	}
+	const joinRoom = async (roomCode: string, username: string) => {
+  const authToken = await hmsActions.getAuthTokenByRoomCode({ roomCode })
+  await hmsActions.join({
+    userName: username,
+    authToken,
+  })
+}
 
 	const leaveRoom = async () => {
 		await hmsActions.leave()
 	}
 
 	const toggleAudio = async () => {
+		console.log('Toggling audio');
 		isLocalAudioEnabled.value = !isLocalAudioEnabled.value
 		await hmsActions.setLocalAudioEnabled(isLocalAudioEnabled.value)
 	}
 
 	const toggleVideo = async () => {
+		console.log('Toggling video');
 		isLocalVideoEnabled.value = !isLocalVideoEnabled.value
 		await hmsActions.setLocalVideoEnabled(isLocalVideoEnabled.value)
 	}
