@@ -1,16 +1,16 @@
 import { ref, onBeforeUnmount, onMounted, watch } from 'vue'
 import {
-    HMSReactiveStore,
-    selectIsLocalAudioEnabled,
-    selectIsLocalVideoEnabled,
-    selectPeers,
-    selectIsConnectedToRoom,
-    selectVideoTrackByID,
+	HMSReactiveStore,
+	selectIsLocalAudioEnabled,
+	selectIsLocalVideoEnabled,
+	selectPeers,
+	selectIsConnectedToRoom,
+	selectVideoTrackByID,
 } from '@100mslive/hms-video-store'
 import type { HmsInstance } from '~/types'
 
-export function useHms() : HmsInstance {
-	console.log("Initializing useHms instance");
+export function useHms(): HmsInstance {
+	console.log('Initializing useHms instance')
 	const hmsManager = new HMSReactiveStore()
 	hmsManager.triggerOnSubscribe()
 	const hmsStore = hmsManager.getStore()
@@ -25,6 +25,8 @@ export function useHms() : HmsInstance {
 	const isConnected = ref(false)
 	const peers = ref([])
 
+	const video = useVideoStore()
+
 	watch(peers, (newPeers) => {
 		// synchronize the video elements with the peers
 		newPeers.forEach((peer, index) => {
@@ -37,25 +39,29 @@ export function useHms() : HmsInstance {
 	})
 
 	const joinRoom = async (roomCode: string, username: string) => {
-  const authToken = await hmsActions.getAuthTokenByRoomCode({ roomCode })
-  await hmsActions.join({
-    userName: username,
-    authToken,
-  })
-}
+		const authToken = await hmsActions.getAuthTokenByRoomCode({ roomCode })
+		await hmsActions.join({
+			userName: username,
+			authToken,
+			settings: {
+				isAudioMuted: true,
+				isVideoMuted: !video.cameraActive,
+			},
+		})
+	}
 
 	const leaveRoom = async () => {
 		await hmsActions.leave()
 	}
 
 	const toggleAudio = async () => {
-		console.log('Toggling audio');
+		console.log('Toggling audio')
 		isLocalAudioEnabled.value = !isLocalAudioEnabled.value
 		await hmsActions.setLocalAudioEnabled(isLocalAudioEnabled.value)
 	}
 
 	const toggleVideo = async () => {
-		console.log('Toggling video');
+		console.log('Toggling video')
 		isLocalVideoEnabled.value = !isLocalVideoEnabled.value
 		await hmsActions.setLocalVideoEnabled(isLocalVideoEnabled.value)
 	}
@@ -65,17 +71,17 @@ export function useHms() : HmsInstance {
 	hmsStore.subscribe((val) => (isConnected.value = val), selectIsConnectedToRoom)
 	hmsStore.subscribe((val) => (peers.value = val), selectPeers)
 
-    return {
-        userName,
-        roomCode,
-        videoRefs,
-        isLocalAudioEnabled,
-        isLocalVideoEnabled,
-        isConnected,
-        peers,
-        joinRoom,
-        leaveRoom,
-        toggleAudio,
-        toggleVideo,
-    }
+	return {
+		userName,
+		roomCode,
+		videoRefs,
+		isLocalAudioEnabled,
+		isLocalVideoEnabled,
+		isConnected,
+		peers,
+		joinRoom,
+		leaveRoom,
+		toggleAudio,
+		toggleVideo,
+	}
 }
