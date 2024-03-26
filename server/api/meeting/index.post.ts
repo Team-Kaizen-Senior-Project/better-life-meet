@@ -1,5 +1,27 @@
 import { AbortError, ServiceError, fql } from 'fauna'
 import type { MeetingFields } from '~/types'
+import jwt from 'jsonwebtoken'
+import { v4 as uuidv4 } from 'uuid'
+
+// Function to generate a management token
+function generateManagementToken() {
+	const payload = {
+		access_key: process.env.APP_ACCESS_KEY,
+		type: 'management',
+		version: 2,
+		iat: Math.floor(Date.now() / 1000),
+		nbf: Math.floor(Date.now() / 1000),
+	}
+
+	return new Promise((resolve, reject) => {
+		jwt.sign(
+			payload,
+			process.env.APP_SECRET!,
+			{ algorithm: 'HS256', expiresIn: '24h', jwtid: uuidv4() },
+			(err, token) => (err ? reject(err) : resolve(token)),
+		)
+	})
+}
 
 // Endpoint for creating a meeting
 export default defineEventHandler(async (event) => {
@@ -9,6 +31,9 @@ export default defineEventHandler(async (event) => {
 	// Create new meeting record and assign attendees
 	try {
 		const meeting = (await readBody(event)) as Required<MeetingFields>
+
+		// Generate a management token
+		const managementToken = await generateManagementToken()
 
 		// Convert the start and end time to date objects
 		const startTime = new Date(meeting.startTime)
@@ -27,8 +52,7 @@ export default defineEventHandler(async (event) => {
 		const roomResponse = await fetch('https://api.100ms.live/v2/rooms', {
 			method: 'POST',
 			headers: {
-				Authorization:
-					'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTA3Mjg2MzksImV4cCI6MTcxMTg1MTgzOSwianRpIjoiNTkyMDM5MjctYjYxZC00YTAwLWE3OWMtNGQ3YzQwZDg0N2IwIiwidHlwZSI6Im1hbmFnZW1lbnQiLCJ2ZXJzaW9uIjoyLCJuYmYiOjE3MTA3Mjg2MzksImFjY2Vzc19rZXkiOiI2NWVmYWE4YjRlZDY5YTRhZjc3ZmUzMzEifQ.nSYJnuVCsCzq2yS9Mp7f7bkKBnbbvI0f-5wCqX6H9Yk',
+				Authorization: `Bearer ${managementToken}`,
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
@@ -44,8 +68,7 @@ export default defineEventHandler(async (event) => {
 		const roomCodeResponse = await fetch(`https://api.100ms.live/v2/room-codes/room/${roomId}`, {
 			method: 'POST',
 			headers: {
-				Authorization:
-					'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTA3Mjg2MzksImV4cCI6MTcxMTg1MTgzOSwianRpIjoiNTkyMDM5MjctYjYxZC00YTAwLWE3OWMtNGQ3YzQwZDg0N2IwIiwidHlwZSI6Im1hbmFnZW1lbnQiLCJ2ZXJzaW9uIjoyLCJuYmYiOjE3MTA3Mjg2MzksImFjY2Vzc19rZXkiOiI2NWVmYWE4YjRlZDY5YTRhZjc3ZmUzMzEifQ.nSYJnuVCsCzq2yS9Mp7f7bkKBnbbvI0f-5wCqX6H9Yk',
+				Authorization: `Bearer ${managementToken}`,
 				'Content-Type': 'application/json',
 			},
 		})
