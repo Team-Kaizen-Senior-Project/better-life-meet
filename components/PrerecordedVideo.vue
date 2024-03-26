@@ -2,35 +2,33 @@
 	import { ref } from 'vue'
 	import dayjs from 'dayjs'
 	import type { Meeting, Time } from '~/types'
-	const videoRef = ref()
+	const videoRef = ref<HTMLVideoElement | null>(null)
 	const props = defineProps<{
 		meetingStartTime: Time
 	}>()
 	const emit = defineEmits(['toggleVideo'])
-	const calculateTimeDifferenceInSeconds = (startTime): number => {
-		const now = new Date()
-		const start = new Date(startTime)
-		const difference = now.getTime() - start.getTime()
-		return Math.floor(difference / 1000)
+	const calculateTimeDifferenceInSeconds = (startTime: string): number => {
+		const now = dayjs()
+		const start = dayjs(startTime)
+		const difference = now.diff(start, 'second')
+		return difference
 	}
-	const now = dayjs()
-	const startTime = dayjs(props.meetingStartTime.isoString)
+	onMounted(() => {
+		if (!videoRef.value) return
 
-	if (videoRef.value) {
-		console.log('hello')
-		const timeLag = calculateTimeDifferenceInSeconds(startTime)
-		videoRef.value.addEventListener('loadedmetadata', () => {
-			if (timeLag > 0 && timeLag < videoRef.value.duration) {
-				videoRef.value.currentTime = timeLag
-				videoRef.value.play()
-			} else if (timeLag >= videoRef.value.duration) {
-				emit('toggleVideo')
+		const startTime = props.meetingStartTime.isoString
+		const timeDifferenceInSeconds = calculateTimeDifferenceInSeconds(startTime)
+
+		videoRef.value.onloadedmetadata = () => {
+			const videoDuration = videoRef.value.duration
+			if (timeDifferenceInSeconds < videoDuration) {
+				videoRef.value.currentTime = timeDifferenceInSeconds
 			} else {
-				videoRef.value.play()
+				console.log('User is too late to watch the video.')
+				emit('toggleVideo')
 			}
-		})
-	}
-	console.log(videoRef.value)
+		}
+	})
 </script>
 
 <template>
@@ -40,6 +38,7 @@
 			@ended="emit('toggleVideo')"
 			controls
 			contextmenu="disabled"
+			autoplay
 			playsinline="true"
 			src="/assets/a.mp4"
 			class="mx-auto max-h-[80vh] w-full rounded-lg bg-zinc-900 lg:w-[90%]"
