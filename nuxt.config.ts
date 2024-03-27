@@ -37,5 +37,7 @@ export default defineNuxtConfig({
 		FAUNA_KEY: process.env.FAUNA_KEY,
 		AUTH_SECRET: process.env.AUTH_SECRET,
 		AUTH_ORIGIN: process.env.AUTH_ORIGIN,
+		APP_ACCESS_KEY: process.env.APP_ACCESS_KEY,
+		APP_SECRET: process.env.APP_SECRET,
 	},
 })
