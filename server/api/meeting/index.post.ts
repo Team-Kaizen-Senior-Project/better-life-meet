@@ -1,6 +1,6 @@
 import { AbortError, ServiceError, fql } from 'fauna'
 import type { MeetingFields } from '~/types'
-import { generateManagementToken } from '~/server/utils/generateToken'
+
 // Endpoint for creating a meeting
 export default defineEventHandler(async (event) => {
 	// Initialize Fauna client
