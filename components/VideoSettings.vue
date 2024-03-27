@@ -26,11 +26,7 @@
 		</div>
 		<div class="mt-4 flex justify-between">
 			<div class="flex gap-2">
-				<Button type="primary">
-					<div class="h-4 w-4">
-						<Cog6ToothIcon />
-					</div>
-				</Button>
+				<DeviceControlModal />
 				<Button
 					type="primary"
 					@click="video.toggleCamera"
@@ -44,7 +40,7 @@
 						<VideoCameraIcon />
 					</div>
 				</Button>
-				<Button v-else @click="video.toggleCamera" type="primary" class="border border-green-500">
+				<Button v-else @click="video.toggleCamera" type="primary" class="border">
 					<div class="h-4 w-4"><VideoCameraIcon /></div>
 				</Button>
 				<Button type="primary" data-testid="microphone-icon">
