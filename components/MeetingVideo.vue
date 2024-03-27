@@ -1,9 +1,4 @@
 <script setup>
-	import { onMounted } from 'vue'
-
-	const customerStore = useCustomerStore()
-	const customer = customerStore.state.customer
-
 	const {
 		videoRefs,
 		isLocalAudioEnabled,
@@ -15,19 +10,6 @@
 		toggleAudio,
 		toggleVideo,
 	} = getHmsInstance()
-
-	const props = defineProps({
-		roomCode: String,
-	})
-
-	let userName = ''
-
-	onMounted(async () => {
-		if (customer?.firstName && customer?.lastName) {
-			userName = customer.firstName + ' ' + customer.lastName
-			await joinRoom(props.roomCode, userName)
-		}
-	})
 
 	window.addEventListener('beforeunload', () => {
 		if (isConnected.value) {

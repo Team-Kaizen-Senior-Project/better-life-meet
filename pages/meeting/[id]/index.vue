@@ -6,6 +6,7 @@
 	import dayjs from 'dayjs'
 	const { display: displayDate } = useDate()
 	const video = useVideoStore()
+	const { leaveRoom, joinRoom, isConnected } = getHmsInstance()
 
 	definePageMeta({
 		layout: 'meeting',
@@ -23,6 +24,10 @@
 	const startTime = dayjs(meeting.startTime.isoString)
 	const now = dayjs()
 
+	const customerStore = useCustomerStore()
+	const customer = customerStore.state.customer
+	let userName = ''
+
 	if (now.isBefore(startTime)) {
 		countdown.setShowCountdown(true)
 		console.log('before')
@@ -30,9 +35,6 @@
 	console.log(meeting)
 	console.log('Now', now)
 	console.log('Start Time', startTime)
-
-	// Initiate socket connection
-	// const ws = ref(io())
 
 	function toggleVideo() {
 		showBufferText.value = true
@@ -44,20 +46,18 @@
 			showBufferText.value = false
 		}, BUFFER * 1000)
 	}
-	// ws.value.emit('joinMeeting', { customerRef, meetingId, isCameraOn: video.cameraActive })
 
-	//watch video camera status
-	watch(
-		() => ({ cameraActive: video.cameraActive }),
-		(newVal) => {
-			if (newVal.cameraActive) {
-				// ws.value.emit('toggleVideo')
-			}
-		},
-	)
+	onMounted(async () => {
+		if (customer?.firstName && customer?.lastName) {
+			userName = customer.firstName + ' ' + customer.lastName
+			await joinRoom(meeting.roomCode, userName)
+		}
+	})
 
 	onUnmounted(() => {
-		// ws.value.close()
+		if (isConnected.value) {
+			leaveRoom()
+		}
 	})
 </script>
 
@@ -75,7 +75,7 @@
 		<div v-else-if="!recordedVideoIsPlaying">
 			<!-- Local user's video feed -->
 			<div class="relative overflow-hidden rounded-lg bg-zinc-900" v-if="true">
-				<MeetingVideo v-if="!video.modalOpen" :roomCode="meeting.roomCode" />
+				<MeetingVideo v-if="!video.modalOpen" />
 			</div>
 			<!-- External users' video feeds placeholder -->
 		</div>
