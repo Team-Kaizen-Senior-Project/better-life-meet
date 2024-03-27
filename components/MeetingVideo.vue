@@ -41,10 +41,22 @@
 		<div v-if="isConnected" class="conference-section">
 			<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 				<div v-for="peer in peers" :key="peer.id" class="peer-tile w-full rounded-lg bg-zinc-500 p-4 sm:w-auto">
-					<video ref="videoRefs" class="peer-video mx-auto h-auto w-full rounded-lg" autoplay muted playsinline></video>
+					<video
+						ref="videoRefs"
+						class="peer-video mirror-video mx-auto h-auto w-full rounded-lg"
+						autoplay
+						muted
+						playsinline
+					></video>
 					<div class="peer-name mt-2 text-center font-bold text-black">{{ peer.name }}</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </template>
+
+<style>
+	.mirror-video {
+		transform: scaleX(-1);
+	}
+</style>
