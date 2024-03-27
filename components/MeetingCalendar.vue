@@ -47,3 +47,12 @@
 		</div>
 	</ClientOnly>
 </template>
+
+<style scoped>
+	.my-calendar :deep(.vc-dark) {
+		--vc-bg: #27272a;
+	}
+	.my-calendar :deep(.vc-bordered) {
+		border-color: transparent;
+	}
+</style>

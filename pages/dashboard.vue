@@ -1,5 +1,6 @@
 <script setup lang="ts">
 	import MeetingCard from '@/components/MeetingCard.vue'
+	import MeetingCalendar from '@/components/MeetingCalendar.vue'
 
 	const { getMeetings } = useApi()
 
@@ -70,14 +71,6 @@
 		gap: 10px;
 		align-items: flex-start;
 	}
-
-	.my-calendar :deep(.vc-dark) {
-		--vc-bg: #27272a;
-	}
-	.my-calendar :deep(.vc-bordered) {
-		border-color: transparent;
-	}
-
 	h3 {
 		margin: 0;
 	}
