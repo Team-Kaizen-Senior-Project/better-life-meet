@@ -83,6 +83,7 @@ export default defineEventHandler(async (event) => {
             timeZone: ${meeting.timeZone},
             podRef: Pod.byId(${meeting.podRef}),
             vimeoId: ${meeting.vimeoId},
+			roomId: ${roomId},
             roomCode: ${roomCode}
         }
         Meeting.create(meeting)

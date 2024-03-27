@@ -49,6 +49,7 @@ export interface Meeting {
 	endTime: Time
 	timeZone: string
 	podRef: GeneralRef
+	roomId: string
 	roomCode: string
 }
 

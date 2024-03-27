@@ -20,7 +20,6 @@
 		roomCode: String,
 	})
 
-	//const roomCode = 'qas-jmqz-old'
 	let userName = ''
 
 	onMounted(async () => {
