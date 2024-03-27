@@ -15,7 +15,6 @@
 		leaveRoom,
 		toggleAudio,
 		toggleVideo,
-		sendChatMessage,
 	} = getHmsInstance()
 
 	const roomCode = 'qas-jmqz-old'
@@ -25,7 +24,6 @@
 		if (customer?.firstName && customer?.lastName) {
 			userName = customer.firstName + ' ' + customer.lastName
 			await joinRoom(roomCode, userName)
-			await sendChatMessage('hello')
 		}
 	})
 

@@ -91,9 +91,10 @@ export interface HmsInstance {
 	toggleAudio: () => Promise<void>
 	toggleVideo: () => Promise<void>
 	sendBroadcastMessage: (message: string) => Promise<void>
-	messages: Ref<Array<string>>
+	messages: Ref<Array<ChatMessage>>
 }
 interface ChatMessage {
 	id: string
 	content: string
+	sendername: string | any
 }

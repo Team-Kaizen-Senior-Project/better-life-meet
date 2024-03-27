@@ -72,7 +72,7 @@ export function useHms(): HmsInstance {
 		try {
 			const result = await hmsActions.sendBroadcastMessage(message)
 			console.log('message success', result)
-		} catch(error) {
+		} catch (error) {
 			console.log('there is an error', error)
 		}
 	}
@@ -83,6 +83,7 @@ export function useHms(): HmsInstance {
 			messages.value.push({
 				id: mostRecentMessage.id,
 				content: mostRecentMessage.message,
+				sendername: mostRecentMessage.senderName,
 			})
 		}
 	}, selectHMSMessages) //for all messages, send

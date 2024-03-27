@@ -17,6 +17,7 @@
 	const isChatBoxVisible = computed(() => chatbox.isChatBoxVisible)
 
 	const customer = customerStore.state.customer
+	const currentUser = `${customer?.firstName} ${customer?.lastName}`
 	const newMessage = ref('')
 	const meetingID = route.params.id
 	console.log(meetingID)
@@ -27,7 +28,6 @@
 			newMessage.value = '' // Clear input after sending
 		}
 	}
-	function recieveMessage() {}
 </script>
 
 <template>
@@ -49,21 +49,22 @@
 		</div>
 		<div class="mb-4 flex flex-1 flex-col overflow-y-auto">
 			<!-- Dynamically display messages -->
-			<div v-for="message in messages" :key="message.id" class="mb-2 rounded-lg bg-white p-2 shadow">
-				<!-- 
-                <div v-if="msg.isCurrentUser" class="flex justify-end">
-					<div class="max-w-xs rounded-lg bg-sky-500 px-4 py-2 text-white">
-						<div class="text-xs text-white">{{ msg.sender }}</div>
-						{{ msg.text }}
+			<div v-for="message in messages" :key="message.id" style="padding: 5px">
+				<div v-if="message.sendername == currentUser" class="flex justify-end">
+					<div
+						class="max-w-xs rounded-lg bg-sky-500 px-3 py-1 text-white"
+						style="border-radius: 15px; padding-top: 10px"
+					>
+						<div class="text-xs text-white">{{ message.sendername }}</div>
+						<div style="font-weight: 490">{{ message.content }}</div>
 					</div>
 				</div>
-				<div v-if="msg.isCurrentUser == false" class="flex justify-end">
-					<div class="max-w-xs rounded-lg bg-gray-300 px-4 py-2">
-						<div class="text-xs text-gray-500">{{ msg.sender }}</div>
-						{{ msg.text }}
+				<div v-else-if="message.sendername != currentUser" class="flex justify-start">
+					<div class="max-w-xs rounded-lg bg-gray-300 px-3 py-1" style="border-radius: 15px; padding-top: 10px">
+						<div class="text-xs text-gray-500">{{ message.sendername }}</div>
+						<div style="font-weight: 490">{{ message.content }}</div>
 					</div>
 				</div>
-                -->
 			</div>
 		</div>
 		<div class="flex flex-row">
