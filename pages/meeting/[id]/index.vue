@@ -79,6 +79,9 @@
 			</div>
 			<!-- External users' video feeds placeholder -->
 		</div>
+		<div class="flex justify-end p-4">
+			<ChatBox />
+		</div>
 	</div>
 
 	<BreakoutRoomModal v-if="!recordedVideoIsPlaying" :meetingRef="meetingId" />
