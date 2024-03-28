@@ -1,24 +1,26 @@
 import { AbortError, ServiceError, fql } from 'fauna'
 
-// Endpoint for retrieving all meetings
+// Endpoint for retrieving meetings
 export default defineEventHandler(async (event) => {
 	// Extract params from request query
-	const { cursor, count, podId }: any = getQuery(event)
+	const { cursor, count, podId, allPods }: any = getQuery(event)
 
-	// Intitialize Fauna client
+	// Initialize Fauna client
 	const { client, error } = useFauna()
 	if (error !== null) return error
 
 	try {
-		// Default Query
-		let query = fql`Meeting.all().paginate()`
+		let query = fql`Meeting.all()`
 
-		// Check to see if client is making a paginated request
-		if (cursor) {
+		// Convert allPods to boolean
+		const allPodsBool = allPods === 'true'
+
+		// Adjust query based on the presence of allPods, podId, and pagination parameters
+		if (allPodsBool) {
 			if (count) {
-				query = fql`Set.paginate(${cursor}, ${Number(count)})`
+				query = fql`Meeting.all().paginate(${Number(count)})`
 			} else {
-				query = fql`Set.paginate(${cursor})`
+				query = fql`Meeting.all()`
 			}
 		} else if (podId) {
 			// Check if count parameter is passed for pagination
@@ -28,7 +30,13 @@ export default defineEventHandler(async (event) => {
 				query = fql`let pod = Pod.byId(${podId}); Meeting.where(.podRef == pod).paginate()`
 			}
 		} else if (count) {
+			// Default
 			query = fql`Meeting.all().paginate(${Number(count)})`
+		}
+
+		// Apply cursor for pagination if provided
+		if (cursor) {
+			query = fql`Set.paginate(${cursor})`
 		}
 
 		const response = await client.query(query)

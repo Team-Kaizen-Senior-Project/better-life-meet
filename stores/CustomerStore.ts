@@ -12,14 +12,20 @@ export const useCustomerStore = defineStore('customer', () => {
 		const { getSession } = useAuth()
 		const session = await getSession()
 		const customer = session.user as Customer
+		console.log(session.user)
 
 		state.customer = customer
 
 		return customer
 	}
 
+	const isAdmin = computed(() => {
+		return state.customer?.admin
+	})
+
 	return {
 		getMe,
 		state,
+		isAdmin,
 	}
 })
