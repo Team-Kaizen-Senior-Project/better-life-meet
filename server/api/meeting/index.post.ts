@@ -39,6 +39,10 @@ export default defineEventHandler(async (event) => {
 			}),
 		})
 
+		if (!roomResponse.ok) {
+			throw new Error('Error creating room')
+		}
+
 		const roomData = await roomResponse.json()
 		const roomId = roomData.id
 
@@ -50,6 +54,10 @@ export default defineEventHandler(async (event) => {
 				'Content-Type': 'application/json',
 			},
 		})
+
+		if (!roomCodeResponse.ok) {
+			throw new Error('Error creating room code')
+		}
 
 		const roomCodeData = await roomCodeResponse.json()
 		const roomCode = roomCodeData.data[0].code // first role's code
