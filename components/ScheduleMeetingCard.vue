@@ -91,7 +91,7 @@
 		Schedule Meeting
 		<CalendarIcon class="h-5 w-5" />
 	</UButton>
-	<UModal v-model="isOpen" class="w-[90vw] max-w-[450px]" :ui="customModal">
+	<UModal v-model="isOpen" :ui="customModal">
 		<div class="rounded bg-zinc-800 p-4 shadow-lg">
 			<div>
 				<p class="text-lg font-semibold text-white">Schedule New Meeting</p>
@@ -103,7 +103,7 @@
 						Start
 						<span class="text-red-400">*</span>
 					</label>
-					<div class="flex gap-2">
+					<div class="flex flex-col gap-2 md:flex-row">
 						<input
 							required
 							v-model="state.form.startData.date"
@@ -124,7 +124,7 @@
 						End
 						<span class="text-red-400">*</span>
 					</label>
-					<div class="flex gap-2">
+					<div class="flex flex-col gap-2 md:flex-row">
 						<input
 							required
 							v-model="state.form.endData.date"
