@@ -110,7 +110,7 @@ export const useApi = () => {
 
 	const getMeetings = async (params?: MeetingQueryParams): Promise<Meeting[]> => {
 		const response = await $fetch<{ data: { data: Meeting[] } }>(`/api/meeting`, { params })
-		console.log(response.data.data)
+		//console.log(response.data.data)
 		// filter out meetings that have already ended
 		// sort the meetings by start time so newest is first
 		return response.data.data
