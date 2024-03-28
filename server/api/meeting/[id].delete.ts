@@ -35,7 +35,6 @@ export default defineEventHandler(async (event) => {
 				},
 				body: JSON.stringify({ enabled: false }),
 			})
-			console.log(resp)
 		}
 
 		// Perform READ query (print error if resource not found)
