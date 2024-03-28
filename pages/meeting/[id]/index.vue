@@ -70,7 +70,7 @@
 			<p>The meeting will start shortly</p>
 		</div>
 		<div v-if="recordedVideoIsPlaying && !showBufferText && !countdown.showCountdown" class="flex flex-row">
-			<PrerecordedVideo @toggle-video="toggleVideo" />
+			<PrerecordedVideo @toggle-video="toggleVideo" :meetingStartTime="meeting.startTime" />
 		</div>
 		<div v-else-if="!recordedVideoIsPlaying">
 			<!-- Local user's video feed -->
