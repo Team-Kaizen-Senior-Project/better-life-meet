@@ -13,32 +13,12 @@
 			background: 'bg-zinc-900/90',
 		},
 	})
-	async function createNewAttendee() {
-		const startTime = new Date().toISOString()
-		const { meetingRef } = props
-		const isCameraOn = video.cameraActive
-
-		const fields: AttendeeFields = {
-			joinTime: startTime,
-			leaveTime: startTime,
-			customerRef: customerState.customer?.id,
-			usedVideo: isCameraOn,
-			meetingRef,
-			// TODO: use actual user device
-			platform: 'Mobile',
-		}
-
-		try {
-			console.log(fields)
-			await attendee.createAttendee(fields)
-			video.joinMeeting()
-		} catch (error) {
-			console.log('error creating attendee', error)
-		}
+	function joinMeeting() {
+		video.joinMeeting()
 	}
 </script>
 <template>
-	<UModal v-model="video.modalOpen" class="max-w-[400px]" :ui="customModal">
+	<UModal v-model="video.modalOpen" class="max-w-[400px]" :ui="customModal" data-testid="settings-modal">
 		<VideoSettings
 			title="Pod accountability meeting is starting"
 			description="This is your chance to make sure your camera is setup and your microphone is working!"
@@ -46,12 +26,16 @@
 		>
 			<template #join>
 				<!-- TODO add functionality to cancel joining a meeting -->
-				<Button type="button" class="mr-2 rounded-md bg-gray-500 font-medium text-white hover:bg-sky-600">
+				<Button
+					type="button"
+					class="mr-2 rounded-md bg-gray-500 font-medium text-white hover:bg-sky-600"
+					data-testid="br-cancel-button"
+				>
 					Cancel
 				</Button>
 				<Button
 					type="button"
-					@click="createNewAttendee"
+					@click="joinMeeting"
 					class="rounded-md bg-sky-500 font-medium text-white hover:bg-sky-600"
 				>
 					Join

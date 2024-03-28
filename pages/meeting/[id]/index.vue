@@ -1,9 +1,11 @@
 <script setup lang="ts">
-	import { io } from 'socket.io-client'
-	const recordedVideoIsPlaying = ref(true)
 	import { useCountdownStore } from '~/stores/CountdownStore'
 	import { useVideoStore } from '~/stores/videoService'
+	import type { Meeting } from '~/types'
+	import dayjs from 'dayjs'
+	const { display: displayDate } = useDate()
 	const video = useVideoStore()
+	const recordedVideoIsPlaying = ref(true)
 
 	definePageMeta({
 		layout: 'meeting',
@@ -27,7 +29,6 @@
 	const showBufferText = ref(false)
 
 	// Connect to websocket server
-	const ws = io()
 	function toggleVideo() {
 		showBufferText.value = true
 		// Temp buffer for video end
@@ -65,18 +66,13 @@
 		/>
 		<div v-else-if="!recordedVideoIsPlaying" class="grid h-[70vh] w-[80vw] grid-cols-4 grid-rows-2 gap-3">
 			<!-- Local user's video feed -->
-			<div class="relative overflow-hidden rounded-lg bg-zinc-900" v-if="true">
-				<LocalVideo />
-				<p class="absolute bottom-0 left-0 bg-black px-2 py-1.5 text-white">Local User</p>
+			<div class="relative overflow-y-auto rounded-lg bg-zinc-900" v-if="true">
+				<MeetingVideo v-if="!video.modalOpen" />
 			</div>
-
-			<!-- External users' video feeds -->
-			<!-- <div class="relative overflow-hidden rounded-lg bg-zinc-900" v-for="stream in externalStreams" :key="stream.id">
-				<ExternalVideo :stream="stream.stream" />
-				<p class="absolute bottom-0 left-0 bg-black px-2 py-1.5 text-white">{{ stream.id }}</p>
-			</div> -->
+			<!-- External users' video feeds placeholder -->
 		</div>
 	</div>
+
 	<BreakoutRoomModal v-if="!recordedVideoIsPlaying" :meetingRef="meetingId" />
 	<PodFooter />
 </template>

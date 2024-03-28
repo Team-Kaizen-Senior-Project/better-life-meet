@@ -1,4 +1,5 @@
 import { AbortError, ServiceError, fql } from 'fauna'
+import type { AttendeeFields } from '~/types'
 
 export default defineEventHandler(async (event) => {
 	// Get ID from the URL params
@@ -9,10 +10,14 @@ export default defineEventHandler(async (event) => {
 	if (error !== null) return error
 
 	try {
-		const attendee = await readBody(event)
-
+		const attendee = (await readBody(event)) as AttendeeFields
 		let query = fql`let attendee = Attendee.byId(${id});
-		attendee!.update(${attendee})`
+		attendee!.update({${String(attendee)}})`
+
+		if (attendee.leaveTime) {
+			query = fql`let attendee = Attendee.byId(${id});
+			attendee!.update({leaveTime: Time(${attendee.leaveTime})})`
+		}
 
 		const response = await client.query(query)
 		return response

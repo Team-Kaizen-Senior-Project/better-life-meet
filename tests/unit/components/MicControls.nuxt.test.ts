@@ -21,14 +21,14 @@ describe('MicControls', () => {
 		const wrapper = await mountSuspended(MicControls, {
 			props: { boxLength: 10 },
 		})
-		
+
 		const testButton = wrapper.find('button')
 		expect(testButton.text()).toBe('Test Mic')
-		
+
 		await wrapper.vm.toggleMicTest()
 		await wrapper.vm.$nextTick()
 		expect(testButton.text()).toBe('Stop Test')
-		
+
 		await wrapper.vm.toggleMicTest()
 		await wrapper.vm.$nextTick()
 		expect(testButton.text()).toBe('Test Mic')
