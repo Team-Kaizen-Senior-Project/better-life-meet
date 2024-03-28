@@ -17,6 +17,7 @@ export interface Customer {
 	id: string
 	firstName: string
 	lastName: string
+	admin: boolean
 	email: string
 	netWorth: number
 	podRef: GeneralRef
@@ -49,6 +50,7 @@ export interface Meeting {
 	endTime: Time
 	timeZone: string
 	podRef: GeneralRef
+	vimeoId: string
 }
 
 export interface MeetingFields {
@@ -76,4 +78,10 @@ export interface AttendeeFields {
 	meetingRef?: string
 	platform?: string
 	usedVideo?: boolean
+}
+
+interface VimeoVideo {
+	download: { link: string }[]
+	width: number
+	height: number
 }

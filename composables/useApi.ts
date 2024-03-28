@@ -13,8 +13,8 @@ import type {
 // All the api requests, error and response handling should happen where they are being called.
 
 type MeetingQueryParams =
-	| { podId?: never; count?: number; cursor?: string }
-	| { podId: Numberic; count?: number; cursor?: never }
+	| { podId?: never; count?: number; cursor?: string; allPods?: boolean }
+	| { podId: Numberic; count?: number; cursor?: never; allPods?: boolean }
 
 export const useApi = () => {
 	const createCustomer = async (customer: CustomerFields) => {
@@ -109,6 +109,7 @@ export const useApi = () => {
 	}
 
 	const getMeetings = async (params?: MeetingQueryParams): Promise<Meeting[]> => {
+		console.log(params)
 		const response = await $fetch<{ data: { data: Meeting[] } }>(`/api/meeting`, { params })
 		console.log(response.data.data)
 		// filter out meetings that have already ended

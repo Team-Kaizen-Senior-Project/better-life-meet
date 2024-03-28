@@ -1,15 +1,17 @@
 <script setup lang="ts">
 	import { ref } from 'vue'
 
-	const videoRef = ref(null)
+	const props = defineProps({
+		vimeoId: {
+			type: String,
+			required: true,
+		},
+	})
 
 	const { getVimeoVideo } = useApi()
 
-	const vimeoId = 523363936
+	const { data: video, refresh, pending } = await useAsyncData<any>('vimeo-video', () => getVimeoVideo(props.vimeoId))
 
-	const { data: video, refresh, pending } = await useAsyncData('vimeo-video', () => getVimeoVideo(vimeoId))
-
-	console.log(video.value)
 	const videoUrl = computed(() => {
 		return video.value.download[0].link
 	})
@@ -20,7 +22,6 @@
 <template>
 	<div>
 		<video
-			ref="videoRef"
 			@ended="emit('toggleVideo')"
 			controls
 			contextmenu="disabled"
