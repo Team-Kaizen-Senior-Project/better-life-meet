@@ -41,6 +41,7 @@
 							class="bg-sky-500 hover:bg-sky-600"
 							label="View Schedule"
 							trailing-icon="i-heroicons-chevron-down-20-solid"
+							data-testid="view-schedule"
 						/>
 					</UDropdown>
 				</div>
