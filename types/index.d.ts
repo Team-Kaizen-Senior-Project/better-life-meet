@@ -93,3 +93,19 @@ export interface HmsInstance {
 	toggleAudio: () => Promise<void>
 	toggleVideo: () => Promise<void>
 }
+
+export interface RoomResponse {
+	id: string
+	name: string
+	description: string
+	enabled: boolean
+}
+
+export interface RoomCodeResponse {
+	data: Array<{
+		code: string
+		roomId: string
+		role: string
+		enabled: boolean
+	}>
+}

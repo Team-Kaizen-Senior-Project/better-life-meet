@@ -1,5 +1,5 @@
 import { AbortError, ServiceError, fql } from 'fauna'
-import type { MeetingFields } from '~/types'
+import type { MeetingFields, RoomResponse, RoomCodeResponse } from '~/types'
 
 // Endpoint for creating a meeting
 export default defineEventHandler(async (event) => {
@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
 			throw new Error('Error creating room')
 		}
 
-		const roomData = await roomResponse.json()
+		const roomData: RoomResponse = await roomResponse.json()
 		const roomId = roomData.id
 
 		// Create room code for the room
@@ -59,7 +59,7 @@ export default defineEventHandler(async (event) => {
 			throw new Error('Error creating room code')
 		}
 
-		const roomCodeData = await roomCodeResponse.json()
+		const roomCodeData: RoomCodeResponse = await roomCodeResponse.json()
 		const roomCode = roomCodeData.data[0].code // first role's code
 
 		const query = fql`
