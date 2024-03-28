@@ -41,6 +41,7 @@
 		"@nuxt/ui": "^2.13.0",
 		"@pinia/nuxt": "^0.5.1",
 		"@popperjs/core": "^2.11.8",
+		"@testing-library/vue": "^8.0.3",
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.1.0",
 		"dayjs": "^1.11.10",

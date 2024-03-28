@@ -31,11 +31,11 @@
 </script>
 <template>
 	<header class="bg-black py-4">
-		<div class="mx-auto flex w-[90vw] max-w-[1600px] items-center justify-between">
-			<div class="flex items-center gap-4">
-				<p class="text-lg font-medium text-white">Weekly Pod Accountability Meeting</p>
+		<div class="mx-auto flex w-[95vw] max-w-[1600px] items-center justify-between">
+			<div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+				<p class="text-lg font-medium text-white">Pod Accountability Meeting</p>
+				<!-- Used to override width -->
 				<div class="schedule-dropdown">
-					<!-- Used to override width -->
 					<UDropdown :items="podMeetings" :popper="{ placement: 'bottom-start' }">
 						<UButton
 							class="bg-sky-500 hover:bg-sky-600"
@@ -50,7 +50,7 @@
 				<button class="aspect-square h-[2rem] w-[2rem] rounded-full bg-gray-200 text-lg">U</button>
 				<div class="flex flex-col text-sm text-white" v-if="customer">
 					<p>{{ customer.firstName }}</p>
-					<p>{{ customer.email }}</p>
+					<p class="max-md:max-w-[125px] truncate">{{ customer.email }}</p>
 				</div>
 			</div>
 		</div>
