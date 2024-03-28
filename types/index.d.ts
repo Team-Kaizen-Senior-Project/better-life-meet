@@ -84,6 +84,7 @@ interface VimeoVideo {
 	download: { link: string }[]
 	width: number
 	height: number
+	link: string
 }
 
 export interface HmsInstance {

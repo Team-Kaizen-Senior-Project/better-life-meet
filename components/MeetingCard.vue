@@ -185,7 +185,8 @@
 				<div v-if="hasVimeoId" class="mb-2 text-sm">
 					{{ console.log(vimeo) }}
 					id:
-					<NuxtLink class="underline" :to="vimeo.link">{{ meeting?.vimeoId }}</NuxtLink>
+					<span v-if="vimeoLoading">...</span>
+					<NuxtLink class="underline" v-else-if="vimeo.link" :to="vimeo.link">{{ meeting?.vimeoId }}</NuxtLink>
 				</div>
 				<div>
 					<Popover v-model:open="popoverOpen">
