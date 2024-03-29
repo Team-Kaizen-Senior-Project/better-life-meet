@@ -18,7 +18,6 @@ describe('LocalVideo with video disabled', () => {
 
 	it('shows VideoCameraSlashIcon when video is not enabled', async () => {
 		const wrapper = await mountSuspended(LocalVideo)
-		console.log(wrapper.html())
 		expect(wrapper.find('svg').exists()).toBe(true)
 	})
 
