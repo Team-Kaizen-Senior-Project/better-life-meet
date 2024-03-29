@@ -8,7 +8,7 @@ describe('Login', () => {
         expect(wrapper.exists()).toBe(true)
     })
 
-    it ('email and password fields exist', async () => {
+    it ('email and password fields exist for input', async () => {
         const wrapper = await mountSuspended(Login)
         const email = wrapper.find('[data-testid="email"]')
         const password = wrapper.find('[data-testid="password"]')

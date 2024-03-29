@@ -56,7 +56,7 @@
 				<!-- column 3 -->
 				<div class="col-span-1 grid gap-4 self-start lg:col-span-3">
 					<div class="rounded-lg bg-zinc-900 p-4">
-						<h2 class="mb-4 text-lg font-medium text-white">Upcoming events</h2>
+						<h2 class="mb-4 text-lg font-medium text-white" data-testid="upcoming-events">Upcoming events</h2>
 						<ClientOnly>
 							<div class="my-calendar">
 								<VCalendar v-model="date" :attributes="attrs" class="" isDark />
@@ -68,7 +68,7 @@
 					</div>
 
 					<div class="rounded-lg bg-zinc-900 p-4">
-						<h2 class="mb-4 text-lg font-medium text-white">Meetings this week</h2>
+						<h2 class="mb-4 text-lg font-medium text-white" data-testid="meetings-this-week">Meetings this week</h2>
 						<div class="grid grid-cols-1 gap-4">
 							<div v-if="data?.meetings?.length" v-for="(meeting, index) in data?.meetings" class="">
 								<MeetingCard :meeting="meeting" :isFirst="index === 0" @refresh="refresh" />
