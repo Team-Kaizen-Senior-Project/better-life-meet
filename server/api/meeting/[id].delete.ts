@@ -10,6 +10,33 @@ export default defineEventHandler(async (event) => {
 	if (error !== null) return error
 
 	try {
+		// Generate a management token
+		const managementToken = await generateManagementToken()
+
+		// Perform READ query to get meeting details, including roomId
+		const meetingQuery = fql`let meeting = Meeting.byId(${id});
+		if (!meeting.exists()) abort({ message: "Meeting with this ID does not exist." });
+		meeting;`
+
+		const meetingResponse = await client.query(meetingQuery)
+		if (!meetingResponse.data) {
+			throw new Error('Meeting not found.')
+		}
+
+		const roomId = meetingResponse.data.roomId // Accessing roomId from the response
+
+		if (roomId) {
+			// Disable the room on 100ms
+			const resp = await fetch(`https://api.100ms.live/v2/rooms/${roomId}`, {
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${managementToken}`,
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ enabled: false }),
+			})
+		}
+
 		// Perform READ query (print error if resource not found)
 		const query = fql`let meeting = Meeting.byId(${id});
 		if (!meeting.exists()) abort({ message: "Meeting with this ID does not exist." });

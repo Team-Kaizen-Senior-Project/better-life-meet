@@ -49,6 +49,8 @@ export interface Meeting {
 	endTime: Time
 	timeZone: string
 	podRef: GeneralRef
+	roomId: string
+	roomCode: string
 }
 
 export interface MeetingFields {
@@ -91,9 +93,26 @@ export interface HmsInstance {
 	toggleAudio: () => Promise<void>
 	toggleVideo: () => Promise<void>
 	sendBroadcastMessage: (message: string) => Promise<void>
-	messages: Ref<Array<string>>
+	messages: Ref<Array<ChatMessage>>
 }
 interface ChatMessage {
 	id: string
 	content: string
+	sendername: string | any
+}
+
+export interface RoomResponse {
+	id: string
+	name: string
+	description: string
+	enabled: boolean
+}
+
+export interface RoomCodeResponse {
+	data: Array<{
+		code: string
+		roomId: string
+		role: string
+		enabled: boolean
+	}>
 }

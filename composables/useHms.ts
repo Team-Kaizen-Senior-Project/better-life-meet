@@ -10,7 +10,6 @@ import {
 	selectBroadcastMessages,
 } from '@100mslive/hms-video-store'
 import type { HmsInstance, ChatMessage } from '~/types'
-import { select } from '@nuxt/ui/dist/runtime/ui.config'
 
 export function useHms(): HmsInstance {
 	console.log('Initializing useHms instance')
@@ -70,7 +69,12 @@ export function useHms(): HmsInstance {
 	}
 
 	const sendBroadcastMessage = async (message: string) => {
-		await hmsActions.sendBroadcastMessage(message)
+		try {
+			const result = await hmsActions.sendBroadcastMessage(message)
+			console.log('message success', result)
+		} catch (error) {
+			console.log('there is an error', error)
+		}
 	}
 
 	hmsStore.subscribe((newMessages) => {
@@ -79,6 +83,7 @@ export function useHms(): HmsInstance {
 			messages.value.push({
 				id: mostRecentMessage.id,
 				content: mostRecentMessage.message,
+				sendername: mostRecentMessage.senderName,
 			})
 		}
 	}, selectHMSMessages) //for all messages, send
