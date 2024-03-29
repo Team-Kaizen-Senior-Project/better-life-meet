@@ -6,8 +6,10 @@ import {
 	selectPeers,
 	selectIsConnectedToRoom,
 	selectVideoTrackByID,
+	selectHMSMessages,
+	selectBroadcastMessages,
 } from '@100mslive/hms-video-store'
-import type { HmsInstance } from '~/types'
+import type { HmsInstance, ChatMessage } from '~/types'
 
 export function useHms(): HmsInstance {
 	console.log('Initializing useHms instance')
@@ -24,7 +26,7 @@ export function useHms(): HmsInstance {
 	const isLocalVideoEnabled = ref(false)
 	const isConnected = ref(false)
 	const peers = ref([])
-
+	const messages: Ref<ChatMessage[]> = ref([])
 	const video = useVideoStore()
 
 	watch(peers, (newPeers) => {
@@ -66,6 +68,26 @@ export function useHms(): HmsInstance {
 		await hmsActions.setLocalVideoEnabled(isLocalVideoEnabled.value)
 	}
 
+	const sendBroadcastMessage = async (message: string) => {
+		try {
+			const result = await hmsActions.sendBroadcastMessage(message)
+			console.log('message success', result)
+		} catch (error) {
+			console.log('there is an error', error)
+		}
+	}
+
+	hmsStore.subscribe((newMessages) => {
+		if (newMessages.length > 0) {
+			const mostRecentMessage = newMessages[newMessages.length - 1]
+			messages.value.push({
+				id: mostRecentMessage.id,
+				content: mostRecentMessage.message,
+				sendername: mostRecentMessage.senderName,
+			})
+		}
+	}, selectHMSMessages) //for all messages, send
+
 	hmsStore.subscribe((val) => (isLocalAudioEnabled.value = val), selectIsLocalAudioEnabled)
 	hmsStore.subscribe((val) => (isLocalVideoEnabled.value = val), selectIsLocalVideoEnabled)
 	hmsStore.subscribe((val) => (isConnected.value = val), selectIsConnectedToRoom)
@@ -79,9 +101,11 @@ export function useHms(): HmsInstance {
 		isLocalVideoEnabled,
 		isConnected,
 		peers,
+		messages,
 		joinRoom,
 		leaveRoom,
 		toggleAudio,
 		toggleVideo,
+		sendBroadcastMessage,
 	}
 }
