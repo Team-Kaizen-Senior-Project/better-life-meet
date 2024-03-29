@@ -4,6 +4,7 @@ import type {
 	Customer,
 	CustomerFields,
 	HmsEventsResponse,
+	HmsPeers,
 	HmsRoom,
 	HmsSession,
 	Meeting,
@@ -231,6 +232,23 @@ export const useApi = () => {
 		return events
 	}
 
+	const getHmsPeers = async (roomId: string, filters?: { user_id?: string; role?: string }): Promise<HmsPeers> => {
+		const managementToken = await generateManagementToken()
+
+		const queryParams = { ...filters }
+
+		const peers = await $fetch<HmsPeers>(`https://api.100ms.live/v2/active-rooms/${roomId}/peers`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${managementToken}`,
+				'Content-Type': 'application/json',
+			},
+			query: queryParams,
+		})
+
+		return peers
+	}
+
 	return {
 		// Customer
 		createCustomer,
@@ -262,5 +280,6 @@ export const useApi = () => {
 		getHmsRoom,
 		getHmsSession,
 		getHmsEvents,
+		getHmsPeers,
 	}
 }

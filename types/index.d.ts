@@ -130,7 +130,7 @@ export interface HmsRoom {
 	session: Session
 }
 
-interface Peer {
+export interface Peer {
 	id: string
 	session_id: string
 	name: string
@@ -140,7 +140,7 @@ interface Peer {
 	left_at: string
 }
 
-interface Peers {
+interface HmsPeers {
 	[key: string]: Peer
 }
 
@@ -149,7 +149,7 @@ export interface HmsSession {
 	room_id: string
 	customer_id: string
 	active: boolean
-	peers: Peers
+	peers: HmsPeers
 	created_at: string
 	updated_at: string
 }
