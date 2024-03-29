@@ -49,6 +49,8 @@ export interface Meeting {
 	endTime: Time
 	timeZone: string
 	podRef: GeneralRef
+	roomId: string
+	roomCode: string
 }
 
 export interface MeetingFields {
@@ -79,15 +81,31 @@ export interface AttendeeFields {
 }
 
 export interface HmsInstance {
-	userName: Ref<string>;
-	roomCode: Ref<string>;
-	videoRefs: Ref<Array<any>>; // Specify a more accurate type if available
-	isLocalAudioEnabled: Ref<boolean>;
-	isLocalVideoEnabled: Ref<boolean>;
-	isConnected: Ref<boolean>;
-	peers: Ref<Array<any>>; // Specify a more accurate type if available
-	joinRoom: (roomCode: string, username: string) => Promise<void>;
-	leaveRoom: () => Promise<void>;
-	toggleAudio: () => Promise<void>;
-	toggleVideo: () => Promise<void>;
-  }
+	userName: Ref<string>
+	roomCode: Ref<string>
+	videoRefs: Ref<Array<any>> // Specify a more accurate type if available
+	isLocalAudioEnabled: Ref<boolean>
+	isLocalVideoEnabled: Ref<boolean>
+	isConnected: Ref<boolean>
+	peers: Ref<Array<any>> // Specify a more accurate type if available
+	joinRoom: (roomCode: string, username: string) => Promise<void>
+	leaveRoom: () => Promise<void>
+	toggleAudio: () => Promise<void>
+	toggleVideo: () => Promise<void>
+}
+
+export interface RoomResponse {
+	id: string
+	name: string
+	description: string
+	enabled: boolean
+}
+
+export interface RoomCodeResponse {
+	data: Array<{
+		code: string
+		roomId: string
+		role: string
+		enabled: boolean
+	}>
+}
