@@ -74,7 +74,7 @@
 		</div>
 		<div v-else-if="!recordedVideoIsPlaying">
 			<!-- Local user's video feed -->
-			<div class="relative overflow-hidden rounded-lg bg-zinc-900" v-if="true">
+			<div class="relative overflow-y-auto rounded-lg bg-zinc-900" v-if="true">
 				<MeetingVideo v-if="!video.modalOpen" />
 			</div>
 			<!-- External users' video feeds placeholder -->
