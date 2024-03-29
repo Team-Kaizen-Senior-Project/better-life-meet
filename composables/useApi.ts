@@ -3,6 +3,8 @@ import type {
 	AttendeeFields,
 	Customer,
 	CustomerFields,
+	HmsRoom,
+	HmsSession,
 	Meeting,
 	MeetingFields,
 	Numberic,
@@ -165,6 +167,34 @@ export const useApi = () => {
 		const response = await $fetch(`/api/attendee/${id}`, { method: 'DELETE' })
 
 		return response
+	}
+
+	const getHmsRoom = async (roomId: string): Promise<HmsRoom> => {
+		const managementToken = await generateManagementToken()
+
+		const room = await $fetch<HmsRoom>(`https://api.100ms.live/v2/active-rooms/${roomId}`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${managementToken}`,
+				'Content-Type': 'application/json',
+			},
+		})
+
+		return room
+	}
+
+	const getHmsSession = async (sessionId: string): Promise<HmsSession> => {
+		const managementToken = await generateManagementToken()
+
+		const session = await $fetch<HmsSession>(`https://api.100ms.live/v2/sessions/${sessionId}`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${managementToken}`,
+				'Content-Type': 'application/json',
+			},
+		})
+
+		return session
 	}
 
 	return {
