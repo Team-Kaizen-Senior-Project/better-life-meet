@@ -57,7 +57,7 @@ const { isLocalAudioEnabled, isLocalVideoEnabled, toggleAudio, toggleVideo } = g
 					</button>
 				</div>
 				<div class="flex flex-row gap-2">
-					<Button class="rounded px-5 py-3" @click="chatbox.toggleChatBox">
+					<Button v-if="isConnected" class="rounded px-5 py-3" @click="chatbox.toggleChatBox">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="{1.5}"
 							stroke="currentColor" class="h-5 w-5">
 							<path strokeLinecap="round" strokeLinejoin="round"

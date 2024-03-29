@@ -66,6 +66,9 @@
 				<MeetingVideo v-if="!video.modalOpen" :roomCode="meeting.roomCode" />
 			</div>
 		</div>
+		<div class="flex justify-end p-4">
+			<ChatBox />
+		</div>
 	</div>
 
 	<BreakoutRoomModal v-if="!recordedVideoIsPlaying" :meetingRef="meetingId" />
