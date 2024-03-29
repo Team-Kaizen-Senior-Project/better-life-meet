@@ -153,3 +153,36 @@ export interface HmsSession {
 	created_at: string
 	updated_at: string
 }
+
+interface HmsTrackEvents {
+	room_id: string
+	session_id: string
+	room_name: string
+	peer_id: string
+	user_id: string
+	user_name: string
+	joined_at: string
+	role: string
+	track_id: string
+	stream_id: string
+	type: string
+	source: string
+	mute: boolean
+	started_at: string
+	stopped_at?: string // only specified in track.remove.success event
+}
+
+export interface HmsEvents {
+	version: string
+	id: string
+	timestamp: string
+	type: string
+	data: HmsTrackEvents
+}
+
+export interface HmsEventsResponse {
+	limit: number
+	total: number
+	next: string
+	events: HmsEvents[]
+}
