@@ -114,5 +114,5 @@ export interface RoomCodeResponse {
 		roomId: string
 		role: string
 		enabled: boolean
-	}
+	}>
 }
