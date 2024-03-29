@@ -1,6 +1,5 @@
 import { AbortError, ServiceError, fql } from 'fauna'
-
-import type { MeetingFields } from '~/types'
+import type { MeetingFields, RoomResponse, RoomCodeResponse } from '~/types'
 
 // Endpoint for creating a meeting
 export default defineEventHandler(async (event) => {
@@ -11,6 +10,9 @@ export default defineEventHandler(async (event) => {
 	try {
 		const meeting = (await readBody(event)) as Required<MeetingFields>
 
+		// Generate a management token
+		const managementToken = await generateManagementToken()
+
 		// Convert the start and end time to date objects
 		const startTime = new Date(meeting.startTime)
 		const endTime = new Date(meeting.endTime)
@@ -19,32 +21,59 @@ export default defineEventHandler(async (event) => {
 		const currentTime = new Date()
 
 		// Check if meeting start time is in the past
-		if (startTime < currentTime) {
-			throw createError({
-				statusCode: 400,
-				statusMessage: 'Cannot schedule a meeting in the past.',
-			})
+		if (startTime < currentTime)
+			throw createError({ statusCode: 400, statusMessage: 'Cannot schedule a meeting in the past.' })
+		if (endTime < startTime)
+			throw createError({ statusCode: 400, statusMessage: 'The meeting end time must be after the start time.' })
+
+		// Create room in 100ms
+		const roomResponse = await fetch('https://api.100ms.live/v2/rooms', {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${managementToken}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				name: `Meeting ${meeting.startTime}`,
+				description: 'Meeting room',
+			}),
+		})
+
+		if (!roomResponse.ok) {
+			throw new Error('Error creating room')
 		}
 
-		// Check if meeting end time is greater than start time
-		if (endTime < startTime) {
-			throw createError({
-				statusCode: 400,
-				statusMessage: 'The meeting end time must be after the start time.',
-			})
+		const roomData: RoomResponse = await roomResponse.json()
+		const roomId = roomData.id
+
+		// Create room code for the room
+		const roomCodeResponse = await fetch(`https://api.100ms.live/v2/room-codes/room/${roomId}`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${managementToken}`,
+				'Content-Type': 'application/json',
+			},
+		})
+
+		if (!roomCodeResponse.ok) {
+			throw new Error('Error creating room code')
 		}
 
-		// Perform POST query for meeting
+		const roomCodeData: RoomCodeResponse = await roomCodeResponse.json()
+		const roomCode = roomCodeData.data[0].code // first role's code
+
 		const query = fql`
-		let meeting = {
-			startTime: Time(${meeting.startTime}),
-			endTime: Time(${meeting.endTime}),
-			timeZone: ${meeting.timeZone},
-			podRef: Pod.byId(${meeting.podRef}),
-			vimeoId: ${meeting.vimeoId},
-		}
-		Meeting.create(meeting)
-		`
+        let meeting = {
+            startTime: Time(${meeting.startTime}),
+            endTime: Time(${meeting.endTime}),
+            timeZone: ${meeting.timeZone},
+            podRef: Pod.byId(${meeting.podRef}),
+            vimeoId: ${meeting.vimeoId},
+			roomId: ${roomId},
+            roomCode: ${roomCode}
+        }
+        Meeting.create(meeting)
+        `
 
 		const response = await client.query(query)
 

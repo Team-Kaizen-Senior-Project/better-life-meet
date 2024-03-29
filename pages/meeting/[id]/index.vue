@@ -6,6 +6,7 @@
 	import dayjs from 'dayjs'
 	const { display: displayDate } = useDate()
 	const video = useVideoStore()
+	const { leaveRoom, isConnected } = getHmsInstance()
 
 	definePageMeta({
 		layout: 'meeting',
@@ -31,9 +32,6 @@
 	console.log('Now', now)
 	console.log('Start Time', startTime)
 
-	// Initiate socket connection
-	// const ws = ref(io())
-
 	function toggleVideo() {
 		showBufferText.value = true
 		// Temp buffer for video end
@@ -44,20 +42,11 @@
 			showBufferText.value = false
 		}, BUFFER * 1000)
 	}
-	// ws.value.emit('joinMeeting', { customerRef, meetingId, isCameraOn: video.cameraActive })
-
-	//watch video camera status
-	watch(
-		() => ({ cameraActive: video.cameraActive }),
-		(newVal) => {
-			if (newVal.cameraActive) {
-				// ws.value.emit('toggleVideo')
-			}
-		},
-	)
 
 	onUnmounted(() => {
-		// ws.value.close()
+		if (isConnected.value) {
+			leaveRoom()
+		}
 	})
 </script>
 
@@ -73,11 +62,9 @@
 			<PrerecordedVideo @toggle-video="toggleVideo" />
 		</div>
 		<div v-else-if="!recordedVideoIsPlaying">
-			<!-- Local user's video feed -->
 			<div class="relative overflow-y-auto rounded-lg bg-zinc-900" v-if="true">
-				<MeetingVideo v-if="!video.modalOpen" />
+				<MeetingVideo v-if="!video.modalOpen" :roomCode="meeting.roomCode" />
 			</div>
-			<!-- External users' video feeds placeholder -->
 		</div>
 		<div class="flex justify-end p-4">
 			<ChatBox />

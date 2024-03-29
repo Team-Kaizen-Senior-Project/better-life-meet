@@ -49,6 +49,8 @@ export interface Meeting {
 	endTime: Time
 	timeZone: string
 	podRef: GeneralRef
+	roomId: string
+	roomCode: string
 }
 
 export interface MeetingFields {
@@ -97,4 +99,20 @@ interface ChatMessage {
 	id: string
 	content: string
 	sendername: string | any
+}
+
+export interface RoomResponse {
+	id: string
+	name: string
+	description: string
+	enabled: boolean
+}
+
+export interface RoomCodeResponse {
+	data: Array<{
+		code: string
+		roomId: string
+		role: string
+		enabled: boolean
+	}
 }
