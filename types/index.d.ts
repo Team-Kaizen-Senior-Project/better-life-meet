@@ -92,6 +92,13 @@ export interface HmsInstance {
 	leaveRoom: () => Promise<void>
 	toggleAudio: () => Promise<void>
 	toggleVideo: () => Promise<void>
+	sendBroadcastMessage: (message: string) => Promise<void>
+	messages: Ref<Array<ChatMessage>>
+}
+interface ChatMessage {
+	id: string
+	content: string
+	sendername: string | any
 }
 
 export interface RoomResponse {
@@ -107,5 +114,5 @@ export interface RoomCodeResponse {
 		roomId: string
 		role: string
 		enabled: boolean
-	}>
+	}
 }
