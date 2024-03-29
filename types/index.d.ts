@@ -116,3 +116,40 @@ export interface RoomCodeResponse {
 		enabled: boolean
 	}>
 }
+
+interface HmsRoomSession {
+	id: string
+	created_at: string
+	peers: string[]
+}
+
+export interface HmsRoom {
+	id: string
+	name: string
+	customer_id: string
+	session: Session
+}
+
+interface Peer {
+	id: string
+	session_id: string
+	name: string
+	role: string
+	user_id: string
+	joined_at: string
+	left_at: string
+}
+
+interface Peers {
+	[key: string]: Peer
+}
+
+export interface HmsSession {
+	id: string
+	room_id: string
+	customer_id: string
+	active: boolean
+	peers: Peers
+	created_at: string
+	updated_at: string
+}
