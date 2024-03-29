@@ -3,6 +3,9 @@ import type {
 	AttendeeFields,
 	Customer,
 	CustomerFields,
+	HmsEventsResponse,
+	HmsRoom,
+	HmsSession,
 	Meeting,
 	MeetingFields,
 	Numberic,
@@ -15,6 +18,14 @@ import type {
 type MeetingQueryParams =
 	| { podId?: never; count?: number; cursor?: string }
 	| { podId: Numberic; count?: number; cursor?: never }
+
+type EventsFilters = {
+	session_id?: string
+	peer_id?: string
+	user_id?: string
+	limit?: number
+	start?: string
+}
 
 export const useApi = () => {
 	const createCustomer = async (customer: CustomerFields) => {
@@ -167,6 +178,59 @@ export const useApi = () => {
 		return response
 	}
 
+	const getHmsRoom = async (roomId: string): Promise<HmsRoom> => {
+		const managementToken = await generateManagementToken()
+
+		const room = await $fetch<HmsRoom>(`https://api.100ms.live/v2/active-rooms/${roomId}`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${managementToken}`,
+				'Content-Type': 'application/json',
+			},
+		})
+
+		return room
+	}
+
+	const getHmsSession = async (sessionId: string): Promise<HmsSession> => {
+		const managementToken = await generateManagementToken()
+
+		const session = await $fetch<HmsSession>(`https://api.100ms.live/v2/sessions/${sessionId}`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${managementToken}`,
+				'Content-Type': 'application/json',
+			},
+		})
+
+		return session
+	}
+
+	const getHmsEvents = async (
+		roomId: string,
+		eventType: 'add' | 'update' | 'remove',
+		filters?: EventsFilters,
+	): Promise<HmsEventsResponse> => {
+		const managementToken = await generateManagementToken()
+
+		const queryParams = {
+			room_id: roomId,
+			type: `track.${eventType}.success`,
+			...filters,
+		}
+
+		const events = await $fetch<HmsEventsResponse>(`https://api.100ms.live/v2/analytics/events`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${managementToken}`,
+				'Content-Type': 'application/json',
+			},
+			query: queryParams,
+		})
+
+		return events
+	}
+
 	return {
 		// Customer
 		createCustomer,
@@ -193,5 +257,10 @@ export const useApi = () => {
 		getAttendee,
 		updateAttendee,
 		deleteAttendee,
+
+		// HMS
+		getHmsRoom,
+		getHmsSession,
+		getHmsEvents,
 	}
 }
