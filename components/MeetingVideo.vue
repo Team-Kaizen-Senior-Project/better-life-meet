@@ -37,8 +37,8 @@
 </script>
 
 <template>
-	<div class="container mx-auto mb-8 mt-8">
-		<div v-if="isConnected" class="conference-section">
+	<div class="container mx-auto mb-8 mt-8" data-testid="meeting-container">
+		<div v-if="isConnected" class="conference-section" data-testid="conference-section">
 			<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 				<div v-for="peer in peers" :key="peer.id" class="peer-tile relative w-full rounded-lg bg-zinc-500 sm:w-auto">
 					<div class="relative z-[2]">
@@ -48,6 +48,7 @@
 							autoplay
 							muted
 							playsinline
+              data-testid="video"
 						></video>
 					</div>
 					<div class="absolute left-0 top-0 z-[1] flex h-full w-full items-center justify-center rounded-md">

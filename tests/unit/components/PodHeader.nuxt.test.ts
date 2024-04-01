@@ -21,7 +21,7 @@ describe('PodHeader', async () => {
 	const wrapper = await mountSuspended(PodHeader)
 
 	it('displays the correct meeting title', () => {
-		expect(wrapper.text()).toContain('Weekly Pod Accountability Meeting')
+		expect(wrapper.text()).toContain('Pod Accountability Meeting')
 	})
 
 	it('renders the "View Schedule" button with a ChevronDownIcon', async () => {

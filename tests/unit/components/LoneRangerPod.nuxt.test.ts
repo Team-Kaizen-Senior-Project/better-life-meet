@@ -8,7 +8,6 @@ describe('LoneRangerPod', () => {
 		expect(wrapper.exists()).toBe(true)
 		expect(wrapper.text()).toContain('Lone ranger pod')
 		const joinButton = wrapper.find('[data-testid="join-button"]')
-		console.log(joinButton.text())
 		expect(joinButton.text()).toBe('Join')
 	})
 })

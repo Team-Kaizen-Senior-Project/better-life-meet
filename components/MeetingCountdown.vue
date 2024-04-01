@@ -39,6 +39,6 @@
 		class="countdown-wrapper flex flex-col items-center justify-center rounded-lg border border-dashed bg-gray-800 px-40 py-20 text-white"
 	>
 		<div class="label text-sm-lg mb-2">Starting in</div>
-		<span class="text-xl font-bold text-white">{{ countdown }}</span>
+		<span class="text-xl font-bold text-white" data-testid="countdown">{{ countdown }}</span>
 	</div>
 </template>

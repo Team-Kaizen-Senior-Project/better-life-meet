@@ -18,7 +18,6 @@ describe('ScheduleMeetingCard', () => {
 				plugins: [createPinia()],
 			},
 		})
-		console.warn(wrapper.html())
 		expect(wrapper.exists()).toBe(true)
 	})
 
