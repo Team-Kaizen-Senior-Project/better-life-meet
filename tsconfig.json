@@ -5,7 +5,8 @@
 			"#internal/nitro/*": ["./node_modules/nitropack/dist/runtime/*"],
 			"~/*": ["./*"],
 			"@/components/*": ["./components/*"],
-			"@/*": ["./*"]
+			"@/*": ["./*"],
+			"@/lib/*": ["./lib/*"]
 		},
 		"types": ["vitest/globals"],
 		"moduleResolution": "node"
