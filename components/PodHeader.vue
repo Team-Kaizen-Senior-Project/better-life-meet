@@ -31,8 +31,8 @@
 </script>
 <template>
 	<header class="bg-black py-4">
-		<div class="mx-auto flex w-[95vw] max-w-[1600px] items-center justify-between">
-			<div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+		<div class="mx-auto flex w-[90vw] max-w-[1600px] items-center justify-between">
+			<div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-4">
 				<p class="text-lg font-medium text-white">Pod Accountability Meeting</p>
 				<!-- Used to override width -->
 				<div class="schedule-dropdown">
@@ -47,10 +47,12 @@
 				</div>
 			</div>
 			<div class="flex items-center gap-2">
-				<button class="aspect-square h-[2rem] w-[2rem] rounded-full bg-gray-200 text-lg">U</button>
-				<div class="flex flex-col text-sm text-white" v-if="customer">
+				<button class="aspect-square h-[2rem] w-[2rem] rounded-full bg-gray-200 text-lg">
+					<span v-if="customer">{{ customer.firstName[0] }}</span>
+				</button>
+				<div class="hidden flex-col text-sm text-white sm:flex" v-if="customer">
 					<p>{{ customer.firstName }}</p>
-					<p class="max-md:max-w-[125px] truncate">{{ customer.email }}</p>
+					<p class="truncate max-md:max-w-[125px]">{{ customer.email }}</p>
 				</div>
 			</div>
 		</div>

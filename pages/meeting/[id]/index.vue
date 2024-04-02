@@ -52,22 +52,25 @@
 
 <template>
 	<PodHeader />
-	<div class="flex min-h-[82vh] items-center justify-center bg-zinc-800">
-		<MeetingCountdown v-if="countdown.showCountdown" :meetingStartTime="meeting.startTime" />
-		<div v-if="showBufferText" class="rounded-lg bg-zinc-900 p-6 text-center text-white">
-			<p class="font-semibold">Please wait</p>
-			<p>The meeting will start shortly</p>
-		</div>
-		<div v-if="recordedVideoIsPlaying && !showBufferText && !countdown.showCountdown" class="flex flex-row">
-			<PrerecordedVideo @toggle-video="toggleVideo" :meetingStartTime="meeting.startTime" />
-		</div>
-		<div v-else-if="!recordedVideoIsPlaying">
-			<div class="relative overflow-y-auto rounded-lg bg-zinc-900" v-if="true">
+	<div class="bg-zinc-800 py-8">
+		<div class="flex items-center justify-center">
+			<MeetingCountdown v-if="countdown.showCountdown" :meetingStartTime="meeting.startTime" />
+			<div v-if="showBufferText" class="rounded-lg bg-zinc-900 p-6 text-center text-white">
+				<p class="font-semibold">Please wait</p>
+				<p>The meeting will start shortly</p>
+			</div>
+			<div v-if="recordedVideoIsPlaying && !showBufferText && !countdown.showCountdown" class="flex flex-row">
+				<PrerecordedVideo @toggle-video="toggleVideo" :meetingStartTime="meeting.startTime" />
+			</div>
+			<div
+				v-else-if="!recordedVideoIsPlaying"
+				class="relative max-h-[70vh] xl:max-h-[85vh] w-[90%] overflow-y-auto rounded-lg bg-zinc-900 p-8 lg:w-[85%] 2xl:w-[80%]"
+			>
 				<MeetingVideo v-if="!video.modalOpen" :roomCode="meeting.roomCode" />
 			</div>
-		</div>
-		<div class="flex justify-end p-4">
-			<ChatBox />
+			<div class="flex justify-end p-4">
+				<ChatBox />
+			</div>
 		</div>
 	</div>
 
