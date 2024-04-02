@@ -1,8 +1,8 @@
 <script setup lang="ts">
 	import { cn } from '~/lib/utils'
 	import { toast } from 'vue-sonner'
-	import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
-	import { Button } from '~/components/ui/button'
+	import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+	import { Button } from '@/components/ui/button'
 	import type { Meeting } from '~/types'
 
 	const props = defineProps<{
@@ -183,7 +183,6 @@
 
 			<div v-if="isAdmin">
 				<div v-if="hasVimeoId" class="mb-2 text-sm">
-					{{ console.log(vimeo) }}
 					id:
 					<span v-if="vimeoLoading">...</span>
 					<NuxtLink class="underline" v-else-if="vimeo.link" :to="vimeo.link">{{ meeting?.vimeoId }}</NuxtLink>
