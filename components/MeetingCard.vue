@@ -1,8 +1,8 @@
 <script setup lang="ts">
 	import { cn } from '~/lib/utils'
 	import { toast } from 'vue-sonner'
-	import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-	import { Button } from '@/components/ui/button'
+	import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
+	import { Button } from '~/components/ui/button'
 	import type { Meeting } from '~/types'
 
 	const props = defineProps<{

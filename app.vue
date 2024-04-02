@@ -1,6 +1,6 @@
 <script setup>
 	const route = useRoute()
-	import { Toaster } from '@/components/ui/sonner'
+	import { Toaster } from '~/components/ui/sonner'
 </script>
 
 <template>

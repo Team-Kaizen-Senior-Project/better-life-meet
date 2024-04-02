@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import MeetingCard from '@/components/MeetingCard.vue'
+	import MeetingCard from '~/components/MeetingCard.vue'
 	import type { Meeting } from '~/types'
 
 	// Access the useApi composable
