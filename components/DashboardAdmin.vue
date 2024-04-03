@@ -18,7 +18,7 @@
 
 <template>
 	<section class="page-header bg-zinc-800 py-12 text-white">
-		<div class="container">
+		<inner-column>
 			<h1 className="text-2xl">All pod meetings</h1>
 			<div class="rounded-lg bg-zinc-900 p-4">
 				<div v-if="pending && !meetings">Loading meetings...</div>
@@ -32,6 +32,6 @@
 				</div>
 				<div v-else>No meetings found.</div>
 			</div>
-		</div>
+		</inner-column>
 	</section>
 </template>
