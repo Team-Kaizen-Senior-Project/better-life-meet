@@ -1,8 +1,6 @@
 <script setup>
-	import { useHms } from '~/composables/useHms.ts'
 	import { onMounted } from 'vue'
 	import { VideoCameraSlashIcon } from '@heroicons/vue/24/outline'
-
 	const customerStore = useCustomerStore()
 	const customer = customerStore.state.customer
 
@@ -18,13 +16,16 @@
 		toggleVideo,
 	} = getHmsInstance()
 
-	const roomCode = 'qas-jmqz-old'
+	const props = defineProps({
+		roomCode: String,
+	})
+
 	let userName = ''
 
 	onMounted(async () => {
 		if (customer?.firstName && customer?.lastName) {
 			userName = customer.firstName + ' ' + customer.lastName
-			await joinRoom(roomCode, userName)
+			await joinRoom(props.roomCode, userName)
 		}
 	})
 
@@ -36,23 +37,24 @@
 </script>
 
 <template>
-	<div class="container mx-auto mb-8 mt-8">
-		<div v-if="isConnected" class="conference-section">
+	<div class="container mx-auto mb-8 mt-8" data-testid="meeting-container">
+		<div v-if="isConnected" class="conference-section" data-testid="conference-section">
 			<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 				<div v-for="peer in peers" :key="peer.id" class="peer-tile relative w-full rounded-lg bg-zinc-500 sm:w-auto">
-					<div class="z-[2] relative">
+					<div class="relative z-[2]">
 						<video
 							ref="videoRefs"
 							class="peer-video mirror-video mx-auto h-auto w-full rounded-lg"
 							autoplay
 							muted
 							playsinline
+              data-testid="video"
 						></video>
 					</div>
 					<div class="absolute left-0 top-0 z-[1] flex h-full w-full items-center justify-center rounded-md">
 						<VideoCameraSlashIcon class="z-[1] h-10 w-10" />
 					</div>
-					<div class="peer-name z-[2] absolute bottom-2 left-2 mt-2 rounded bg-[rgb(0,0,0,0.3)] px-2 text-white">
+					<div class="peer-name absolute bottom-2 left-2 z-[2] mt-2 rounded bg-[rgb(0,0,0,0.3)] px-2 text-white">
 						<p>{{ peer.name }}</p>
 					</div>
 				</div>

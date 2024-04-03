@@ -3,6 +3,10 @@ import type {
 	AttendeeFields,
 	Customer,
 	CustomerFields,
+	HmsEventsResponse,
+	HmsPeers,
+	HmsRoom,
+	HmsSession,
 	Meeting,
 	MeetingFields,
 	Numberic,
@@ -15,6 +19,14 @@ import type {
 type MeetingQueryParams =
 	| { podId?: never; count?: number; cursor?: string; allPods?: boolean }
 	| { podId: Numberic; count?: number; cursor?: never; allPods?: boolean }
+
+type EventsFilters = {
+	session_id?: string
+	peer_id?: string
+	user_id?: string
+	limit?: number
+	start?: string
+}
 
 export const useApi = () => {
 	const createCustomer = async (customer: CustomerFields) => {
@@ -91,6 +103,7 @@ export const useApi = () => {
 	}
 
 	const createMeeting = async (meeting: MeetingFields): Promise<Meeting> => {
+		console.log(meeting)
 		const response = await $fetch<{ data: Meeting }>('/api/meeting', {
 			method: 'POST',
 			body: meeting,
@@ -109,6 +122,7 @@ export const useApi = () => {
 
 	const getMeetings = async (params?: MeetingQueryParams): Promise<Meeting[]> => {
 		const response = await $fetch<{ data: { data: Meeting[] } }>(`/api/meeting`, { params })
+		//console.log(response.data.data)
 		// filter out meetings that have already ended
 		// sort the meetings by start time so newest is first
 		return response.data.data
@@ -165,6 +179,76 @@ export const useApi = () => {
 		return response
 	}
 
+	const getHmsRoom = async (roomId: string): Promise<HmsRoom> => {
+		const managementToken = await generateManagementToken()
+
+		const room = await $fetch<HmsRoom>(`https://api.100ms.live/v2/active-rooms/${roomId}`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${managementToken}`,
+				'Content-Type': 'application/json',
+			},
+		})
+
+		return room
+	}
+
+	const getHmsSession = async (sessionId: string): Promise<HmsSession> => {
+		const managementToken = await generateManagementToken()
+
+		const session = await $fetch<HmsSession>(`https://api.100ms.live/v2/sessions/${sessionId}`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${managementToken}`,
+				'Content-Type': 'application/json',
+			},
+		})
+
+		return session
+	}
+
+	const getHmsEvents = async (
+		roomId: string,
+		eventType: 'add' | 'update' | 'remove',
+		filters?: EventsFilters,
+	): Promise<HmsEventsResponse> => {
+		const managementToken = await generateManagementToken()
+
+		const queryParams = {
+			room_id: roomId,
+			type: `track.${eventType}.success`,
+			...filters,
+		}
+
+		const events = await $fetch<HmsEventsResponse>(`https://api.100ms.live/v2/analytics/events`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${managementToken}`,
+				'Content-Type': 'application/json',
+			},
+			query: queryParams,
+		})
+
+		return events
+	}
+
+	const getHmsPeers = async (roomId: string, filters?: { user_id?: string; role?: string }): Promise<HmsPeers> => {
+		const managementToken = await generateManagementToken()
+
+		const queryParams = { ...filters }
+
+		const peers = await $fetch<HmsPeers>(`https://api.100ms.live/v2/active-rooms/${roomId}/peers`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${managementToken}`,
+				'Content-Type': 'application/json',
+			},
+			query: queryParams,
+		})
+
+		return peers
+	}
+
 	const getVimeoVideo = async (id: Numberic): Promise<unknown> => {
 		const response = await $fetch<{ data: any }>(`/api/vimeo/${id}`)
 
@@ -173,6 +257,8 @@ export const useApi = () => {
 	}
 
 	return {
+		getVimeoVideo,
+
 		// Customer
 		createCustomer,
 		getCustomer,
@@ -199,7 +285,10 @@ export const useApi = () => {
 		updateAttendee,
 		deleteAttendee,
 
-		// vimeo
-		getVimeoVideo,
+		// HMS
+		getHmsRoom,
+		getHmsSession,
+		getHmsEvents,
+		getHmsPeers,
 	}
 }

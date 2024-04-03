@@ -1,11 +1,9 @@
 <script setup lang="ts">
-	import { useCountdownStore } from '~/stores/CountdownStore'
 	import { useVideoStore } from '~/stores/videoService'
-	import type { Meeting } from '~/types'
-	import dayjs from 'dayjs'
-	const { display: displayDate } = useDate()
+
 	const video = useVideoStore()
 	const recordedVideoIsPlaying = ref(true)
+	const { leaveRoom, isConnected } = getHmsInstance()
 
 	definePageMeta({
 		layout: 'meeting',
@@ -28,7 +26,6 @@
 
 	const showBufferText = ref(false)
 
-	// Connect to websocket server
 	function toggleVideo() {
 		showBufferText.value = true
 		// Temp buffer for video end
@@ -42,6 +39,12 @@
 
 	const effectiveVimeoId = computed(() => {
 		return meeting.value?.vimeoId || '557876585'
+	})
+
+	onUnmounted(() => {
+		if (isConnected.value) {
+			leaveRoom()
+		}
 	})
 </script>
 
@@ -67,9 +70,11 @@
 		<div v-else-if="!recordedVideoIsPlaying" class="grid h-[70vh] w-[80vw] grid-cols-4 grid-rows-2 gap-3">
 			<!-- Local user's video feed -->
 			<div class="relative overflow-y-auto rounded-lg bg-zinc-900" v-if="true">
-				<MeetingVideo v-if="!video.modalOpen" />
+				<MeetingVideo v-if="!video.modalOpen" :roomCode="meeting?.roomCode" />
 			</div>
-			<!-- External users' video feeds placeholder -->
+		</div>
+		<div class="flex justify-end p-4">
+			<ChatBox />
 		</div>
 	</div>
 
