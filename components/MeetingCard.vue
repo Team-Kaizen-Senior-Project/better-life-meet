@@ -189,6 +189,7 @@
 					id:
 					<span v-if="vimeoLoading">...</span>
 					<NuxtLink class="underline" v-else-if="vimeo.link" :to="vimeo.link">{{ meeting?.vimeoId }}</NuxtLink>
+					<span v-else>wrong id</span>
 				</div>
 				<div>
 					<Popover v-model:open="popoverOpen">

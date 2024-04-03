@@ -250,10 +250,13 @@ export const useApi = () => {
 	}
 
 	const getVimeoVideo = async (id: Numberic): Promise<unknown> => {
-		const response = await $fetch<{ data: any }>(`/api/vimeo/${id}`)
-
-		const video = response
-		return video
+		try {
+			const response = await $fetch<{ data: any }>(`/api/vimeo/${id}`)
+			return response
+		} catch (error) {
+			console.error('Error fetching Vimeo video:', error)
+			return {}
+		}
 	}
 
 	return {
