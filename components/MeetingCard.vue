@@ -147,7 +147,9 @@
 <template>
 	<div :class="cn('rounded-lg border border-transparent bg-zinc-800 p-4', borderClass)">
 		<div class="grid gap-2">
-			<div class="text-sm font-medium text-white" data-testid="pod-accountability-meeting">Pod accountability meeting</div>
+			<div class="text-sm font-medium text-white" data-testid="pod-accountability-meeting">
+				Pod accountability meeting
+			</div>
 			<div class="grid gap-2">
 				<p class="text-sm text-zinc-300">{{ displayDate(meeting?.startTime.isoString) }}</p>
 				<p class="text-sm text-zinc-300">
@@ -168,7 +170,7 @@
 				class="flex gap-2 rounded-md px-3 py-2 text-sm font-medium leading-tight text-white shadow"
 				:class="buttonClass"
 				@click="video.joinMeeting"
-        data-testid="join-meeting"
+				data-testid="join-meeting"
 			>
 				Join
 			</NuxtLink>
