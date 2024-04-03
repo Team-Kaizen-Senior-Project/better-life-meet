@@ -1,42 +1,41 @@
 <script setup>
-import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
+	import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
 
-const isOpen = ref(false)
-const media = useMediaStore()
-let audioDevices = ref([])
-let videoDevices = ref([])
-let audioOutput = ref([])
-let selectedVideoDeviceId = ref()
-let selectedAudioDeviceId = ref()
-let selectedOutputDeviceId = ref()
-const customModal = {
-	overlay: {
-		background: 'bg-zinc-900/90 dark:bg-gray-800/75',
-	},
-}
-async function getDevices() {
-	const devices = await navigator.mediaDevices.enumerateDevices();
-	// console.log(media.state);
-	// console.log(devices)
-	audioDevices.value = devices.filter((device) => device.kind === 'audioinput');
-	videoDevices.value = devices.filter((device) => device.kind === 'videoinput');
-	audioOutput.value = devices.filter((device) => device.kind === 'audiooutput');
+	const isOpen = ref(false)
+	const media = useMediaStore()
+	let audioDevices = ref([])
+	let videoDevices = ref([])
+	let audioOutput = ref([])
+	let selectedVideoDeviceId = ref()
+	let selectedAudioDeviceId = ref()
+	let selectedOutputDeviceId = ref()
+	const customModal = {
+		overlay: {
+			background: 'bg-zinc-900/90 dark:bg-gray-800/75',
+		},
+	}
+	async function getDevices() {
+		const devices = await navigator.mediaDevices.enumerateDevices()
+		// console.log(media.state);
+		// console.log(devices)
+		audioDevices.value = devices.filter((device) => device.kind === 'audioinput')
+		videoDevices.value = devices.filter((device) => device.kind === 'videoinput')
+		audioOutput.value = devices.filter((device) => device.kind === 'audiooutput')
 
-	selectedVideoDeviceId.value = media.state.videoSourceId || videoDevices.value[0]?.deviceId;
-	selectedAudioDeviceId.value = media.state.audioSourceId || audioDevices.value[0]?.deviceId;
-	selectedOutputDeviceId.value = media.state.outputSourceId || audioOutput.value[0]?.deviceId;
-}
-onMounted(() => {
-	getDevices()
-})
+		selectedVideoDeviceId.value = media.state.videoSourceId || videoDevices.value[0]?.deviceId
+		selectedAudioDeviceId.value = media.state.audioSourceId || audioDevices.value[0]?.deviceId
+		selectedOutputDeviceId.value = media.state.outputSourceId || audioOutput.value[0]?.deviceId
+	}
+	onMounted(() => {
+		getDevices()
+	})
 
-function saveSelections() {
-	media.setVideoSourceId(selectedVideoDeviceId.value);
-	media.setAudioSourceId(selectedAudioDeviceId.value);
-	media.setOutputSourceId(selectedOutputDeviceId.value);
-	isOpen.value = false;
-
-}
+	function saveSelections() {
+		media.setVideoSourceId(selectedVideoDeviceId.value)
+		media.setAudioSourceId(selectedAudioDeviceId.value)
+		media.setOutputSourceId(selectedOutputDeviceId.value)
+		isOpen.value = false
+	}
 </script>
 <template>
 	<UButton @click="isOpen = true" class="bg-zinc-600 hover:bg-zinc-700">
@@ -46,19 +45,19 @@ function saveSelections() {
 		<div class="rounded bg-zinc-800 p-4 shadow-lg">
 			<div class="mb-10 flex flex-col gap-3 text-white">
 				<span>Video Source</span>
-				<select v-model="selectedVideoDeviceId" class="rounded-lg bg-zinc-700 p-2">
+				<select v-model="media.videoSourceId" class="rounded-lg bg-zinc-700 p-2">
 					<option v-for="device in videoDevices" :value="device.deviceId" :key="device.deviceId">
 						{{ device.label }}
 					</option>
 				</select>
 				<span>Audio Source</span>
-				<select v-model="selectedAudioDeviceId" class="rounded-lg bg-zinc-700 p-2">
+				<select v-model="media.audioSourceId" class="rounded-lg bg-zinc-700 p-2">
 					<option v-for="device in audioDevices" :value="device.deviceId" :key="device.deviceId">
 						{{ device.label }}
 					</option>
 				</select>
 				<span>Audio Output</span>
-				<select v-model="selectedOutputDeviceId" class="rounded-lg bg-zinc-700 p-2">
+				<select v-model="media.outputSourceId" class="rounded-lg bg-zinc-700 p-2">
 					<option v-for="device in audioOutput" :value="device.deviceId" :key="device.deviceId">
 						{{ device.label }}
 					</option>
@@ -66,7 +65,6 @@ function saveSelections() {
 			</div>
 			<Button class="float-right bg-sky-500 p-2 hover:bg-sky-600" @click="saveSelections">Save</Button>
 			<UButton variant="ghost" color="gray" type="button" @click="isOpen = false">Cancel</UButton>
-
 		</div>
 	</UModal>
 </template>
