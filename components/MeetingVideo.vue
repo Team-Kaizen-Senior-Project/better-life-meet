@@ -48,7 +48,7 @@
 							autoplay
 							muted
 							playsinline
-              data-testid="video"
+							data-testid="video"
 						></video>
 					</div>
 					<div class="absolute left-0 top-0 z-[1] flex h-full w-full items-center justify-center rounded-md">

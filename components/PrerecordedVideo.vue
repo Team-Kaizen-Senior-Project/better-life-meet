@@ -20,7 +20,7 @@
 </script>
 
 <template>
-	<div class="w-full max-w-[1000px]">
+	<div class="mx-auto max-w-[1000px]">
 		<video
 			@ended="emit('toggleVideo')"
 			controls
@@ -30,7 +30,7 @@
 			:src="videoUrl"
 			:width="video.width"
 			:height="video.height"
-			class="mx-auto w-full rounded-lg bg-zinc-900"
+			class="w-full rounded-lg bg-zinc-900"
 		></video>
 	</div>
 </template>

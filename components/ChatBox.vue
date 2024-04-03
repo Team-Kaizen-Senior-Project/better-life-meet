@@ -33,7 +33,7 @@
 <template>
 	<div
 		v-if="isChatBoxVisible"
-		class="flex h-[78vh] w-[20vw] flex-col overflow-hidden rounded-lg bg-zinc-600 p-4 px-4 drop-shadow-xl"
+		class="flex h-[78vh] flex-col overflow-hidden rounded-lg bg-zinc-600 p-4 px-4 drop-shadow-xl"
 	>
 		<div class="mb-4 flex items-center justify-between rounded-md bg-zinc-700 p-2">
 			<h1 class="text-white">Meeting Chat</h1>

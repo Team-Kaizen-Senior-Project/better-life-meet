@@ -51,32 +51,36 @@
 
 <template>
 	<PodHeader />
-	<div class="flex min-h-[82vh] items-center justify-center bg-zinc-800">
+	<div class="bg-zinc-800">
 		<!-- <MeetingCountdown v-if="countdown.showCountdown" :meetingStartTime="meeting.startTime" /> -->
-		<div
-			v-if="!hasStarted"
-			className="flex flex-col items-center justify-center rounded-lg  bg-zinc-900 px-40 py-20 text-white"
-		>
-			<p className="text-2xl font-medium">{{ countdown }}</p>
-		</div>
-		<div v-if="showBufferText" class="rounded-lg bg-zinc-900 p-6 text-center text-white">
-			<p class="font-semibold">Please wait</p>
-			<p>The meeting will start shortly</p>
-		</div>
-		<PrerecordedVideo
-			@toggle-video="toggleVideo"
-			v-if="recordedVideoIsPlaying && !showBufferText && hasStarted"
-			:vimeoId="effectiveVimeoId"
-		/>
-		<div v-else-if="!recordedVideoIsPlaying" class="grid h-[70vh] w-[80vw] grid-cols-4 grid-rows-2 gap-3">
-			<!-- Local user's video feed -->
-			<div class="relative overflow-y-auto rounded-lg bg-zinc-900" v-if="true">
-				<MeetingVideo v-if="!video.modalOpen" :roomCode="meeting?.roomCode" />
+		<inner-column>
+			<div class="flex min-h-[82vh] items-center justify-center">
+				<div
+					v-if="!hasStarted"
+					className="flex flex-col items-center justify-center rounded-lg  bg-zinc-900 px-40 py-20 text-white"
+				>
+					<p className="text-2xl font-medium">{{ countdown }}</p>
+				</div>
+				<div v-if="showBufferText" class="mx-auto max-w-fit rounded-lg bg-zinc-900 p-6 text-center text-white">
+					<p class="font-semibold">Please wait</p>
+					<p>The meeting will start shortly</p>
+				</div>
+				<PrerecordedVideo
+					@toggle-video="toggleVideo"
+					v-if="recordedVideoIsPlaying && !showBufferText && hasStarted"
+					:vimeoId="effectiveVimeoId"
+				/>
+				<div v-else-if="!recordedVideoIsPlaying" class="">
+					<!-- Local user's video feed -->
+					<div class="relative overflow-y-auto rounded-lg bg-zinc-900" v-if="true">
+						<MeetingVideo v-if="!video.modalOpen" :roomCode="meeting?.roomCode" />
+					</div>
+				</div>
+				<div class="" v-if="!recordedVideoIsPlaying">
+					<ChatBox />
+				</div>
 			</div>
-		</div>
-		<div class="flex justify-end p-4">
-			<ChatBox />
-		</div>
+		</inner-column>
 	</div>
 
 	<BreakoutRoomModal v-if="!recordedVideoIsPlaying" :meetingRef="meetingId" />
