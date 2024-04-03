@@ -13,14 +13,14 @@
 	const { data: video, refresh, pending } = await useAsyncData<any>('vimeo-video', () => getVimeoVideo(props.vimeoId))
 
 	const videoUrl = computed(() => {
-		return video.value.download[0].link
+		return video.value.download[1].link
 	})
 
 	const emit = defineEmits(['toggleVideo'])
 </script>
 
 <template>
-	<div>
+	<div class="w-full max-w-[1000px]">
 		<video
 			@ended="emit('toggleVideo')"
 			controls
