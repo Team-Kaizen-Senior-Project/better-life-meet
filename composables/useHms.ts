@@ -30,9 +30,15 @@ export function useHms(): HmsInstance {
 	const video = useVideoStore()
 
 	watch(peers, (newPeers) => {
-		// synchronize the video elements with the peers
+		// Synchronize the video elements with the peers
 		newPeers.forEach((peer, index) => {
-			hmsActions.attachVideo(peer.videoTrack, videoRefs.value[index])
+			if (peer.videoTrack && videoRefs.value[index]) {
+				try {
+					hmsActions.attachVideo(peer.videoTrack, videoRefs.value[index])
+				} catch (error) {
+					console.error(error)
+				}
+			}
 		})
 	})
 
