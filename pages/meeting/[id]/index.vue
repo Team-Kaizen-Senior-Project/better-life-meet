@@ -47,6 +47,7 @@
 		if (isConnected.value) {
 			leaveRoom()
 		}
+		location.reload()
 	})
 </script>
 
