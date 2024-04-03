@@ -5,11 +5,9 @@
 </script>
 
 <template>
-	<div class="container">
-		<!-- Render AdminDashboard if the user is an admin -->
-		<DashboardAdmin v-if="isAdmin" />
+	<!-- Render AdminDashboard if the user is an admin -->
+	<DashboardAdmin v-if="isAdmin" />
 
-		<!-- Render CurrentDashboard if the user is not an admin -->
-		<DashboardCustomer v-else />
-	</div>
+	<!-- Render CurrentDashboard if the user is not an admin -->
+	<DashboardCustomer v-else />
 </template>
