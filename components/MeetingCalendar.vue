@@ -41,11 +41,9 @@
 	)
 </script>
 <template>
-	<ClientOnly>
-		<div class="my-calendar">
-			<VCalendar v-model="date" :attributes="attrs" class="" isDark />
-		</div>
-	</ClientOnly>
+	<div class="my-calendar">
+		<VCalendar v-model="date" :attributes="attrs" class="" isDark />
+	</div>
 </template>
 
 <style scoped>

@@ -17,8 +17,8 @@ import type {
 // All the api requests, error and response handling should happen where they are being called.
 
 type MeetingQueryParams =
-	| { podId?: never; count?: number; cursor?: string }
-	| { podId: Numberic; count?: number; cursor?: never }
+	| { podId?: never; count?: number; cursor?: string; allPods?: boolean }
+	| { podId: Numberic; count?: number; cursor?: never; allPods?: boolean }
 
 type EventsFilters = {
 	session_id?: string
@@ -249,7 +249,19 @@ export const useApi = () => {
 		return peers
 	}
 
+	const getVimeoVideo = async (id: Numberic): Promise<unknown> => {
+		try {
+			const response = await $fetch<{ data: any }>(`/api/vimeo/${id}`)
+			return response
+		} catch (error) {
+			console.error('Error fetching Vimeo video:', error)
+			return {}
+		}
+	}
+
 	return {
+		getVimeoVideo,
+
 		// Customer
 		createCustomer,
 		getCustomer,

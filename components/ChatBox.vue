@@ -1,9 +1,10 @@
 <script setup lang="ts">
 	import { ref, computed } from 'vue'
 	import { useRoute } from 'vue-router'
+	import { useHms } from '~/composables/useHms'
 	import type { ChatMessage } from '~/types'
 
-	const { messages, sendBroadcastMessage } = getHmsInstance()
+	const { messages, sendBroadcastMessage } = useHms()
 
 	const chatbox = useChatboxStore()
 	const customerStore = useCustomerStore()
@@ -33,7 +34,7 @@
 <template>
 	<div
 		v-if="isChatBoxVisible"
-		class="flex h-[78vh] w-[20vw] flex-col overflow-hidden rounded-lg bg-zinc-600 p-4 px-4 drop-shadow-xl"
+		class="flex h-[78vh] flex-col overflow-hidden rounded-lg bg-zinc-600 p-4 px-4 drop-shadow-xl"
 	>
 		<div class="mb-4 flex items-center justify-between rounded-md bg-zinc-700 p-2">
 			<h1 class="text-white">Meeting Chat</h1>

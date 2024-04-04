@@ -8,12 +8,32 @@ import {
 	selectVideoTrackByID,
 	selectHMSMessages,
 	selectBroadcastMessages,
+	type HMSPeer,
 } from '@100mslive/hms-video-store'
 import type { HmsInstance, ChatMessage } from '~/types'
 
-export function useHms(): HmsInstance {
-	console.log('Initializing useHms instance')
-	const hmsManager = new HMSReactiveStore()
+// this is the hms instance
+// if you want to use the instance just do export const useHmsInstance and you can important it into any file.
+const useHmsInstance = () => useState<null | HMSReactiveStore>('hmsReactiveStore', () => shallowRef(null))
+
+// creates the instance
+// ensures singleton-ness
+export function getHmsInstance() {
+	const instance = useHmsInstance()
+	if (instance.value === null) {
+		console.log('Creating a new instance of useHms')
+		instance.value = new HMSReactiveStore()
+	} else {
+		console.log('Reusing existing instance of useHms')
+	}
+	return instance as Ref<HMSReactiveStore>
+}
+
+// this uses getHmsInstance and useHmsInstance. We generally call useHms anywhere we need HMS.
+export const useHms = () => {
+	const hmsManagerRef = getHmsInstance()
+	const hmsManager = unref(hmsManagerRef)
+
 	hmsManager.triggerOnSubscribe()
 	const hmsStore = hmsManager.getStore()
 	const hmsActions = hmsManager.getActions()
@@ -24,8 +44,8 @@ export function useHms(): HmsInstance {
 
 	const isLocalAudioEnabled = ref(false)
 	const isLocalVideoEnabled = ref(false)
-	const isConnected = ref(false)
-	const peers = ref([])
+	const isConnected = ref<boolean | null | undefined>(false)
+	const peers = ref<HMSPeer[]>([])
 	const messages: Ref<ChatMessage[]> = ref([])
 	const video = useVideoStore()
 
