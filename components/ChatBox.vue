@@ -51,18 +51,29 @@
 			<!-- Dynamically display messages -->
 			<div v-for="message in messages" :key="message.id" style="padding: 5px">
 				<div v-if="message.sendername == currentUser" class="flex justify-end">
-					<div
-						class="max-w-xs rounded-lg bg-sky-500 px-3 py-1 text-white"
-						style="border-radius: 15px; padding-top: 10px"
-					>
-						<div class="text-xs text-white">{{ message.sendername }}</div>
-						<div style="font-weight: 490">{{ message.content }}</div>
+					<div class="flex-direction column">
+						<div class="text-xs text-white ">
+							<b>{{ message.sendername }}</b>&nbsp;&nbsp;{{ message.time.toLocaleTimeString('en-US', {hour12: true, hour:'numeric', minute: 'numeric'})}}
+						</div>
+						<div
+							class="max-w-xs rounded-lg bg-sky-500 px-3 py-1 text-white"
+							style="border-radius: 15px; padding-top: 10px; word-wrap: break-word; overflow-wrap: break-word;"
+						>
+							<div style="font-weight: 490">{{ message.content }}</div>
+						</div>
 					</div>
 				</div>
-				<div v-else-if="message.sendername != currentUser" class="flex justify-start">
-					<div class="max-w-xs rounded-lg bg-gray-300 px-3 py-1" style="border-radius: 15px; padding-top: 10px">
-						<div class="text-xs text-gray-500">{{ message.sendername }}</div>
-						<div style="font-weight: 490">{{ message.content }}</div>
+				<div v-else-if="message.sendername != currentUser" class="flex justify-start" style="margin-right: 50px;">
+					<div class="flex-direction column">
+						<div class="text-xs text-white">
+							<b>{{ message.sendername }}</b>&nbsp;&nbsp;{{ message.time.toLocaleTimeString('en-US', {hour12: true, hour:'numeric', minute: 'numeric'})}}
+                        </div>
+						<div
+							class="max-w-xs rounded-lg bg-gray-500 px-3 py-1 text-white"
+							style="border-radius: 15px; padding-top: 10px; word-wrap: break-word; overflow-wrap: break-word;"
+						>
+							<div style="font-weight: 490">{{ message.content }}</div>
+						</div>
 					</div>
 				</div>
 			</div>
