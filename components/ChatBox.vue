@@ -63,7 +63,7 @@
 						</div>
 					</div>
 				</div>
-				<div v-else-if="message.sendername != currentUser" class="flex justify-start" style="margin-right: 50px;">
+				<div v-else-if="message.sendername != currentUser" class="flex justify-start">
 					<div class="flex-direction column">
 						<div class="text-xs text-white">
 							<b>{{ message.sendername }}</b>&nbsp;&nbsp;{{ message.time.toLocaleTimeString('en-US', {hour12: true, hour:'numeric', minute: 'numeric'})}}

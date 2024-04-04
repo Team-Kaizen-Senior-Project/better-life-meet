@@ -90,6 +90,7 @@ export function useHms(): HmsInstance {
 				id: mostRecentMessage.id,
 				content: mostRecentMessage.message,
 				sendername: mostRecentMessage.senderName,
+				time: mostRecentMessage.time
 			})
 		}
 	}, selectHMSMessages) //for all messages, send

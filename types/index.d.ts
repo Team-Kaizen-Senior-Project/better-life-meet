@@ -117,3 +117,73 @@ export interface RoomCodeResponse {
 		enabled: boolean
 	}>
 }
+
+interface HmsRoomSession {
+	id: string
+	created_at: string
+	peers: string[]
+}
+
+export interface HmsRoom {
+	id: string
+	name: string
+	customer_id: string
+	session: Session
+}
+
+export interface Peer {
+	id: string
+	session_id: string
+	name: string
+	role: string
+	user_id: string
+	joined_at: string
+	left_at: string
+}
+
+interface HmsPeers {
+	[key: string]: Peer
+}
+
+export interface HmsSession {
+	id: string
+	room_id: string
+	customer_id: string
+	active: boolean
+	peers: HmsPeers
+	created_at: string
+	updated_at: string
+}
+
+interface HmsTrackEvents {
+	room_id: string
+	session_id: string
+	room_name: string
+	peer_id: string
+	user_id: string
+	user_name: string
+	joined_at: string
+	role: string
+	track_id: string
+	stream_id: string
+	type: string
+	source: string
+	mute: boolean
+	started_at: string
+	stopped_at?: string // only specified in track.remove.success event
+}
+
+export interface HmsEvents {
+	version: string
+	id: string
+	timestamp: string
+	type: string
+	data: HmsTrackEvents
+}
+
+export interface HmsEventsResponse {
+	limit: number
+	total: number
+	next: string
+	events: HmsEvents[]
+}
