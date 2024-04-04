@@ -8,6 +8,7 @@ export default defineNuxtConfig({
 		'@sidebase/nuxt-auth',
 		'@nuxt/test-utils/module',
 		'shadcn-nuxt',
+		'@pinia-plugin-persistedstate/nuxt',
 	],
 	// css: ['~/assets/css/main.css'],
 	auth: {

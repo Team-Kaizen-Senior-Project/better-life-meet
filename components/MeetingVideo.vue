@@ -14,7 +14,7 @@
 		leaveRoom,
 		toggleAudio,
 		toggleVideo,
-	} = getHmsInstance()
+	} = useHms()
 
 	const props = defineProps({
 		roomCode: String,

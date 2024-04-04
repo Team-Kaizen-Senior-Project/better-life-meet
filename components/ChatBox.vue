@@ -1,9 +1,10 @@
 <script setup lang="ts">
 	import { ref, computed } from 'vue'
 	import { useRoute } from 'vue-router'
+	import { useHms } from '~/composables/useHms'
 	import type { ChatMessage } from '~/types'
 
-	const { messages, sendBroadcastMessage } = getHmsInstance()
+	const { messages, sendBroadcastMessage } = useHms()
 
 	const chatbox = useChatboxStore()
 	const customerStore = useCustomerStore()

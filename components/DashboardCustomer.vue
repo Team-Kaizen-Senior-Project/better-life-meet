@@ -6,18 +6,22 @@
 
 	const { state: podState } = usePodStore()
 
-	const { data, refresh, pending } = await useAsyncData('dashboard', async () => {
-		const [meetings] = await Promise.all([
-			getMeetings({
-				podId: podState.pod?.id,
-				count: 100,
-			}),
-		])
+	const { data, refresh, pending } = await useAsyncData(
+		'dashboard',
+		async () => {
+			const [meetings] = await Promise.all([
+				getMeetings({
+					podId: podState.pod?.id,
+					count: 100,
+				}),
+			])
 
-		return {
-			meetings,
-		}
-	})
+			return {
+				meetings,
+			}
+		},
+		{ server: false },
+	)
 </script>
 
 <template>

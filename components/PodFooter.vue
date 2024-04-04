@@ -3,7 +3,7 @@
 
 	const media = useMediaStore()
 	const chatbox = useChatboxStore()
-	const { isLocalAudioEnabled, isLocalVideoEnabled, isConnected, toggleAudio, toggleVideo } = getHmsInstance()
+	const { isLocalAudioEnabled, isLocalVideoEnabled, isConnected, toggleAudio, toggleVideo } = useHms()
 </script>
 
 <template>
