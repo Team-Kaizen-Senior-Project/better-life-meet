@@ -1,7 +1,9 @@
 <script setup lang="ts">
-	const { state: customerState } = useCustomerStore()
-
-	const isAdmin = computed(() => customerState.customer?.admin)
+const { state: customerState } = useCustomerStore()
+const isAdmin = computed(() => customerState.customer?.admin)
+const media = useMediaStore()
+await media.initDeviceSources()
+console.log(media.state)
 </script>
 
 <template>

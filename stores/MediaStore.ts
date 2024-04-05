@@ -1,69 +1,104 @@
-export const useMediaStore = defineStore('media', () => {
-	const isVideoEnabled: Ref<boolean> = ref(false)
-	const isAudioEnabled: Ref<boolean> = ref(false)
-	const audioSourceId: Ref<String | null> = ref(null);
-	const videoSourceId: Ref<String | null> = ref(null);
-	const outputSourceId: Ref<String | null> = ref(null);
+interface State {
+	isVideoEnabled: boolean,
+	isAudioEnabled: boolean,
+	audioSourceId: String,
+	videoSourceId: String,
+	outputSourceId: String,
+	mediaStream: MediaStream | null,
+}
 
-	const mediaStream: Ref<MediaStream | undefined> = ref(undefined)
+export const useMediaStore = defineStore('media', () => {
+	const state = reactive<State>({
+		isVideoEnabled: false,
+		isAudioEnabled: false,
+		audioSourceId: "",
+		videoSourceId: "",
+		outputSourceId: "",
+		mediaStream: null,
+
+	})
+	async function initDeviceSources() {
+		console.log("here")
+		const devices = await navigator?.mediaDevices.enumerateDevices();
+		console.log("devices: ", devices)
+		if (!state.audioSourceId) {
+			const audioInput = devices?.find(device => device.kind === 'audioinput');
+			if (audioInput) state.audioSourceId = audioInput.deviceId;
+		}
+		if (!state.videoSourceId) {
+			const videoInput = devices?.find(device => device.kind === 'videoinput');
+			if (videoInput) state.videoSourceId = videoInput.deviceId;
+		}
+		if (!state.outputSourceId) {
+			const audioOutput = devices?.find(device => device.kind === 'audiooutput');
+			if (audioOutput) state.outputSourceId = audioOutput.deviceId;
+		}
+	}
 
 	function setAudioSourceId(id: String) {
-		audioSourceId.value = id;
+		state.audioSourceId = id;
 	}
 
 	function setVideoSourceId(id: String) {
-		videoSourceId.value = id;
+		state.videoSourceId = id;
 	}
 
 	function setOutputSourceId(id: String) {
-		outputSourceId.value = id;
+		state.outputSourceId = id;
 	}
 
 	const update = async () => {
-		mediaStream.value = await navigator.mediaDevices.getUserMedia({
-			video: isVideoEnabled.value,
-			audio: isAudioEnabled.value,
+		state.mediaStream = await navigator.mediaDevices.getUserMedia({
+			video: state.isVideoEnabled,
+			audio: state.isAudioEnabled,
 		})
 	}
 
 	const toggleVideo = async () => {
 		console.log('inside toggle video')
-		isVideoEnabled.value = !isVideoEnabled.value
+		state.isVideoEnabled = !state.isVideoEnabled
 
-		if (isVideoEnabled.value) {
+		if (state.isVideoEnabled) {
 			await update()
 		} else {
-			if (mediaStream.value) {
-				mediaStream.value.getVideoTracks().forEach((track) => track.stop())
+			if (state.mediaStream) {
+				state.mediaStream.getVideoTracks().forEach((track) => track.stop())
 			}
 		}
 	}
 
 	const toggleAudio = async () => {
-		isAudioEnabled.value = !isAudioEnabled.value
+		state.isAudioEnabled = !state.isAudioEnabled
 
-		if (isAudioEnabled.value) {
+		if (state.isAudioEnabled) {
 			await update()
 		} else {
-			if (mediaStream.value) {
-				mediaStream.value.getAudioTracks().forEach((track) => track.stop())
+			if (state.mediaStream) {
+				state.mediaStream.getAudioTracks().forEach((track) => track.stop())
 			}
 		}
 	}
 
-	const stream = computed(() => mediaStream.value)
+	const stream = computed(() => state.mediaStream)
 
 	return {
-		stream,
-		isVideoEnabled,
-		isAudioEnabled,
-		audioSourceId,
-		videoSourceId,
-		outputSourceId,
+		state,
 		toggleAudio,
 		toggleVideo,
 		setAudioSourceId,
 		setVideoSourceId,
 		setOutputSourceId,
+		initDeviceSources,
 	}
-})
+
+},
+	{
+		persist: {
+			paths: ["state.isVideoEnabled", "state.audioSourceId",
+				"state.isAudioEnabled", "audioSourceId", "state.videoSourceId",
+				"state.outputSourceId"],
+			storage: persistedState.localStorage,
+		}
+	}
+)
+
