@@ -1,5 +1,6 @@
 <script setup>
 	import { MicrophoneIcon, VideoCameraIcon, VideoCameraSlashIcon } from '@heroicons/vue/24/outline'
+import ParticipantIcons from './ParticipantIcons.vue';
 
 	const media = useMediaStore()
 	const chatbox = useChatboxStore()
@@ -52,23 +53,7 @@
 						</svg>
 					</Button> -->
 				</div>
-				<div class="flex -space-x-3 overflow-hidden">
-					<button class="inline-block aspect-[1/1] h-8 w-8 rounded-full border-[3px] border-white bg-gray-100">
-						U
-					</button>
-					<button class="inline-block aspect-[1/1] h-8 w-8 rounded-full border-[3px] border-white bg-gray-200">
-						U
-					</button>
-					<button class="inline-block aspect-[1/1] h-8 w-8 rounded-full border-[3px] border-white bg-gray-300">
-						U
-					</button>
-					<button class="inline-block aspect-[1/1] h-8 w-8 rounded-full border-[3px] border-white bg-gray-400">
-						U
-					</button>
-					<button class="inline-block aspect-[1/1] h-8 w-8 rounded-full border-[3px] border-white bg-gray-500">
-						U
-					</button>
-				</div>
+				<ParticipantIcons />
 				<div class="flex flex-row gap-2">
 					<Button v-if="isConnected" class="rounded px-5 py-3" @click="chatbox.toggleChatBox">
 						<svg
