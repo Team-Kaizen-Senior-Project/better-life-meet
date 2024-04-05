@@ -17,8 +17,10 @@
 				<div class="flex flex-col text-sm text-white">
 					<p>{{ customer?.firstName }}</p>
 					<p>{{ customer?.email }}</p>
+					<p v-if="customer?.admin">admin</p>
+					<p v-else>not an admin</p>
 				</div>
-				<UButton class="bg-sky-500 hover:bg-blue-600 hover:bg-sky-600" @click="() => signOut()">Sign Out</UButton>
+				<UButton class="bg-sky-500 hover:bg-blue-600" @click="() => signOut()">Sign Out</UButton>
 			</div>
 		</div>
 	</header>
