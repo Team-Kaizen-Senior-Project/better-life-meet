@@ -42,13 +42,10 @@ export const useHms = () => {
 	const roomCode = ref('')
 	const videoRefs = ref([])
 
-	const isLocalAudioEnabled = ref(false)
-	const isLocalVideoEnabled = ref(false)
 	const isConnected = ref<boolean | null | undefined>(false)
 	const peers = ref<HMSPeer[]>([])
 	const messages: Ref<ChatMessage[]> = ref([])
-	const video = useVideoStore()
-
+	const media = useMediaStore()
 	watch(peers, (newPeers) => {
 		// Synchronize the video elements with the peers
 		newPeers.forEach((peer, index) => {
@@ -72,8 +69,8 @@ export const useHms = () => {
 			userName: username,
 			authToken,
 			settings: {
-				isAudioMuted: true,
-				isVideoMuted: !video.cameraActive,
+				isAudioMuted: media.state.isAudioEnabled,
+				isVideoMuted: media.state.isVideoEnabled,
 			},
 		})
 	}
@@ -84,14 +81,14 @@ export const useHms = () => {
 
 	const toggleAudio = async () => {
 		console.log('Toggling audio')
-		isLocalAudioEnabled.value = !isLocalAudioEnabled.value
-		await hmsActions.setLocalAudioEnabled(isLocalAudioEnabled.value)
+		media.toggleAudio
+		await hmsActions.setLocalAudioEnabled(media.state.isAudioEnabled)
 	}
 
 	const toggleVideo = async () => {
 		console.log('Toggling video')
-		isLocalVideoEnabled.value = !isLocalVideoEnabled.value
-		await hmsActions.setLocalVideoEnabled(isLocalVideoEnabled.value)
+		media.toggleVideo
+		await hmsActions.setLocalAudioEnabled(media.state.isVideoEnabled)
 	}
 
 	const sendBroadcastMessage = async (message: string) => {
@@ -110,13 +107,13 @@ export const useHms = () => {
 				id: mostRecentMessage.id,
 				content: mostRecentMessage.message,
 				sendername: mostRecentMessage.senderName,
-				time: mostRecentMessage.time
+				time: mostRecentMessage.time,
 			})
 		}
 	}, selectHMSMessages) //for all messages, send
 
-	hmsStore.subscribe((val) => (isLocalAudioEnabled.value = val), selectIsLocalAudioEnabled)
-	hmsStore.subscribe((val) => (isLocalVideoEnabled.value = val), selectIsLocalVideoEnabled)
+	hmsStore.subscribe((val) => (media.state.isAudioEnabled = val), selectIsLocalAudioEnabled)
+	hmsStore.subscribe((val) => (media.state.isVideoEnabled = val), selectIsLocalVideoEnabled)
 	hmsStore.subscribe((val) => (isConnected.value = val), selectIsConnectedToRoom)
 	hmsStore.subscribe((val) => (peers.value = val), selectPeers)
 
@@ -124,8 +121,6 @@ export const useHms = () => {
 		userName,
 		roomCode,
 		videoRefs,
-		isLocalAudioEnabled,
-		isLocalVideoEnabled,
 		isConnected,
 		peers,
 		messages,

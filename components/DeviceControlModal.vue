@@ -22,9 +22,9 @@
 		videoDevices.value = devices.filter((device) => device.kind === 'videoinput')
 		audioOutput.value = devices.filter((device) => device.kind === 'audiooutput')
 
-		selectedVideoDeviceId.value = media.state.videoSourceId || videoDevices.value[0]?.deviceId
-		selectedAudioDeviceId.value = media.state.audioSourceId || audioDevices.value[0]?.deviceId
-		selectedOutputDeviceId.value = media.state.outputSourceId || audioOutput.value[0]?.deviceId
+		selectedVideoDeviceId.value = media.state?.videoSourceId || videoDevices.value[0]?.deviceId
+		selectedAudioDeviceId.value = media.state?.audioSourceId || audioDevices.value[0]?.deviceId
+		selectedOutputDeviceId.value = media.state?.outputSourceId || audioOutput.value[0]?.deviceId
 	}
 	onMounted(() => {
 		getDevices()
@@ -44,19 +44,19 @@
 	<UModal v-model="isOpen" class="w-[90vw] max-w-[450px]" :ui="customModal">
 		<div class="rounded bg-zinc-800 p-4 shadow-lg">
 			<div class="mb-10 flex flex-col gap-3 text-white">
-				<span>Video Source</span>
+				<span>Select a Camera</span>
 				<select v-model="selectedVideoDeviceId" class="rounded-lg bg-zinc-700 p-2">
 					<option v-for="device in videoDevices" :value="device.deviceId" :key="device.deviceId">
 						{{ device.label }}
 					</option>
 				</select>
-				<span>Audio Source</span>
+				<span>Select a Microphone</span>
 				<select v-model="selectedAudioDeviceId" class="rounded-lg bg-zinc-700 p-2">
 					<option v-for="device in audioDevices" :value="device.deviceId" :key="device.deviceId">
 						{{ device.label }}
 					</option>
 				</select>
-				<span>Audio Output</span>
+				<span>Select a Speaker</span>
 				<select v-model="selectedOutputDeviceId" class="rounded-lg bg-zinc-700 p-2">
 					<option v-for="device in audioOutput" :value="device.deviceId" :key="device.deviceId">
 						{{ device.label }}

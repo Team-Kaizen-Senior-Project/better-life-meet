@@ -1,7 +1,6 @@
 <script setup lang="ts">
-	const video = useVideoStore()
 	const meetingStore = useMeetingStore()
-
+	const media = useMediaStore()
 	const recordedVideoIsPlaying = ref(false)
 	const { leaveRoom, isConnected } = useHms()
 
@@ -21,7 +20,7 @@
 		startTime: computed(() => meeting.value?.startTime.isoString),
 		onMeetingStart: () => {
 			if (meetingStore.getHasViewedVideo(meetingId.value)) {
-				video.setModalOpen(true)
+				media.setModalOpen(true)
 			} else {
 				recordedVideoIsPlaying.value = true
 			}
@@ -37,7 +36,7 @@
 		const BUFFER = 5 // seconds
 		setTimeout(() => {
 			recordedVideoIsPlaying.value = false
-			video.setModalOpen(true)
+			media.setModalOpen(true)
 			showBufferText.value = false
 		}, BUFFER * 1000)
 	}
@@ -74,7 +73,7 @@
 				<div v-else>
 					<!-- Local user's video feed -->
 					<div class="relative overflow-y-auto rounded-lg bg-zinc-900">
-						<MeetingVideo v-if="!video.modalOpen" :roomCode="meeting?.roomCode" />
+						<MeetingVideo v-if="!media.state.modalOpen" :roomCode="meeting?.roomCode" />
 					</div>
 
 					<div>

@@ -3,7 +3,7 @@
 
 	const media = useMediaStore()
 	const chatbox = useChatboxStore()
-	const { isLocalAudioEnabled, isLocalVideoEnabled, isConnected, toggleAudio, toggleVideo } = useHms()
+	const { isConnected, toggleAudio, toggleVideo } = useHms()
 </script>
 
 <template>
@@ -12,7 +12,7 @@
 			<div class="mx-auto flex items-center justify-between">
 				<div class="flex gap-2">
 					<Button class="rounded px-5 py-3" @click="toggleAudio">
-						<MicrophoneIcon v-if="isLocalAudioEnabled" class="h-5 w-5 text-green-500" />
+						<MicrophoneIcon v-if="media.state.isAudioEnabled" class="h-5 w-5 text-green-500" />
 						<svg
 							v-else
 							class="h-5 w-5 text-red-500"
@@ -32,7 +32,7 @@
 						</svg>
 					</Button>
 					<Button class="rounded px-5 py-3" @click="toggleVideo">
-						<VideoCameraIcon v-if="isLocalVideoEnabled" class="h-5 w-5 text-green-500" />
+						<VideoCameraIcon v-if="media.state.isVideoEnabled" class="h-5 w-5 text-green-500" />
 						<VideoCameraSlashIcon v-else class="h-5 w-5 text-red-500" />
 					</Button>
 					<!-- <Button class="rounded px-5 py-3">

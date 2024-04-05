@@ -1,11 +1,11 @@
 <script setup>
 	import { ref } from 'vue'
-	import { Cog6ToothIcon, VideoCameraSlashIcon, VideoCameraIcon } from '@heroicons/vue/24/outline'
+	import { Cog6ToothIcon, VideoCameraSlashIcon, VideoCameraIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
 	import { MicrophoneIcon } from '@heroicons/vue/24/solid'
 
 	defineProps(['title', 'description', 'boxLength'])
 
-	const video = useVideoStore()
+	const media = useMediaStore()
 </script>
 
 <template>
@@ -15,10 +15,10 @@
 			This is your chance to make sure your camera is setup and your microphone is working
 		</p>
 		<div class="relative mb-5 mt-4 aspect-video h-72 w-full rounded bg-zinc-950 text-white md:col-span-8">
-			<VideoPreview :cameraActive="video.cameraActive" v-if="video.cameraActive" />
+			<VideoPreview :cameraActive="media.state.isVideoEnabled" v-if="media.state.isVideoEnabled" />
 
 			<div v-else class="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 transform">
-				<VideoCameraSlashIcon @click="video.toggleCamera" />
+				<VideoCameraSlashIcon @click="media.toggleModal" />
 			</div>
 		</div>
 		<div class="">
@@ -29,8 +29,8 @@
 				<DeviceControlModal />
 				<Button
 					type="primary"
-					@click="video.toggleCamera"
-					v-if="!video.cameraActive"
+					@click="media.toggleVideo"
+					v-if="!media.state.isVideoEnabled"
 					class="relative border border-transparent"
 					data-testid="video-icon"
 				>
@@ -40,10 +40,24 @@
 						<VideoCameraIcon />
 					</div>
 				</Button>
-				<Button v-else @click="video.toggleCamera" type="primary" class="border">
+
+				<Button v-else @click="media.toggleVideo" type="primary" class="border">
 					<div class="h-4 w-4"><VideoCameraIcon /></div>
 				</Button>
-				<Button type="primary" data-testid="microphone-icon">
+				<Button
+					type="primary"
+					@click="media.toggleAudio"
+					v-if="!media.state.isAudioEnabled"
+					class="relative border border-transparent"
+					data-testid="video-icon"
+				>
+					<div
+						class="h-4 w-4 after:absolute after:left-1/2 after:top-1/2 after:h-12 after:w-[2px] after:-translate-x-1/2 after:-translate-y-1/2 after:rotate-45 after:rounded-xl after:bg-red-500 after:shadow-2xl"
+					>
+						<MicrophoneIcon />
+					</div>
+				</Button>
+				<Button v-else @click="media.toggleAudio" type="primary" class="border">
 					<div class="h-4 w-4"><MicrophoneIcon /></div>
 				</Button>
 			</div>
