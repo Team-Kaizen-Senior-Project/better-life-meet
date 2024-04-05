@@ -45,19 +45,19 @@
 		<div class="rounded bg-zinc-800 p-4 shadow-lg">
 			<div class="mb-10 flex flex-col gap-3 text-white">
 				<span>Video Source</span>
-				<select v-model="media.videoSourceId" class="rounded-lg bg-zinc-700 p-2">
+				<select v-model="selectedVideoDeviceId" class="rounded-lg bg-zinc-700 p-2">
 					<option v-for="device in videoDevices" :value="device.deviceId" :key="device.deviceId">
 						{{ device.label }}
 					</option>
 				</select>
 				<span>Audio Source</span>
-				<select v-model="media.audioSourceId" class="rounded-lg bg-zinc-700 p-2">
+				<select v-model="selectedAudioDeviceId" class="rounded-lg bg-zinc-700 p-2">
 					<option v-for="device in audioDevices" :value="device.deviceId" :key="device.deviceId">
 						{{ device.label }}
 					</option>
 				</select>
 				<span>Audio Output</span>
-				<select v-model="media.outputSourceId" class="rounded-lg bg-zinc-700 p-2">
+				<select v-model="selectedOutputDeviceId" class="rounded-lg bg-zinc-700 p-2">
 					<option v-for="device in audioOutput" :value="device.deviceId" :key="device.deviceId">
 						{{ device.label }}
 					</option>
