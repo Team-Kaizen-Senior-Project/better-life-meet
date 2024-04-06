@@ -10,6 +10,7 @@ import {
 	selectBroadcastMessages,
 	selectLocalMediaSettings,
 	HMSLogLevel,
+	selectDevices,
 	type HMSPeer,
 } from '@100mslive/hms-video-store'
 import type { HmsInstance, ChatMessage } from '~/types'
@@ -127,7 +128,10 @@ export const useHms = () => {
 		}
 	}, selectHMSMessages) //for all messages, send
 
-
+	const devices = hmsStore.getState(selectDevices);
+	const selected = hmsStore.getState(selectLocalMediaSettings);
+	console.log(devices)
+	console.log(selected)
 	hmsStore.subscribe((val) => (isConnected.value = val), selectIsConnectedToRoom)
 	hmsStore.subscribe((val) => (peers.value = val), selectPeers)
 
@@ -144,5 +148,8 @@ export const useHms = () => {
 		toggleVideo,
 		sendBroadcastMessage,
 		selectLocalMediaSettings,
+		selectDevices,
+		hmsStore,
+		hmsActions,
 	}
 }
