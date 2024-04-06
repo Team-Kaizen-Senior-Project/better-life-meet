@@ -7,6 +7,13 @@ defineProps(['title', 'description', 'boxLength'])
 
 const media = useMediaStore()
 console.log(media.state)
+
+function toggleVideo() {
+	media.toggleVideo()
+}
+function toggleAudio() {
+	media.toggleAudio()
+}
 </script>
 
 <template>
@@ -29,13 +36,13 @@ console.log(media.state)
 			<div class="flex gap-2">
 				<DeviceControlModal />
 				<div>
-					<Button v-if="media.state?.isVideoEnabled" @click="media.toggleVideo" type="primary" class="border">
+					<Button v-if="media.state?.isVideoEnabled" @click.stop="toggleVideo" type="primary" class="border">
 						<div class="h-4 w-4">
 							<VideoCameraIcon />
 						</div>
 					</Button>
 
-					<Button type="primary" @click="media.toggleVideo" v-else class="relative border border-transparent"
+					<Button type="primary" @click.stop="toggleVideo" v-else class="relative border border-transparent"
 						data-testid="video-icon">
 						<div
 							class="h-4 w-4 after:absolute after:left-1/2 after:top-1/2 after:h-12 after:w-[2px] after:-translate-x-1/2 after:-translate-y-1/2 after:rotate-45 after:rounded-xl after:bg-red-500 after:shadow-2xl">
@@ -45,12 +52,12 @@ console.log(media.state)
 				</div>
 				<div>
 
-					<Button v-if="media.state?.isAudioEnabled" @click="media.toggleAudio" type="primary" class="border">
+					<Button v-if="media.state?.isAudioEnabled" @click="toggleAudio" type="primary" class="border">
 						<div class="h-4 w-4">
 							<MicrophoneIcon />
 						</div>
 					</Button>
-					<Button type="primary" @click="media.toggleAudio" v-else class="relative border border-transparent"
+					<Button type="primary" @click="toggleAudio" v-else class="relative border border-transparent"
 						data-testid="video-icon">
 						<div
 							class="h-4 w-4 after:absolute after:left-1/2 after:top-1/2 after:h-12 after:w-[2px] after:-translate-x-1/2 after:-translate-y-1/2 after:rotate-45 after:rounded-xl after:bg-red-500 after:shadow-2xl">

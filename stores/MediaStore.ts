@@ -35,10 +35,10 @@ export const useMediaStore = defineStore(
 				if (audioOutput) state.outputSourceId = audioOutput.deviceId
 			}
 			if (state.isAudioEnabled === undefined) {
-				state.isAudioEnabled = false; // Or true, based on your default/preferred state
+				state.isAudioEnabled = false;
 			}
 			if (state.isVideoEnabled === undefined) {
-				state.isVideoEnabled = false; // Or true
+				state.isVideoEnabled = false;
 			}
 			console.log(state)
 		}
@@ -60,19 +60,21 @@ export const useMediaStore = defineStore(
 		function toggleModal() {
 			state.modalOpen = !state.modalOpen
 		}
-		function toggleVideo() {
-			console.log('inside toggle video')
+		async function toggleVideo() {
+			console.log('toggle video')
 			state.isVideoEnabled = !state.isVideoEnabled
 		}
 
-		function toggleAudio() {
+		async function toggleAudio() {
 			console.log('toggle audio')
 			state.isAudioEnabled = !state.isAudioEnabled
 		}
 		function setAudioEnabled(val: boolean) {
+			console.log("inside set audio")
 			state.isAudioEnabled = val
 		}
 		function setVideoEnabled(val: boolean) {
+			console.log("inside set video")
 			state.isVideoEnabled = val
 		}
 

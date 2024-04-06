@@ -9,6 +9,7 @@ import {
 	selectHMSMessages,
 	selectBroadcastMessages,
 	selectLocalMediaSettings,
+	HMSLogLevel,
 	type HMSPeer,
 } from '@100mslive/hms-video-store'
 import type { HmsInstance, ChatMessage } from '~/types'
@@ -34,10 +35,10 @@ export function getHmsInstance() {
 export const useHms = () => {
 	const hmsManagerRef = getHmsInstance()
 	const hmsManager = unref(hmsManagerRef)
-
 	hmsManager.triggerOnSubscribe()
 	const hmsStore = hmsManager.getStore()
 	const hmsActions = hmsManager.getActions()
+	hmsActions.setLogLevel(HMSLogLevel.NONE);
 
 	const userName = ref('')
 	const roomCode = ref('')
@@ -47,6 +48,7 @@ export const useHms = () => {
 	const peers = ref<HMSPeer[]>([])
 	const messages: Ref<ChatMessage[]> = ref([])
 	const media = useMediaStore()
+
 	watch(peers, (newPeers) => {
 		// Synchronize the video elements with the peers
 		newPeers.forEach((peer, index) => {
@@ -64,20 +66,26 @@ export const useHms = () => {
 		leaveRoom()
 	})
 
+
 	const joinRoom = async (roomCode: string, username: string) => {
+		console.log(media.state.isAudioEnabled)
+		console.log(media.state.isVideoEnabled)
+		console.log("joining room")
+
 		const authToken = await hmsActions.getAuthTokenByRoomCode({ roomCode })
 		await hmsActions.join({
 			userName: username,
 			authToken,
 			settings: {
-				isAudioMuted: media.state.isAudioEnabled,
-				isVideoMuted: media.state.isVideoEnabled,
+				isAudioMuted: !media.state?.isAudioEnabled,
+				isVideoMuted: !media.state?.isVideoEnabled,
 			},
 		})
 		await hmsActions.setAudioSettings({ deviceId: media.state?.audioSourceId })
 		await hmsActions.setVideoSettings({ deviceId: media.state?.videoSourceId })
 		await hmsActions.setAudioOutputDevice(media.state?.outputSourceId)
-		console.log(hmsStore.getState(selectLocalMediaSettings))
+		hmsStore.subscribe((val) => (media.setAudioEnabled(val)), selectIsLocalAudioEnabled)
+		hmsStore.subscribe((val) => (media.setVideoEnabled(val)), selectIsLocalVideoEnabled)
 	}
 
 	const leaveRoom = async () => {
@@ -86,15 +94,16 @@ export const useHms = () => {
 
 	const toggleAudio = async () => {
 		console.log('Toggling audio')
-		media.toggleAudio()
+		await media.toggleAudio()
 		await hmsActions.setLocalAudioEnabled(media.state.isAudioEnabled)
 	}
 
 	const toggleVideo = async () => {
 		console.log('Toggling video')
-		media.toggleVideo()
+		await media.toggleVideo()
 		console.log(media.state.isVideoEnabled)
 		await hmsActions.setLocalVideoEnabled(media.state.isVideoEnabled)
+		console.log(hmsStore.getState(selectIsLocalVideoEnabled))
 	}
 
 	const sendBroadcastMessage = async (message: string) => {
@@ -118,8 +127,7 @@ export const useHms = () => {
 		}
 	}, selectHMSMessages) //for all messages, send
 
-	hmsStore.subscribe((val) => (media.setAudioEnabled(val)), selectIsLocalAudioEnabled)
-	hmsStore.subscribe((val) => (media.setVideoEnabled(val)), selectIsLocalVideoEnabled)
+
 	hmsStore.subscribe((val) => (isConnected.value = val), selectIsConnectedToRoom)
 	hmsStore.subscribe((val) => (peers.value = val), selectPeers)
 
