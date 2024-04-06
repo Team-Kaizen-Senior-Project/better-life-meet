@@ -34,7 +34,7 @@ watchEffect(async (onInvalidate) => {
 		}
 	})
 })
-console.log(media.state.videoSourceId)
+console.log(media.state)
 </script>
 
 <template>

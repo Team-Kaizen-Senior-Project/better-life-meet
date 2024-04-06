@@ -1,41 +1,45 @@
 <script setup>
-	import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
+import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
 
-	const isOpen = ref(false)
-	const media = useMediaStore()
-	let audioDevices = ref([])
-	let videoDevices = ref([])
-	let audioOutput = ref([])
-	let selectedVideoDeviceId = ref()
-	let selectedAudioDeviceId = ref()
-	let selectedOutputDeviceId = ref()
-	const customModal = {
-		overlay: {
-			background: 'bg-zinc-900/90 dark:bg-gray-800/75',
-		},
-	}
-	async function getDevices() {
-		const devices = await navigator.mediaDevices.enumerateDevices()
-		// console.log(media.state);
-		// console.log(devices)
-		audioDevices.value = devices.filter((device) => device.kind === 'audioinput')
-		videoDevices.value = devices.filter((device) => device.kind === 'videoinput')
-		audioOutput.value = devices.filter((device) => device.kind === 'audiooutput')
+const isOpen = ref(false)
+const media = useMediaStore()
+console.log("inside device Control")
+let audioDevices = ref([])
+let videoDevices = ref([])
+let audioOutput = ref([])
+let selectedVideoDeviceId = ref()
+let selectedAudioDeviceId = ref()
+let selectedOutputDeviceId = ref()
+const { hmsActions, selectLocalMediaSettings } = useHms()
+const customModal = {
+	overlay: {
+		background: 'bg-zinc-900/90 dark:bg-gray-800/75',
+	},
+}
+async function getDevices() {
+	const devices = await navigator.mediaDevices.enumerateDevices()
+	// console.log(devices)
+	audioDevices.value = devices.filter((device) => device.kind === 'audioinput')
+	videoDevices.value = devices.filter((device) => device.kind === 'videoinput')
+	audioOutput.value = devices.filter((device) => device.kind === 'audiooutput')
 
-		selectedVideoDeviceId.value = media.state?.videoSourceId || videoDevices.value[0]?.deviceId
-		selectedAudioDeviceId.value = media.state?.audioSourceId || audioDevices.value[0]?.deviceId
-		selectedOutputDeviceId.value = media.state?.outputSourceId || audioOutput.value[0]?.deviceId
-	}
-	onMounted(() => {
-		getDevices()
-	})
+	selectedVideoDeviceId.value = media.state?.videoSourceId || videoDevices.value[0]?.deviceId
+	selectedAudioDeviceId.value = media.state?.audioSourceId || audioDevices.value[0]?.deviceId
+	selectedOutputDeviceId.value = media.state?.outputSourceId || audioOutput.value[0]?.deviceId
+	console.log(media.state);
+}
+onMounted(() => {
+	getDevices()
+})
 
-	function saveSelections() {
-		media.setVideoSourceId(selectedVideoDeviceId.value)
-		media.setAudioSourceId(selectedAudioDeviceId.value)
-		media.setOutputSourceId(selectedOutputDeviceId.value)
-		isOpen.value = false
-	}
+function saveSelections() {
+	media.setVideoSourceId(selectedVideoDeviceId.value)
+	media.setAudioSourceId(selectedAudioDeviceId.value)
+	media.setOutputSourceId(selectedOutputDeviceId.value)
+
+
+	isOpen.value = false
+}
 </script>
 <template>
 	<UButton @click="isOpen = true" class="bg-zinc-600 hover:bg-zinc-700">

@@ -1,9 +1,9 @@
 interface State {
 	isVideoEnabled: boolean
 	isAudioEnabled: boolean
-	audioSourceId: String
-	videoSourceId: String
-	outputSourceId: String
+	audioSourceId: string
+	videoSourceId: string
+	outputSourceId: string
 	modalOpen: boolean
 }
 
@@ -19,7 +19,7 @@ export const useMediaStore = defineStore(
 			modalOpen: false,
 		})
 		async function initDeviceSources() {
-			console.log('here')
+			console.log('Initalizing Device Sources')
 			const devices = await navigator?.mediaDevices.enumerateDevices()
 			console.log('devices: ', devices)
 			if (!state.audioSourceId) {
@@ -34,17 +34,24 @@ export const useMediaStore = defineStore(
 				const audioOutput = devices?.find((device) => device.kind === 'audiooutput')
 				if (audioOutput) state.outputSourceId = audioOutput.deviceId
 			}
+			if (state.isAudioEnabled === undefined) {
+				state.isAudioEnabled = false; // Or true, based on your default/preferred state
+			}
+			if (state.isVideoEnabled === undefined) {
+				state.isVideoEnabled = false; // Or true
+			}
+			console.log(state)
 		}
 
-		function setAudioSourceId(id: String) {
+		function setAudioSourceId(id: string) {
 			state.audioSourceId = id
 		}
 
-		function setVideoSourceId(id: String) {
+		function setVideoSourceId(id: string) {
 			state.videoSourceId = id
 		}
 
-		function setOutputSourceId(id: String) {
+		function setOutputSourceId(id: string) {
 			state.outputSourceId = id
 		}
 		function setModalOpen(value: boolean) {
@@ -53,18 +60,26 @@ export const useMediaStore = defineStore(
 		function toggleModal() {
 			state.modalOpen = !state.modalOpen
 		}
-		const toggleVideo = async () => {
+		function toggleVideo() {
 			console.log('inside toggle video')
 			state.isVideoEnabled = !state.isVideoEnabled
 		}
 
-		const toggleAudio = async () => {
+		function toggleAudio() {
 			console.log('toggle audio')
 			state.isAudioEnabled = !state.isAudioEnabled
+		}
+		function setAudioEnabled(val: boolean) {
+			state.isAudioEnabled = val
+		}
+		function setVideoEnabled(val: boolean) {
+			state.isVideoEnabled = val
 		}
 
 		return {
 			state,
+			setAudioEnabled,
+			setVideoEnabled,
 			toggleAudio,
 			toggleVideo,
 			setAudioSourceId,
