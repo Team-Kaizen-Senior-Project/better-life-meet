@@ -8,6 +8,7 @@ interface State {
 	audioDevices: MediaDeviceInfo[]
 	videoDevices: MediaDeviceInfo[]
 	outputDevices: MediaDeviceInfo[]
+	mediaDevices: MediaDeviceInfo[]
 }
 
 export const useMediaStore = defineStore(
@@ -23,20 +24,23 @@ export const useMediaStore = defineStore(
 			audioDevices: [],
 			videoDevices: [],
 			outputDevices: [],
+			mediaDevices: [],
 		})
 
 		async function initDeviceSources() {
+			const devices = await navigator.mediaDevices.enumerateDevices()
+			state.mediaDevices = devices
 			await updateDeviceLists()
 			if (!state.audioSourceId) {
-				const audioInput = devices?.find((device) => device.kind === 'audioinput')
+				const audioInput = state.mediaDevices?.find((device) => device.kind === 'audioinput')
 				if (audioInput) state.audioSourceId = audioInput.deviceId
 			}
 			if (!state.videoSourceId) {
-				const videoInput = devices?.find((device) => device.kind === 'videoinput')
+				const videoInput = state.mediaDevices?.find((device) => device.kind === 'videoinput')
 				if (videoInput) state.videoSourceId = videoInput.deviceId
 			}
 			if (!state.outputSourceId) {
-				const audioOutput = devices?.find((device) => device.kind === 'audiooutput')
+				const audioOutput = state.mediaDevices?.find((device) => device.kind === 'audiooutput')
 				if (audioOutput) state.outputSourceId = audioOutput.deviceId
 			}
 			if (state.isAudioEnabled === undefined) {
@@ -48,10 +52,9 @@ export const useMediaStore = defineStore(
 			console.log(state)
 		}
 		async function updateDeviceLists() {
-			const devices = await navigator.mediaDevices.enumerateDevices()
-			state.audioDevices = devices.filter((device) => device.kind === 'audioinput')
-			state.videoDevices = devices.filter((device) => device.kind === 'videoinput')
-			state.outputDevices = devices.filter((device) => device.kind === 'audiooutput')
+			state.audioDevices = state.mediaDevices.filter((device) => device.kind === 'audioinput')
+			state.videoDevices = state.mediaDevices.filter((device) => device.kind === 'videoinput')
+			state.outputDevices = state.mediaDevices.filter((device) => device.kind === 'audiooutput')
 		}
 
 		async function setAudioSourceId(id: string) {
@@ -111,6 +114,7 @@ export const useMediaStore = defineStore(
 				'state.videoDevices',
 				'state.audioDevices',
 				'state.outputDevices',
+				'state.mediaDevices',
 			],
 			storage: persistedState.localStorage,
 		},
