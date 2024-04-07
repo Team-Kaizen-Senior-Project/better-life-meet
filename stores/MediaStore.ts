@@ -4,10 +4,10 @@ interface State {
 	audioSourceId: string
 	videoSourceId: string
 	outputSourceId: string
-	modalOpen: boolean,
-	audioDevices: [],
-	videoDevices: [],
-	outputDevices: [],
+	modalOpen: boolean
+	audioDevices: MediaDeviceInfo[]
+	videoDevices: MediaDeviceInfo[]
+	outputDevices: MediaDeviceInfo[]
 }
 
 export const useMediaStore = defineStore(
@@ -24,14 +24,9 @@ export const useMediaStore = defineStore(
 			videoDevices: [],
 			outputDevices: [],
 		})
-		async function initDeviceSources() {
-			console.log('Initalizing Device Sources')
-			const devices = await navigator?.mediaDevices.enumerateDevices()
-			state.audioDevices = devices.filter((device) => device.kind === 'audioinput');
-			state.videoDevices = devices.filter((device) => device.kind === 'videoinput');
-			state.outputDevices = devices.filter((device) => device.kind === 'audiootput')
 
-			console.log('devices: ', devices)
+		async function initDeviceSources() {
+			await updateDeviceLists()
 			if (!state.audioSourceId) {
 				const audioInput = devices?.find((device) => device.kind === 'audioinput')
 				if (audioInput) state.audioSourceId = audioInput.deviceId
@@ -45,27 +40,29 @@ export const useMediaStore = defineStore(
 				if (audioOutput) state.outputSourceId = audioOutput.deviceId
 			}
 			if (state.isAudioEnabled === undefined) {
-				state.isAudioEnabled = false;
+				state.isAudioEnabled = false
 			}
 			if (state.isVideoEnabled === undefined) {
-				state.isVideoEnabled = false;
+				state.isVideoEnabled = false
 			}
 			console.log(state)
 		}
+		async function updateDeviceLists() {
+			const devices = await navigator.mediaDevices.enumerateDevices()
+			state.audioDevices = devices.filter((device) => device.kind === 'audioinput')
+			state.videoDevices = devices.filter((device) => device.kind === 'videoinput')
+			state.outputDevices = devices.filter((device) => device.kind === 'audiooutput')
+		}
 
-		function setAudioSourceId(id: string) {
-			console.log("set audio Source id")
+		async function setAudioSourceId(id: string) {
 			state.audioSourceId = id
 		}
 
-		function setVideoSourceId(id: string) {
-			console.log("set video Source id")
+		async function setVideoSourceId(id: string) {
 			state.videoSourceId = id
 		}
 
-		function setOutputSourceId(id: string) {
-			console.log("set output Source id")
-
+		async function setOutputSourceId(id: string) {
 			state.outputSourceId = id
 		}
 		function setModalOpen(value: boolean) {
@@ -75,20 +72,16 @@ export const useMediaStore = defineStore(
 			state.modalOpen = !state.modalOpen
 		}
 		async function toggleVideo() {
-			console.log('toggle video')
 			state.isVideoEnabled = !state.isVideoEnabled
 		}
 
 		async function toggleAudio() {
-			console.log('toggle audio')
 			state.isAudioEnabled = !state.isAudioEnabled
 		}
 		function setAudioEnabled(val: boolean) {
-			console.log("inside set audio")
 			state.isAudioEnabled = val
 		}
 		function setVideoEnabled(val: boolean) {
-			console.log("inside set video")
 			state.isVideoEnabled = val
 		}
 
@@ -102,6 +95,7 @@ export const useMediaStore = defineStore(
 			setVideoSourceId,
 			setOutputSourceId,
 			initDeviceSources,
+			updateDeviceLists,
 			setModalOpen,
 			toggleModal,
 		}
@@ -116,7 +110,7 @@ export const useMediaStore = defineStore(
 				'state.outputSourceId',
 				'state.videoDevices',
 				'state.audioDevices',
-				'state.outputDevices'
+				'state.outputDevices',
 			],
 			storage: persistedState.localStorage,
 		},

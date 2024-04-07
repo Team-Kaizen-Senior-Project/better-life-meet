@@ -39,7 +39,7 @@ export const useHms = () => {
 	hmsManager.triggerOnSubscribe()
 	const hmsStore = hmsManager.getStore()
 	const hmsActions = hmsManager.getActions()
-	hmsActions.setLogLevel(HMSLogLevel.NONE);
+	hmsActions.setLogLevel(HMSLogLevel.NONE)
 
 	const userName = ref('')
 	const roomCode = ref('')
@@ -67,12 +67,7 @@ export const useHms = () => {
 		leaveRoom()
 	})
 
-
 	const joinRoom = async (roomCode: string, username: string) => {
-		console.log(media.state.isAudioEnabled)
-		console.log(media.state.isVideoEnabled)
-		console.log("joining room")
-
 		const authToken = await hmsActions.getAuthTokenByRoomCode({ roomCode })
 		await hmsActions.join({
 			userName: username,
@@ -82,11 +77,13 @@ export const useHms = () => {
 				isVideoMuted: !media.state?.isVideoEnabled,
 			},
 		})
+		//set the preferences that the user selected on the dashboard
 		await hmsActions.setAudioSettings({ deviceId: media.state?.audioSourceId })
 		await hmsActions.setVideoSettings({ deviceId: media.state?.videoSourceId })
 		await hmsActions.setAudioOutputDevice(media.state?.outputSourceId)
-		hmsStore.subscribe((val) => (media.setAudioEnabled(val)), selectIsLocalAudioEnabled)
-		hmsStore.subscribe((val) => (media.setVideoEnabled(val)), selectIsLocalVideoEnabled)
+
+		hmsStore.subscribe((val) => media.setAudioEnabled(val), selectIsLocalAudioEnabled)
+		hmsStore.subscribe((val) => media.setVideoEnabled(val), selectIsLocalVideoEnabled)
 	}
 
 	const leaveRoom = async () => {
@@ -94,17 +91,13 @@ export const useHms = () => {
 	}
 
 	const toggleAudio = async () => {
-		console.log('Toggling audio')
 		await media.toggleAudio()
 		await hmsActions.setLocalAudioEnabled(media.state.isAudioEnabled)
 	}
 
 	const toggleVideo = async () => {
-		console.log('Toggling video')
 		await media.toggleVideo()
-		console.log(media.state.isVideoEnabled)
 		await hmsActions.setLocalVideoEnabled(media.state.isVideoEnabled)
-		console.log(hmsStore.getState(selectIsLocalVideoEnabled))
 	}
 
 	const sendBroadcastMessage = async (message: string) => {
@@ -128,10 +121,6 @@ export const useHms = () => {
 		}
 	}, selectHMSMessages) //for all messages, send
 
-	const devices = hmsStore.getState(selectDevices);
-	const selected = hmsStore.getState(selectLocalMediaSettings);
-	console.log(devices)
-	console.log(selected)
 	hmsStore.subscribe((val) => (isConnected.value = val), selectIsConnectedToRoom)
 	hmsStore.subscribe((val) => (peers.value = val), selectPeers)
 
