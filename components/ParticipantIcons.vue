@@ -38,14 +38,21 @@
 				v-for="(peer, index) in peers"
 				:key="peer.id"
 				class="absolute"
-				:style="{ 'margin-left': index !== 0 ? `30px` : 0 }"
+				:style="{ left: 'calc(50% - ' + index * -30 + 'px' }"
 			>
-				<button
+				<button v-if="index < 3"
 					@click="popoverOpen = true"
 					class="inline-block aspect-[1/1] h-10 w-10 rounded-full text-white"
 					:style="{ backgroundColor: generateColor(peer.name.split(' ')[0], peer.name.split(' ')[1]) }"
 				>
 					{{ peer.name.split(' ')[0][0] }}{{ peer.name.split(' ')[1][0] }}
+				</button>
+				<button v-else-if="index == 3"
+					@click="popoverOpen = true"
+					class="inline-block aspect-[1/1] h-10 w-10 rounded-full text-white background-color-"
+					:style="{ backgroundColor: 'hsla(0, 0%, 32%, 0.85)' }"
+					>
+					...
 				</button>
 			</div>
 		</PopoverTrigger>
