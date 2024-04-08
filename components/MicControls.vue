@@ -4,7 +4,7 @@
 	let audioContext
 	let analyser
 	let intervalId
-	const boxLength = ref(45)
+	const boxLength = ref(55)
 	const boxLengths = {
 		sm: 30,
 		md: 45,
@@ -13,16 +13,7 @@
 	}
 
 	onMounted(() => {
-		if (window.innerWidth < 768) {
-			boxLength.value = boxLengths.sm
-		} else if (window.innerWidth < 1024) {
-			boxLength.value = boxLengths.md
-		} else if (window.innerWidth < 1280) {
-			boxLength.value = boxLengths.lg
-		} else {
-			boxLength.value = boxLengths.xl
-		}
-		window.addEventListener('resize', () => {
+		function updateBoxLength() {
 			if (window.innerWidth < 768) {
 				boxLength.value = boxLengths.sm
 			} else if (window.innerWidth < 1024) {
@@ -32,6 +23,10 @@
 			} else {
 				boxLength.value = boxLengths.xl
 			}
+		}
+		updateBoxLength()
+		window.addEventListener('resize', () => {
+			updateBoxLength()
 		})
 	})
 
@@ -104,11 +99,11 @@
 		<div class="grid gap-2">
 			<span class="text-white">Mic level</span>
 
-			<div class="flex items-center gap-2">
-				<Button @click="toggleMicTest" type="primary" class="w-fit">
+			<div class="flex max-w-full items-center gap-2 overflow-x-hidden">
+				<Button @click="toggleMicTest" type="primary" class="w-fit whitespace-nowrap">
 					{{ isTestingMic ? 'Stop Test' : 'Test Mic' }}
 				</Button>
-				<div class="flex max-w-full items-center gap-1 overflow-x-hidden overflow-x-hidden">
+				<div class="flex items-center gap-1">
 					<div
 						v-for="i in boxLength"
 						:key="`level-bar-${i}`"

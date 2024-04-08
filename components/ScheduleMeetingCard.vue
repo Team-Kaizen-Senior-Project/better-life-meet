@@ -103,19 +103,21 @@
 						Start
 						<span class="text-red-400">*</span>
 					</label>
-					<div class="flex flex-col gap-2 md:flex-row">
+					<div class="flex gap-2 flex-row">
 						<input
 							required
 							v-model="state.form.startData.date"
+							placeholder="Enter start date"
 							id="start-time-input"
 							type="date"
-							class="min-w-0 flex-auto appearance-none rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
+							class="min-h-10 w-1/2 min-w-0 flex-auto appearance-none rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
 						/>
 						<input
 							required
 							v-model="state.form.startData.time"
+							placeholder="Enter start time"
 							type="time"
-							class="min-w-0 flex-auto appearance-none rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
+							class="min-h-10 w-1/2 min-w-0 flex-auto appearance-none rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
 						/>
 					</div>
 				</div>
@@ -124,19 +126,21 @@
 						End
 						<span class="text-red-400">*</span>
 					</label>
-					<div class="flex flex-col gap-2 md:flex-row">
+					<div class="flex gap-2 flex-row">
 						<input
 							required
 							v-model="state.form.endData.date"
+							placeholder="Enter end date"
 							id="end-time-input"
 							type="date"
-							class="min-w-0 flex-auto appearance-none rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
+							class="min-h-10 w-1/2 min-w-0 flex-auto appearance-none rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
 						/>
 						<input
 							required
 							v-model="state.form.endData.time"
+							placeholder="Enter end time"
 							type="time"
-							class="min-w-0 flex-auto appearance-none rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
+							class="min-h-10 w-1/2 min-w-0 flex-auto appearance-none rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
 						/>
 					</div>
 				</div>
@@ -145,32 +149,17 @@
 						Timezone
 						<span class="text-red-400">*</span>
 					</label>
-
 					<select
 						required
 						v-model="state.form.timeZone"
 						name="meeting-timezone-input"
 						id="meeting-timezone-input"
-						class="min-w-0 flex-auto rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] pr-10 text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
+						class="min-w-0 min-h-10 flex-auto rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] pr-10 text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
 					>
 						<option v-for="timezone in timeZones" :value="timezone">
 							{{ timezone }}
 						</option>
 					</select>
-				</div>
-				<div class="flex flex-col items-start gap-1">
-					<!-- <input id="record-check" type="checkbox" />
-					<label for="record-check" class="text-md font-medium text-white">
-						Include prerecorded videos for the week?
-					</label> -->
-					<label for="video-id" class="text-md font-medium text-white">Video ID for this week's meeting</label>
-					<input
-						id="video-id"
-						type="text"
-						v-model="state.form.vimeoId"
-						placeholder="Enter Video ID"
-						class="min-w-0 flex-auto rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] pr-10 text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
-					/>
 				</div>
 				<div v-if="validationMessage" class="mb-2 text-sm text-red-500">
 					{{ validationMessage }}
