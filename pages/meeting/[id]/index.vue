@@ -74,6 +74,11 @@
 				<div v-else>
 					<!-- Local user's video feed -->
 					<div class="relative overflow-y-auto rounded-lg bg-zinc-900">
+						<div v-if="!isConnected" class="flex flex-col items-center justify-center p-6 text-white">
+							<p class="font-semibold">Please wait</p>
+							<p>Connecting to the meeting</p>
+							<Loader class="mt-4" />
+						</div>
 						<MeetingVideo v-if="!video.modalOpen" :roomCode="meeting?.roomCode" />
 					</div>
 
