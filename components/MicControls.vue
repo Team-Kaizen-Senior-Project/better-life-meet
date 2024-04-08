@@ -1,12 +1,39 @@
 <script setup>
-	const props = defineProps({
-		boxLength: Number,
-	})
 	const micLevel = ref(0)
 	const isTestingMic = ref(false)
 	let audioContext
 	let analyser
 	let intervalId
+	const boxLength = ref(45)
+	const boxLengths = {
+		sm: 30,
+		md: 45,
+		lg: 38,
+		xl: 55,
+	}
+
+	onMounted(() => {
+		if (window.innerWidth < 768) {
+			boxLength.value = boxLengths.sm
+		} else if (window.innerWidth < 1024) {
+			boxLength.value = boxLengths.md
+		} else if (window.innerWidth < 1280) {
+			boxLength.value = boxLengths.lg
+		} else {
+			boxLength.value = boxLengths.xl
+		}
+		window.addEventListener('resize', () => {
+			if (window.innerWidth < 768) {
+				boxLength.value = boxLengths.sm
+			} else if (window.innerWidth < 1024) {
+				boxLength.value = boxLengths.md
+			} else if (window.innerWidth < 1280) {
+				boxLength.value = boxLengths.lg
+			} else {
+				boxLength.value = boxLengths.xl
+			}
+		})
+	})
 
 	const MAX_LEVEL = 100 // Max level of micLevel
 
@@ -68,7 +95,7 @@
 
 	const filledBoxes = computed(() => {
 		let level = smoothLevel(micLevel.value) / Math.sqrt(MAX_LEVEL)
-		return Math.ceil(level * props.boxLength)
+		return Math.ceil(level * boxLength)
 	})
 </script>
 
@@ -81,9 +108,9 @@
 				<Button @click="toggleMicTest" type="primary" class="w-fit">
 					{{ isTestingMic ? 'Stop Test' : 'Test Mic' }}
 				</Button>
-				<div class="flex items-center gap-1">
+				<div class="flex max-w-full items-center gap-1 overflow-x-hidden overflow-x-hidden">
 					<div
-						v-for="i in Number.parseInt(props.boxLength)"
+						v-for="i in boxLength"
 						:key="`level-bar-${i}`"
 						:class="[i <= filledBoxes ? 'bg-green-500' : 'bg-neutral-500', 'h-4 w-1 rounded-sm']"
 					></div>
