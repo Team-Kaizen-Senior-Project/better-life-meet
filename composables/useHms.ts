@@ -8,20 +8,12 @@ import {
 	selectVideoTrackByID,
 	selectHMSMessages,
 	selectBroadcastMessages,
-	selectPeersWithAudioStatus,
-	selectLocalMediaSettings,
-	HMSLogLevel,
-	selectDevices,
-	selectDominantSpeaker,
 	type HMSPeer,
-	type HMSPeerWithMuteStatus,
-	type HMSVideoTrack
 } from '@100mslive/hms-video-store'
 import type { HmsInstance, ChatMessage } from '~/types'
 
-
 // this is the hms instance
-// if you want to use the instance just do export const useHmsInstance and you can import it into any file.
+// if you want to use the instance just do export const useHmsInstance and you can important it into any file.
 const useHmsInstance = () => useState<null | HMSReactiveStore>('hmsReactiveStore', () => shallowRef(null))
 
 // creates the instance
@@ -41,21 +33,21 @@ export function getHmsInstance() {
 export const useHms = () => {
 	const hmsManagerRef = getHmsInstance()
 	const hmsManager = unref(hmsManagerRef)
+
 	hmsManager.triggerOnSubscribe()
 	const hmsStore = hmsManager.getStore()
 	const hmsActions = hmsManager.getActions()
-	hmsActions.setLogLevel(HMSLogLevel.NONE)
 
 	const userName = ref('')
 	const roomCode = ref('')
 	const videoRefs = ref([])
 
+	const isLocalAudioEnabled = ref(false)
+	const isLocalVideoEnabled = ref(false)
 	const isConnected = ref<boolean | null | undefined>(false)
 	const peers = ref<HMSPeer[]>([])
-	const peersWithAudioStatus = ref<HMSPeerWithMuteStatus[]>([])
 	const messages: Ref<ChatMessage[]> = ref([])
-	const media = useMediaStore()
-	const dominantSpeaker = ref<HMSPeer | null>(null)
+	const video = useVideoStore()
 
 	watch(peers, (newPeers) => {
 		// Synchronize the video elements with the peers
@@ -80,17 +72,10 @@ export const useHms = () => {
 			userName: username,
 			authToken,
 			settings: {
-				isAudioMuted: !media.state?.isAudioEnabled,
-				isVideoMuted: !media.state?.isVideoEnabled,
+				isAudioMuted: true,
+				isVideoMuted: !video.cameraActive,
 			},
 		})
-		//set the preferences that the user selected on the dashboard
-		await hmsActions.setAudioSettings({ deviceId: media.state?.audioSourceId })
-		await hmsActions.setVideoSettings({ deviceId: media.state?.videoSourceId })
-		await hmsActions.setAudioOutputDevice(media.state?.outputSourceId)
-
-		hmsStore.subscribe((val) => media.setAudioEnabled(val), selectIsLocalAudioEnabled)
-		hmsStore.subscribe((val) => media.setVideoEnabled(val), selectIsLocalVideoEnabled)
 	}
 
 	const leaveRoom = async () => {
@@ -98,13 +83,15 @@ export const useHms = () => {
 	}
 
 	const toggleAudio = async () => {
-		await media.toggleAudio()
-		await hmsActions.setLocalAudioEnabled(media.state.isAudioEnabled)
+		console.log('Toggling audio')
+		isLocalAudioEnabled.value = !isLocalAudioEnabled.value
+		await hmsActions.setLocalAudioEnabled(isLocalAudioEnabled.value)
 	}
 
 	const toggleVideo = async () => {
-		await media.toggleVideo()
-		await hmsActions.setLocalVideoEnabled(media.state.isVideoEnabled)
+		console.log('Toggling video')
+		isLocalVideoEnabled.value = !isLocalVideoEnabled.value
+		await hmsActions.setLocalVideoEnabled(isLocalVideoEnabled.value)
 	}
 
 	const sendBroadcastMessage = async (message: string) => {
@@ -123,36 +110,29 @@ export const useHms = () => {
 				id: mostRecentMessage.id,
 				content: mostRecentMessage.message,
 				sendername: mostRecentMessage.senderName,
-				time: mostRecentMessage.time,
+				time: mostRecentMessage.time
 			})
 		}
 	}, selectHMSMessages) //for all messages, send
 
+	hmsStore.subscribe((val) => (isLocalAudioEnabled.value = val), selectIsLocalAudioEnabled)
+	hmsStore.subscribe((val) => (isLocalVideoEnabled.value = val), selectIsLocalVideoEnabled)
 	hmsStore.subscribe((val) => (isConnected.value = val), selectIsConnectedToRoom)
 	hmsStore.subscribe((val) => (peers.value = val), selectPeers)
-	hmsStore.subscribe((val) => (peersWithAudioStatus.value = val), selectPeersWithAudioStatus)
-
-	hmsStore.subscribe((val) => {
-		dominantSpeaker.value = val
-	}, selectDominantSpeaker)
 
 	return {
 		userName,
 		roomCode,
 		videoRefs,
+		isLocalAudioEnabled,
+		isLocalVideoEnabled,
 		isConnected,
 		peers,
-		peersWithAudioStatus,
 		messages,
 		joinRoom,
 		leaveRoom,
 		toggleAudio,
 		toggleVideo,
 		sendBroadcastMessage,
-		selectLocalMediaSettings,
-		selectDevices,
-		hmsStore,
-		hmsActions,
-		dominantSpeaker,
 	}
 }

@@ -97,7 +97,6 @@ export interface HmsInstance {
 	isLocalVideoEnabled: Ref<boolean>
 	isConnected: Ref<boolean>
 	peers: Ref<Array<any>> // Specify a more accurate type if available
-	peersWithAudioStatus: Ref<Array<any>>
 	joinRoom: (roomCode: string, username: string) => Promise<void>
 	leaveRoom: () => Promise<void>
 	toggleAudio: () => Promise<void>

@@ -3,7 +3,7 @@
 	import { useCountdownStore } from '~/stores/CountdownStore'
 	import type { Meeting, Time } from '~/types'
 	const countdownStore = useCountdownStore()
-	const media = useMediaStore()
+	const video = useVideoStore()
 	const props = defineProps<{
 		meetingStartTime: Time
 	}>()
@@ -16,7 +16,7 @@
 			console.log('countdown has finished')
 			countdown.value = '0d 0h 0m 0s'
 			countdownStore.setShowCountdown(false)
-			media.setModalOpen(true)
+			video.setModalOpen(true)
 			clearInterval(interval) // Stop the countdown
 		} else {
 			const duration = dayjs.duration(startTime.diff(now))

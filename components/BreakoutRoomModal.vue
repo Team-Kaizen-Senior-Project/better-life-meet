@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import type { AttendeeFields } from '~/types'
 
-	const media = useMediaStore()
+	const video = useVideoStore()
 	const attendee = useAttendeeStore()
 	const { state: customerState } = useCustomerStore()
 
@@ -14,11 +14,11 @@
 		},
 	})
 	function joinMeeting() {
-		media.setModalOpen(false)
+		video.joinMeeting()
 	}
 </script>
 <template>
-	<UModal v-model="media.state.modalOpen" class="max-w-[400px]" :ui="customModal" data-testid="settings-modal">
+	<UModal v-model="video.modalOpen" class="max-w-[400px]" :ui="customModal" data-testid="settings-modal">
 		<VideoSettings
 			title="Pod accountability meeting is starting"
 			description="This is your chance to make sure your camera is setup and your microphone is working!"
