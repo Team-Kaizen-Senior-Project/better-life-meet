@@ -14,6 +14,7 @@
 		leaveRoom,
 		toggleAudio,
 		toggleVideo,
+		dominantSpeaker,
 	} = useHms()
 
 	const props = defineProps({
@@ -40,7 +41,14 @@
 	<div class="container mx-auto mb-8 mt-8" data-testid="meeting-container">
 		<div v-if="isConnected" class="conference-section" data-testid="conference-section">
 			<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-				<div v-for="peer in peers" :key="peer.id" class="peer-tile relative w-full rounded-lg bg-zinc-500 sm:w-auto">
+				<div
+					v-for="peer in peers"
+					:key="peer.id"
+					:class="{
+						'dominant-speaker': dominantSpeaker && peer.id === dominantSpeaker.id,
+						'relative w-full rounded-lg bg-zinc-500 sm:w-auto': true,
+					}"
+				>
 					<div class="relative z-[2]">
 						<video
 							ref="videoRefs"
@@ -66,5 +74,8 @@
 <style>
 	.mirror-video {
 		transform: scaleX(-1);
+	}
+	.dominant-speaker {
+		box-shadow: 0 0 0 3px limegreen;
 	}
 </style>
