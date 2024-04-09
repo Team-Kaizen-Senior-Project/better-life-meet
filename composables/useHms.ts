@@ -8,15 +8,19 @@ import {
 	selectVideoTrackByID,
 	selectHMSMessages,
 	selectBroadcastMessages,
+	selectPeersWithAudioStatus,
 	selectLocalMediaSettings,
 	HMSLogLevel,
 	selectDevices,
 	type HMSPeer,
+	type HMSPeerWithMuteStatus,
+	type HMSVideoTrack
 } from '@100mslive/hms-video-store'
 import type { HmsInstance, ChatMessage } from '~/types'
 
+
 // this is the hms instance
-// if you want to use the instance just do export const useHmsInstance and you can important it into any file.
+// if you want to use the instance just do export const useHmsInstance and you can import it into any file.
 const useHmsInstance = () => useState<null | HMSReactiveStore>('hmsReactiveStore', () => shallowRef(null))
 
 // creates the instance
@@ -47,6 +51,7 @@ export const useHms = () => {
 
 	const isConnected = ref<boolean | null | undefined>(false)
 	const peers = ref<HMSPeer[]>([])
+	const peersWithAudioStatus = ref<HMSPeerWithMuteStatus[]>([])
 	const messages: Ref<ChatMessage[]> = ref([])
 	const media = useMediaStore()
 
@@ -123,6 +128,7 @@ export const useHms = () => {
 
 	hmsStore.subscribe((val) => (isConnected.value = val), selectIsConnectedToRoom)
 	hmsStore.subscribe((val) => (peers.value = val), selectPeers)
+	hmsStore.subscribe((val) => (peersWithAudioStatus.value = val), selectPeersWithAudioStatus)
 
 	return {
 		userName,
@@ -130,6 +136,7 @@ export const useHms = () => {
 		videoRefs,
 		isConnected,
 		peers,
+		peersWithAudioStatus,
 		messages,
 		joinRoom,
 		leaveRoom,
