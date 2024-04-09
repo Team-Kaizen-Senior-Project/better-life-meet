@@ -15,6 +15,8 @@ entity Customer {
     * firstName : string
     * lastName : string
     * email : string
+    * netWorth: number
+    * admin : boolean
 }
 
 entity Meeting {
@@ -24,6 +26,9 @@ entity Meeting {
     * startTime : Date
     * endTime : Date
     * timeZone: string
+    * vimeoId : string
+    * roomId : string
+    * roomCode : string
 }
 
 Customer }|--|| Pod
