@@ -11,7 +11,7 @@
 		lg: 38,
 		xl: 55,
 	}
-
+	const media = useMediaStore()
 	onMounted(() => {
 		function updateBoxLength() {
 			if (window.innerWidth < 768) {
@@ -92,7 +92,7 @@
 
 	const filledBoxes = computed(() => {
 		let level = smoothLevel(micLevel.value) / Math.sqrt(MAX_LEVEL)
-		return Math.ceil(level * boxLength)
+		return Math.ceil(level * boxLength.value)
 	})
 </script>
 
