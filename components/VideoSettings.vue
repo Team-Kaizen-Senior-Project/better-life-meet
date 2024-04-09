@@ -22,7 +22,7 @@ function toggleAudio() {
 			This is your chance to make sure your camera is setup and your microphone is working
 		</p>
 		<div class="relative mb-5 mt-4 aspect-video h-72 w-full rounded bg-zinc-950 text-white">
-			<VideoPreview :cameraActive="media.cameraActive" v-if="media.cameraActive" />
+			<VideoPreview :cameraActive="video.cameraActive" v-if="video.cameraActive" />
 
 			<div v-else class="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 transform">
 				<VideoCameraSlashIcon @click="media.toggleModal" />
