@@ -59,4 +59,5 @@ export default defineNuxtConfig({
 		HMS_ACCESS_KEY: process.env.HMS_ACCESS_KEY,
 		HMS_SECRET: process.env.HMS_SECRET,
 	},
+	ssr: false,
 })

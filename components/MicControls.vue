@@ -34,7 +34,9 @@
 
 	async function startMicTest() {
 		try {
-			const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+			const stream = await navigator.mediaDevices.getUserMedia({
+				audio: { deviceId: media.state.audioSourceId ? { exact: media.state.audioSourceId } : undefined },
+			})
 			if (!audioContext) {
 				audioContext = new (window.AudioContext || window.webkitAudioContext)()
 			}
