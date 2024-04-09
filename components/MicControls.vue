@@ -2,6 +2,7 @@
 	const props = defineProps({
 		boxLength: Number,
 	})
+	const media = useMediaStore()
 	const micLevel = ref(0)
 	const isTestingMic = ref(false)
 	let audioContext
@@ -12,7 +13,9 @@
 
 	async function startMicTest() {
 		try {
-			const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+			const stream = await navigator.mediaDevices.getUserMedia({
+				audio: { deviceId: media.state.audioSourceId ? { exact: media.state.audioSourceId } : undefined },
+			})
 			if (!audioContext) {
 				audioContext = new (window.AudioContext || window.webkitAudioContext)()
 			}
