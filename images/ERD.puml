@@ -26,19 +26,7 @@ entity Meeting {
     * timeZone: string
 }
 
-entity Attendee {
-    * attendeeRef
-    --
-    * customerRef : string
-    * meetingRef : string
-    * joinTime : Date
-    * leaveTime : Date
-    * usedVideo : boolean
-    * platform : string
-}
-
 Customer }|--|| Pod
 Meeting }o--|| Pod
-Meeting --o{ Attendee
 
 @enduml
