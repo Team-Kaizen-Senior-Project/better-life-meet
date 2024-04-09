@@ -6,7 +6,6 @@ import { MicrophoneIcon } from '@heroicons/vue/24/solid'
 defineProps(['title', 'description', 'boxLength'])
 
 const media = useMediaStore()
-console.log(media.state)
 
 function toggleVideo() {
 	media.toggleVideo()
