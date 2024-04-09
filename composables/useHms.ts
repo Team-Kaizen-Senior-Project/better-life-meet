@@ -12,6 +12,7 @@ import {
 	selectLocalMediaSettings,
 	HMSLogLevel,
 	selectDevices,
+	selectDominantSpeaker,
 	type HMSPeer,
 	type HMSPeerWithMuteStatus,
 	type HMSVideoTrack
@@ -54,6 +55,7 @@ export const useHms = () => {
 	const peersWithAudioStatus = ref<HMSPeerWithMuteStatus[]>([])
 	const messages: Ref<ChatMessage[]> = ref([])
 	const media = useMediaStore()
+	const dominantSpeaker = ref<HMSPeer | null>(null)
 
 	watch(peers, (newPeers) => {
 		// Synchronize the video elements with the peers
@@ -130,6 +132,10 @@ export const useHms = () => {
 	hmsStore.subscribe((val) => (peers.value = val), selectPeers)
 	hmsStore.subscribe((val) => (peersWithAudioStatus.value = val), selectPeersWithAudioStatus)
 
+	hmsStore.subscribe((val) => {
+		dominantSpeaker.value = val
+	}, selectDominantSpeaker)
+
 	return {
 		userName,
 		roomCode,
@@ -147,5 +153,6 @@ export const useHms = () => {
 		selectDevices,
 		hmsStore,
 		hmsActions,
+		dominantSpeaker,
 	}
 }
