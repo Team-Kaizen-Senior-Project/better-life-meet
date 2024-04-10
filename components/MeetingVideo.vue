@@ -23,17 +23,27 @@ const props = defineProps({
 
 let userName = ''
 
+function handleBeforeUnload(event) {
+	event.preventDefault()
+	event.returnValue = 'Are you sure you want to leave the meeting?'
+}
+
 onMounted(async () => {
 	if (!isConnected.value && customer?.firstName && customer?.lastName) {
 		userName = customer.firstName + ' ' + customer.lastName
 		await joinRoom(props.roomCode, userName)
 	}
+
+	window.addEventListener('beforeunload', handleBeforeUnload)
 })
 
 onUnmounted(() => {
 	if (isConnected.value) {
 		leaveRoom()
+		window.removeEventListener('beforeunload', handleBeforeUnload)
+
 	}
+
 })
 </script>
 
