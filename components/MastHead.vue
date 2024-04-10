@@ -1,7 +1,7 @@
 <script setup lang="ts">
-	const { signOut } = useAuth()
-	const { state: customerState } = useCustomerStore()
-	const customer = computed(() => customerState.customer)
+const { signOut } = useAuth()
+const { state: customerState } = useCustomerStore()
+const customer = computed(() => customerState.customer)
 </script>
 
 <template>
@@ -13,7 +13,7 @@
 				</NuxtLink>
 			</nav>
 			<div class="flex items-center gap-2">
-				<button class="h-[2rem] w-[2rem] rounded-full bg-gray-200 text-lg">U</button>
+				<CustomerIcon />
 				<div class="flex flex-col text-sm text-white">
 					<p>{{ customer?.firstName }}</p>
 					<p class="hidden md:block">{{ customer?.email }}</p>

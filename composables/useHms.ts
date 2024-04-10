@@ -45,6 +45,7 @@ export const useHms = () => {
 	const hmsStore = hmsManager.getStore()
 	const hmsActions = hmsManager.getActions()
 	hmsActions.setLogLevel(HMSLogLevel.NONE)
+	const hmsNotifications = hmsManager.getNotifications()
 
 	const userName = ref('')
 	const roomCode = ref('')
@@ -91,10 +92,12 @@ export const useHms = () => {
 
 		hmsStore.subscribe((val) => media.setAudioEnabled(val), selectIsLocalAudioEnabled)
 		hmsStore.subscribe((val) => media.setVideoEnabled(val), selectIsLocalVideoEnabled)
+		console.log('USER Joined room')
 	}
 
 	const leaveRoom = async () => {
 		await hmsActions.leave()
+		console.log('USER Left room')
 	}
 
 	const toggleAudio = async () => {
@@ -144,6 +147,7 @@ export const useHms = () => {
 		peers,
 		peersWithAudioStatus,
 		messages,
+		hmsNotifications,
 		joinRoom,
 		leaveRoom,
 		toggleAudio,

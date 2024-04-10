@@ -1,68 +1,60 @@
 <script setup>
-	import { onMounted } from 'vue'
-	import { VideoCameraSlashIcon } from '@heroicons/vue/24/outline'
-	const customerStore = useCustomerStore()
-	const customer = customerStore.state.customer
+import { onMounted } from 'vue'
+import { VideoCameraSlashIcon } from '@heroicons/vue/24/outline'
+const customerStore = useCustomerStore()
+const customer = customerStore.state.customer
 
-	const {
-		videoRefs,
-		isLocalAudioEnabled,
-		isLocalVideoEnabled,
-		isConnected,
-		peers,
-		joinRoom,
-		leaveRoom,
-		toggleAudio,
-		toggleVideo,
-		dominantSpeaker,
-	} = useHms()
+const {
+	videoRefs,
+	isLocalAudioEnabled,
+	isLocalVideoEnabled,
+	isConnected,
+	peers,
+	joinRoom,
+	leaveRoom,
+	toggleAudio,
+	toggleVideo,
+	dominantSpeaker,
+} = useHms()
 
-	const props = defineProps({
-		roomCode: String,
-	})
+const props = defineProps({
+	roomCode: String,
+})
 
-	let userName = ''
+let userName = ''
 
-	onMounted(async () => {
-		if (customer?.firstName && customer?.lastName) {
-			userName = customer.firstName + ' ' + customer.lastName
-			await joinRoom(props.roomCode, userName)
-		}
-	})
+onMounted(async () => {
+	if (!isConnected.value && customer?.firstName && customer?.lastName) {
+		userName = customer.firstName + ' ' + customer.lastName
+		await joinRoom(props.roomCode, userName)
+	}
+})
 
-	window.addEventListener('beforeunload', () => {
-		if (isConnected.value) {
-			leaveRoom()
-		}
-	})
+onUnmounted(() => {
+	if (isConnected.value) {
+		leaveRoom()
+	}
+})
 </script>
+
 
 <template>
 	<div class="container mx-auto mb-8 mt-8" data-testid="meeting-container">
 		<div v-if="isConnected" class="conference-section" data-testid="conference-section">
 			<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-				<div
-					v-for="peer in peers"
-					:key="peer.id"
-					:class="{
-						'dominant-speaker': dominantSpeaker && peer.id === dominantSpeaker.id,
-						'relative w-full rounded-lg bg-zinc-500 sm:w-auto': true,
-					}"
-				>
+				<div v-for="peer in peers" :key="peer.id" :class="{
+			'dominant-speaker': dominantSpeaker && peer.id === dominantSpeaker.id,
+			'relative w-full rounded-lg bg-zinc-500 sm:w-auto': true,
+		}">
 					<div class="relative z-[2]">
-						<video
-							ref="videoRefs"
-							class="peer-video mirror-video mx-auto h-auto w-full rounded-lg"
-							autoplay
-							muted
-							playsinline
-							data-testid="video"
-						></video>
+						<video ref="videoRefs" class="peer-video mirror-video mx-auto h-auto w-full rounded-lg" autoplay
+							muted playsinline data-testid="video"></video>
 					</div>
 					<div class="absolute left-0 top-0 z-[1] flex h-full w-full items-center justify-center rounded-md">
 						<VideoCameraSlashIcon class="z-[1] h-10 w-10" />
 					</div>
-					<div class="peer-name absolute bottom-2 left-2 z-[2] mt-2 rounded bg-[rgb(0,0,0,0.3)] px-2 text-white">
+					<div
+						class="peer-name absolute bottom-2 left-2 z-[2] mt-2 rounded bg-[rgb(0,0,0,0.3)] px-2 text-white">
 						<p>{{ peer.name }}</p>
 					</div>
 				</div>
@@ -72,10 +64,11 @@
 </template>
 
 <style>
-	.mirror-video {
-		transform: scaleX(-1);
-	}
-	.dominant-speaker {
-		box-shadow: 0 0 0 3px limegreen;
-	}
+.mirror-video {
+	transform: scaleX(-1);
+}
+
+.dominant-speaker {
+	box-shadow: 0 0 0 3px limegreen;
+}
 </style>
