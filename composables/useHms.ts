@@ -45,6 +45,7 @@ export const useHms = () => {
 	const hmsStore = hmsManager.getStore()
 	const hmsActions = hmsManager.getActions()
 	hmsActions.setLogLevel(HMSLogLevel.NONE)
+	const hmsNotifications = hmsManager.getNotifications()
 
 	const userName = ref('')
 	const roomCode = ref('')
@@ -144,6 +145,7 @@ export const useHms = () => {
 		peers,
 		peersWithAudioStatus,
 		messages,
+		hmsNotifications,
 		joinRoom,
 		leaveRoom,
 		toggleAudio,

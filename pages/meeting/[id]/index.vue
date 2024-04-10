@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import { useLeaveModalStore } from "../../../stores/LeaveMeetingStore"
+
 const meetingStore = useMeetingStore()
 const media = useMediaStore()
 const recordedVideoIsPlaying = ref(false)
 const { leaveRoom, isConnected } = useHms()
+const leaveMeetingModal = useLeaveModalStore()
 
+const isLeaveModalOpen = computed(() => leaveMeetingModal.isLeaveModalOpen)
 definePageMeta({
 	layout: 'meeting',
 })
@@ -45,11 +49,35 @@ const effectiveVimeoId = computed(() => {
 	return meeting.value?.vimeoId || '557876585'
 })
 
-onUnmounted(() => {
+function handleBeforeUnload(event: BeforeUnloadEvent) {
+	if (isConnected.value) {
+		event.preventDefault()
+	}
+}
+
+function handleUnload() {
 	if (isConnected.value) {
 		leaveRoom()
 	}
-	// location.reload()
+}
+
+onMounted(() => {
+	window.addEventListener('beforeunload', handleBeforeUnload)
+	window.addEventListener('unload', handleUnload)
+})
+
+onUnmounted(() => {
+	window.removeEventListener('beforeunload', handleBeforeUnload)
+	window.removeEventListener('unload', handleUnload)
+})
+
+// when user attempts to press the back button
+onBeforeRouteLeave(async (to, from) => {
+	if (isConnected.value) {
+		leaveMeetingModal.toggleLeaveModal()
+		return false
+	}
+
 })
 
 </script>
@@ -89,7 +117,6 @@ onUnmounted(() => {
 			</div>
 		</inner-column>
 	</div>
-
 	<BreakoutRoomModal v-if="!recordedVideoIsPlaying" :meetingRef="meetingId" />
 	<PodFooter />
 </template>
