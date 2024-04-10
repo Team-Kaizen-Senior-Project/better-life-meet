@@ -1,18 +1,18 @@
 <script setup>
-import { ref } from 'vue'
-import { Cog6ToothIcon, VideoCameraSlashIcon, VideoCameraIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
-import { MicrophoneIcon } from '@heroicons/vue/24/solid'
+	import { ref } from 'vue'
+	import { Cog6ToothIcon, VideoCameraSlashIcon, VideoCameraIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
+	import { MicrophoneIcon } from '@heroicons/vue/24/solid'
 
-defineProps(['title', 'description', 'boxLength'])
+	defineProps(['title', 'description'])
 
-const media = useMediaStore()
+	const media = useMediaStore()
 
-function toggleVideo() {
-	media.toggleVideo()
-}
-function toggleAudio() {
-	media.toggleAudio()
-}
+	function toggleVideo() {
+		media.toggleVideo()
+	}
+	function toggleAudio() {
+		media.toggleAudio()
+	}
 </script>
 
 <template>
@@ -28,8 +28,8 @@ function toggleAudio() {
 				<VideoCameraSlashIcon @click="media.toggleModal" />
 			</div>
 		</div>
-		<div class="">
-			<MicControls :box-length="boxLength" />
+		<div>
+			<MicControls />
 		</div>
 		<div class="mt-4 flex justify-between">
 			<div class="flex gap-2">
@@ -41,25 +41,36 @@ function toggleAudio() {
 						</div>
 					</Button>
 
-					<Button type="primary" @click.stop="toggleVideo" v-else class="relative border border-transparent"
-						data-testid="video-icon">
+					<Button
+						type="primary"
+						@click.stop="toggleVideo"
+						v-else
+						class="relative border border-transparent"
+						data-testid="video-icon"
+					>
 						<div
-							class="h-4 w-4 after:absolute after:left-1/2 after:top-1/2 after:h-12 after:w-[2px] after:-translate-x-1/2 after:-translate-y-1/2 after:rotate-45 after:rounded-xl after:bg-red-500 after:shadow-2xl">
+							class="h-4 w-4 after:absolute after:left-1/2 after:top-1/2 after:h-12 after:w-[2px] after:-translate-x-1/2 after:-translate-y-1/2 after:rotate-45 after:rounded-xl after:bg-red-500 after:shadow-2xl"
+						>
 							<VideoCameraIcon />
 						</div>
 					</Button>
 				</div>
 				<div>
-
 					<Button v-if="media.state?.isAudioEnabled" @click="toggleAudio" type="primary" class="border">
 						<div class="h-4 w-4">
 							<MicrophoneIcon />
 						</div>
 					</Button>
-					<Button type="primary" @click="toggleAudio" v-else class="relative border border-transparent"
-						data-testid="video-icon">
+					<Button
+						type="primary"
+						@click="toggleAudio"
+						v-else
+						class="relative border border-transparent"
+						data-testid="video-icon"
+					>
 						<div
-							class="h-4 w-4 after:absolute after:left-1/2 after:top-1/2 after:h-12 after:w-[2px] after:-translate-x-1/2 after:-translate-y-1/2 after:rotate-45 after:rounded-xl after:bg-red-500 after:shadow-2xl">
+							class="h-4 w-4 after:absolute after:left-1/2 after:top-1/2 after:h-12 after:w-[2px] after:-translate-x-1/2 after:-translate-y-1/2 after:rotate-45 after:rounded-xl after:bg-red-500 after:shadow-2xl"
+						>
 							<MicrophoneIcon />
 						</div>
 					</Button>
@@ -73,56 +84,56 @@ function toggleAudio() {
 </template>
 
 <style scoped>
-.slider-vertical {
-	-webkit-appearance: slider-vertical;
-	width: 10px;
-	height: 300px;
-	padding: 0 5px;
-}
+	.slider-vertical {
+		-webkit-appearance: slider-vertical;
+		width: 10px;
+		height: 300px;
+		padding: 0 5px;
+	}
 
-.slider-vertical::-webkit-slider-thumb {
-	-webkit-appearance: none;
-	border: 1px solid #000000;
-	height: 20px;
-	width: 20px;
-	background: #4caf50;
-	cursor: pointer;
-}
+	.slider-vertical::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		border: 1px solid #000000;
+		height: 20px;
+		width: 20px;
+		background: #4caf50;
+		cursor: pointer;
+	}
 
-.slider-vertical::-moz-range-thumb {
-	width: 20px;
-	height: 20px;
-	background: #4caf50;
-	cursor: pointer;
-}
+	.slider-vertical::-moz-range-thumb {
+		width: 20px;
+		height: 20px;
+		background: #4caf50;
+		cursor: pointer;
+	}
 
-.slider-vertical::-ms-thumb {
-	width: 20px;
-	height: 10px;
-	background: #4caf50;
-	cursor: pointer;
-}
+	.slider-vertical::-ms-thumb {
+		width: 20px;
+		height: 10px;
+		background: #4caf50;
+		cursor: pointer;
+	}
 
-.level-container {
-	display: flex;
-	flex-direction: column;
-	height: 300px;
-	/* Adjust as needed */
-	justify-content: space-between;
-}
+	.level-container {
+		display: flex;
+		flex-direction: column;
+		height: 300px;
+		/* Adjust as needed */
+		justify-content: space-between;
+	}
 
-.level-bar {
-	background-color: #444;
-	width: 20px;
-	height: 10%;
-	margin-bottom: 2px;
-	border-radius: 10px;
-	/* This creates the rounded corners */
-}
+	.level-bar {
+		background-color: #444;
+		width: 20px;
+		height: 10%;
+		margin-bottom: 2px;
+		border-radius: 10px;
+		/* This creates the rounded corners */
+	}
 
-.level-bar.active {
-	background-color: #4caf50;
-	border-radius: 10px;
-	/* Ensure the active state also has rounded corners */
-}
+	.level-bar.active {
+		background-color: #4caf50;
+		border-radius: 10px;
+		/* Ensure the active state also has rounded corners */
+	}
 </style>

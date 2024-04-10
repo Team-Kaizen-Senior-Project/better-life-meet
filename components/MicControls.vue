@@ -1,13 +1,34 @@
 <script setup>
-	const props = defineProps({
-		boxLength: Number,
-	})
-	const media = useMediaStore()
 	const micLevel = ref(0)
 	const isTestingMic = ref(false)
 	let audioContext
 	let analyser
 	let intervalId
+	const boxLength = ref(55)
+	const boxLengths = {
+		sm: 30,
+		md: 45,
+		lg: 38,
+		xl: 55,
+	}
+	const media = useMediaStore()
+	onMounted(() => {
+		function updateBoxLength() {
+			if (window.innerWidth < 768) {
+				boxLength.value = boxLengths.sm
+			} else if (window.innerWidth < 1024) {
+				boxLength.value = boxLengths.md
+			} else if (window.innerWidth < 1280) {
+				boxLength.value = boxLengths.lg
+			} else {
+				boxLength.value = boxLengths.xl
+			}
+		}
+		updateBoxLength()
+		window.addEventListener('resize', () => {
+			updateBoxLength()
+		})
+	})
 
 	const MAX_LEVEL = 100 // Max level of micLevel
 
@@ -71,7 +92,7 @@
 
 	const filledBoxes = computed(() => {
 		let level = smoothLevel(micLevel.value) / Math.sqrt(MAX_LEVEL)
-		return Math.ceil(level * props.boxLength)
+		return Math.ceil(level * boxLength.value)
 	})
 </script>
 
@@ -80,25 +101,19 @@
 		<div class="grid gap-2">
 			<span class="text-white">Mic level</span>
 
-			<div class="flex items-center gap-2">
-				<Button @click="toggleMicTest" type="primary" class="w-fit">
+			<div class="flex max-w-full items-center gap-2 overflow-x-hidden">
+				<Button @click="toggleMicTest" type="primary" class="w-fit whitespace-nowrap">
 					{{ isTestingMic ? 'Stop Test' : 'Test Mic' }}
 				</Button>
 				<div class="flex items-center gap-1">
 					<div
-						v-for="i in Number.parseInt(props.boxLength)"
+						v-for="i in boxLength"
 						:key="`level-bar-${i}`"
 						:class="[i <= filledBoxes ? 'bg-green-500' : 'bg-neutral-500', 'h-4 w-1 rounded-sm']"
 					></div>
 				</div>
 			</div>
 			<!-- Button to toggle the mic test -->
-		</div>
-
-		<!-- Volume Control Slider -->
-		<div class="grid max-w-[515px] gap-2 self-start">
-			<label class="whitespace-nowrap text-white">Mic volume</label>
-			<input type="range" min="0" max="100" class="hover:cursor-pointer" data-testid="slider-id" />
 		</div>
 	</div>
 </template>
