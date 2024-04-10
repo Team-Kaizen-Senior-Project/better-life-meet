@@ -92,12 +92,10 @@ export const useHms = () => {
 
 		hmsStore.subscribe((val) => media.setAudioEnabled(val), selectIsLocalAudioEnabled)
 		hmsStore.subscribe((val) => media.setVideoEnabled(val), selectIsLocalVideoEnabled)
-		console.log('USER Joined room')
 	}
 
 	const leaveRoom = async () => {
 		await hmsActions.leave()
-		console.log('USER Left room')
 	}
 
 	const toggleAudio = async () => {

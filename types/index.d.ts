@@ -2,8 +2,6 @@
 // AttendeeFields is the create/update type of Attendee
 import type { IHMSNotifications } from "@100mslive/hms-video-store"
 
-import type { IHMSNotifications } from "@100mslive/hms-video-store"
-
 // for ref fields like meetingRef, customerRef, etc
 export interface GeneralRef {
 	id: string
