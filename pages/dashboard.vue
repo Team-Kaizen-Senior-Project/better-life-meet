@@ -5,7 +5,7 @@
 	await media.initDeviceSources() // set the initial state for the audio and video
 	navigator.mediaDevices.ondevicechange = (event) => {
 		//event listener for when devices are added
-		media.updateDeviceLists()
+		media.initDeviceSources()
 	}
 	console.log(media.state)
 </script>
