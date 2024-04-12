@@ -1,3 +1,4 @@
+import { c } from '@nuxt/test-utils/dist/shared/test-utils.9059LSjm'
 import { AbortError, ServiceError, fql } from 'fauna'
 import type { MeetingFields, RoomResponse, RoomCodeResponse } from '~/types'
 
@@ -34,8 +35,8 @@ export default defineEventHandler(async (event) => {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				name: `Meeting ${meeting.startTime} Pod ${meeting.podRef}`,
-				description: 'Meeting room',
+				name: `Meeting ${meeting.startTime} Pod ${meeting.podRef} Created ${currentTime.toISOString()}`,
+				description: 'Pod meeting room',
 			}),
 		})
 
