@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				name: `Meeting ${meeting.startTime}`,
+				name: `Meeting ${meeting.startTime} Pod ${meeting.podRef}`,
 				description: 'Meeting room',
 			}),
 		})
