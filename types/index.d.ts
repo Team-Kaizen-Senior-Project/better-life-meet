@@ -1,6 +1,6 @@
 // The types that are followed by 'fields' key are used in create and update types instead of the actual type
 // AttendeeFields is the create/update type of Attendee
-import type { IHMSNotifications } from "@100mslive/hms-video-store"
+import type { IHMSNotifications } from '@100mslive/hms-video-store'
 
 // for ref fields like meetingRef, customerRef, etc
 export interface GeneralRef {
@@ -167,6 +167,20 @@ export interface HmsSession {
 	updated_at: string
 }
 
+export interface HmsSessions {
+	limit: number
+	data: HmsSession[]
+}
+
+export interface HmsSessionsFilters {
+	active?: boolean
+	room_id?: string
+	after?: string
+	before?: string
+	limit?: number
+	start?: string
+}
+
 interface HmsTrackEvents {
 	room_id: string
 	session_id: string
@@ -198,4 +212,12 @@ export interface HmsEventsResponse {
 	total: number
 	next: string
 	events: HmsEvents[]
+}
+
+export type HmsEventsFilters = {
+	session_id?: string
+	peer_id?: string
+	user_id?: string
+	limit?: number
+	start?: string
 }
