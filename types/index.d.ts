@@ -143,18 +143,18 @@ export interface HmsRoom {
 	session: Session
 }
 
-export interface Peer {
+export interface HmsPeer {
 	id: string
 	session_id: string
 	name: string
 	role: string
 	user_id: string
 	joined_at: string
-	left_at: string
+	left_at?: string
 }
 
 interface HmsPeers {
-	[key: string]: Peer
+	[key: string]: HmsPeer
 }
 
 export interface HmsSession {
