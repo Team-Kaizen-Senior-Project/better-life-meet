@@ -1,4 +1,3 @@
-import { c } from '@nuxt/test-utils/dist/shared/test-utils.9059LSjm'
 import { AbortError, ServiceError, fql } from 'fauna'
 import type { MeetingFields, RoomResponse, RoomCodeResponse } from '~/types'
 
