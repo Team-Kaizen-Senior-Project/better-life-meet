@@ -1,29 +1,29 @@
 <script setup>
-import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
-const isOpen = ref(false)
-const media = useMediaStore()
-const customModal = {
-	overlay: {
-		background: 'bg-zinc-900/90 dark:bg-gray-800/75',
-	},
-}
-onMounted(async () => {
-	await media.initDeviceSources()
-})
+	import { Cog6ToothIcon } from '@heroicons/vue/24/outline'
+	const isOpen = ref(false)
+	const media = useMediaStore()
+	const customModal = {
+		overlay: {
+			background: 'bg-zinc-900/90 dark:bg-gray-800/75',
+		},
+	}
+	onMounted(async () => {
+		await media.initDeviceSources()
+	})
 
-function saveSelections() {
-	media.setVideoSourceId(media.state.videoSourceId)
-	media.setAudioSourceId(media.state.audioSourceId)
-	media.setOutputSourceId(media.state.outputSourceId)
+	function saveSelections() {
+		media.setVideoSourceId(media.state.videoSourceId)
+		media.setAudioSourceId(media.state.audioSourceId)
+		media.setOutputSourceId(media.state.outputSourceId)
 
-	isOpen.value = false
-}
-async function openModal() {
-	console.log("open")
-	await media.checkPermissions()
-	await media.initDeviceSources()
-	isOpen.value = true
-}
+		isOpen.value = false
+	}
+	async function openModal() {
+		console.log('open')
+		await media.checkPermissions()
+		await media.initDeviceSources()
+		isOpen.value = true
+	}
 </script>
 <template>
 	<UButton @click="openModal" class="bg-zinc-600 hover:bg-zinc-700">
@@ -50,7 +50,7 @@ async function openModal() {
 						{{ device.label }}
 					</option>
 				</select>
-				<span class="text-red-600 text-md">{{ media.state?.error }}</span>
+				<span class="text-md text-red-600">{{ media.state?.error }}</span>
 			</div>
 			<Button class="float-right bg-sky-500 p-2 hover:bg-sky-600" @click="saveSelections">Save</Button>
 			<UButton variant="ghost" class="text-gray-400" type="button" @click="isOpen = false">Cancel</UButton>
