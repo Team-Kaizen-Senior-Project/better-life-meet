@@ -17,6 +17,7 @@ export interface Customer {
 	id: string
 	firstName: string
 	lastName: string
+	admin: boolean
 	email: string
 	netWorth: number
 	podRef: GeneralRef
@@ -49,6 +50,7 @@ export interface Meeting {
 	endTime: Time
 	timeZone: string
 	podRef: GeneralRef
+	vimeoId: string
 	roomId: string
 	roomCode: string
 }
@@ -80,6 +82,13 @@ export interface AttendeeFields {
 	usedVideo?: boolean
 }
 
+interface VimeoVideo {
+	download: { link: string }[]
+	width: number
+	height: number
+	link: string
+}
+
 export interface HmsInstance {
 	userName: Ref<string>
 	roomCode: Ref<string>
@@ -99,6 +108,7 @@ interface ChatMessage {
 	id: string
 	content: string
 	sendername: string | any
+	time: Date
 }
 
 export interface RoomResponse {

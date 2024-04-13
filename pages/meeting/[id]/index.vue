@@ -1,38 +1,37 @@
 <script setup lang="ts">
-	const recordedVideoIsPlaying = ref(true)
-	import { useCountdownStore } from '~/stores/CountdownStore'
-	import { useVideoStore } from '~/stores/videoService'
-	import type { Meeting } from '~/types'
-	import dayjs from 'dayjs'
-	const { display: displayDate } = useDate()
 	const video = useVideoStore()
-	const { leaveRoom, isConnected } = getHmsInstance()
+	const meetingStore = useMeetingStore()
+
+	const recordedVideoIsPlaying = ref(false)
+	const { leaveRoom, isConnected } = useHms()
 
 	definePageMeta({
 		layout: 'meeting',
 	})
-	const countdown = useCountdownStore()
 	const route = useRoute()
-	const meetingId = route.params.id
+	const meetingId = computed(() => route.params.id as string)
 	const { getMeeting } = useApi()
-	const meeting: Meeting = await getMeeting(meetingId)
+	const {
+		data: meeting,
+		refresh,
+		pending,
+	} = await useAsyncData(`meeting-${meetingId.value}`, () => getMeeting(meetingId.value))
+
+	const { countdown, hasStarted } = useMeetingCountdown({
+		startTime: computed(() => meeting.value?.startTime.isoString),
+		onMeetingStart: () => {
+			if (meetingStore.getHasViewedVideo(meetingId.value)) {
+				video.setModalOpen(true)
+			} else {
+				recordedVideoIsPlaying.value = true
+			}
+		},
+	})
+
 	const showBufferText = ref(false)
 
-	const { state: customerState } = useCustomerStore()
-	const customerRef = customerState.customer?.id
-
-	const startTime = dayjs(meeting.startTime.isoString)
-	const now = dayjs()
-
-	if (now.isBefore(startTime)) {
-		countdown.setShowCountdown(true)
-		console.log('before')
-	}
-	console.log(meeting)
-	console.log('Now', now)
-	console.log('Start Time', startTime)
-
 	function toggleVideo() {
+		meetingStore.viewVideo(meetingId.value)
 		showBufferText.value = true
 		// Temp buffer for video end
 		const BUFFER = 5 // seconds
@@ -43,32 +42,52 @@
 		}, BUFFER * 1000)
 	}
 
+	const effectiveVimeoId = computed(() => {
+		return meeting.value?.vimeoId || '557876585'
+	})
+
 	onUnmounted(() => {
 		if (isConnected.value) {
 			leaveRoom()
 		}
+		// location.reload()
 	})
 </script>
 
 <template>
 	<PodHeader />
-	<div class="flex min-h-[82vh] items-center justify-center bg-zinc-800">
-		<MeetingCountdown v-if="countdown.showCountdown" :meetingStartTime="meeting.startTime" />
-		<div v-if="showBufferText" class="rounded-lg bg-zinc-900 p-6 text-center text-white">
-			<p class="font-semibold">Please wait</p>
-			<p>The meeting will start shortly</p>
-		</div>
-		<div v-if="recordedVideoIsPlaying && !showBufferText && !countdown.showCountdown" class="flex flex-row">
-			<PrerecordedVideo @toggle-video="toggleVideo" :meetingStartTime="meeting.startTime" />
-		</div>
-		<div v-else-if="!recordedVideoIsPlaying">
-			<div class="relative overflow-y-auto rounded-lg bg-zinc-900" v-if="true">
-				<MeetingVideo v-if="!video.modalOpen" :roomCode="meeting.roomCode" />
+	<div class="bg-zinc-800">
+		<!-- <MeetingCountdown v-if="countdown.showCountdown" :meetingStartTime="meeting.startTime" /> -->
+		<inner-column>
+			<div class="flex min-h-[82vh] items-center justify-center">
+				<div
+					v-if="!hasStarted"
+					className="flex flex-col items-center justify-center rounded-lg  bg-zinc-900 px-40 py-20 text-white"
+				>
+					<p className="text-2xl font-medium">{{ countdown }}</p>
+				</div>
+				<div v-else-if="showBufferText" class="mx-auto max-w-fit rounded-lg bg-zinc-900 p-6 text-center text-white">
+					<p class="font-semibold">Please wait</p>
+					<p>The meeting will start shortly</p>
+				</div>
+				<PrerecordedVideo v-else-if="recordedVideoIsPlaying" :vimeoId="effectiveVimeoId" @toggle-video="toggleVideo" />
+				<div v-else>
+					<!-- Local user's video feed -->
+					<div class="relative overflow-y-auto rounded-lg bg-zinc-900">
+						<div v-if="!isConnected" class="flex flex-col items-center justify-center p-6 text-white">
+							<p class="font-semibold">Please wait</p>
+							<p>Connecting to the meeting</p>
+							<Loader class="mt-4" />
+						</div>
+						<MeetingVideo v-if="!video.modalOpen" :roomCode="meeting?.roomCode" />
+					</div>
+
+					<div>
+						<ChatBox />
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="flex justify-end p-4">
-			<ChatBox />
-		</div>
+		</inner-column>
 	</div>
 
 	<BreakoutRoomModal v-if="!recordedVideoIsPlaying" :meetingRef="meetingId" />

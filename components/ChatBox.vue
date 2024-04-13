@@ -1,9 +1,10 @@
 <script setup lang="ts">
 	import { ref, computed } from 'vue'
 	import { useRoute } from 'vue-router'
+	import { useHms } from '~/composables/useHms'
 	import type { ChatMessage } from '~/types'
 
-	const { messages, sendBroadcastMessage } = getHmsInstance()
+	const { messages, sendBroadcastMessage } = useHms()
 
 	const chatbox = useChatboxStore()
 	const customerStore = useCustomerStore()
@@ -33,7 +34,7 @@
 <template>
 	<div
 		v-if="isChatBoxVisible"
-		class="flex h-[78vh] w-[20vw] flex-col overflow-hidden rounded-lg bg-zinc-600 p-4 px-4 drop-shadow-xl"
+		class="flex h-[78vh] flex-col overflow-hidden rounded-lg bg-zinc-600 p-4 px-4 drop-shadow-xl"
 	>
 		<div class="mb-4 flex items-center justify-between rounded-md bg-zinc-700 p-2">
 			<h1 class="text-white">Meeting Chat</h1>
@@ -51,18 +52,29 @@
 			<!-- Dynamically display messages -->
 			<div v-for="message in messages" :key="message.id" style="padding: 5px">
 				<div v-if="message.sendername == currentUser" class="flex justify-end">
-					<div
-						class="max-w-xs rounded-lg bg-sky-500 px-3 py-1 text-white"
-						style="border-radius: 15px; padding-top: 10px"
-					>
-						<div class="text-xs text-white">{{ message.sendername }}</div>
-						<div style="font-weight: 490">{{ message.content }}</div>
+					<div class="flex-direction column">
+						<div class="text-xs text-white ">
+							<b>{{ message.sendername }}</b>&nbsp;&nbsp;{{ message.time.toLocaleTimeString('en-US', {hour12: true, hour:'numeric', minute: 'numeric'})}}
+						</div>
+						<div
+							class="max-w-xs rounded-lg bg-sky-500 px-3 py-1 text-white"
+							style="border-radius: 15px; padding-top: 10px; word-wrap: break-word; overflow-wrap: break-word;"
+						>
+							<div style="font-weight: 490">{{ message.content }}</div>
+						</div>
 					</div>
 				</div>
 				<div v-else-if="message.sendername != currentUser" class="flex justify-start">
-					<div class="max-w-xs rounded-lg bg-gray-300 px-3 py-1" style="border-radius: 15px; padding-top: 10px">
-						<div class="text-xs text-gray-500">{{ message.sendername }}</div>
-						<div style="font-weight: 490">{{ message.content }}</div>
+					<div class="flex-direction column">
+						<div class="text-xs text-white">
+							<b>{{ message.sendername }}</b>&nbsp;&nbsp;{{ message.time.toLocaleTimeString('en-US', {hour12: true, hour:'numeric', minute: 'numeric'})}}
+                        </div>
+						<div
+							class="max-w-xs rounded-lg bg-gray-500 px-3 py-1 text-white"
+							style="border-radius: 15px; padding-top: 10px; word-wrap: break-word; overflow-wrap: break-word;"
+						>
+							<div style="font-weight: 490">{{ message.content }}</div>
+						</div>
 					</div>
 				</div>
 			</div>
