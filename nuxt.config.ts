@@ -1,3 +1,5 @@
+import { f } from "msw/lib/core/HttpResponse-_514VQ9z";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	// ... other options
@@ -29,6 +31,7 @@ export default defineNuxtConfig({
 		 */
 		componentDir: './components/ui',
 	},
+
 	imports: {
 		dirs: ['./stores'],
 	},
@@ -59,4 +62,5 @@ export default defineNuxtConfig({
 		HMS_ACCESS_KEY: process.env.HMS_ACCESS_KEY,
 		HMS_SECRET: process.env.HMS_SECRET,
 	},
+	ssr: false,
 })

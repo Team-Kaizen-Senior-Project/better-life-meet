@@ -15,6 +15,8 @@ entity Customer {
     * firstName : string
     * lastName : string
     * email : string
+    * netWorth: number
+    * admin : boolean
 }
 
 entity Meeting {
@@ -24,21 +26,12 @@ entity Meeting {
     * startTime : Date
     * endTime : Date
     * timeZone: string
-}
-
-entity Attendee {
-    * attendeeRef
-    --
-    * customerRef : string
-    * meetingRef : string
-    * joinTime : Date
-    * leaveTime : Date
-    * usedVideo : boolean
-    * platform : string
+    * vimeoId : string
+    * roomId : string
+    * roomCode : string
 }
 
 Customer }|--|| Pod
 Meeting }o--|| Pod
-Meeting --o{ Attendee
 
 @enduml

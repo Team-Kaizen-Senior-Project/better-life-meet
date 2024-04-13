@@ -1,5 +1,6 @@
 // The types that are followed by 'fields' key are used in create and update types instead of the actual type
 // AttendeeFields is the create/update type of Attendee
+import type { IHMSNotifications } from "@100mslive/hms-video-store"
 
 // for ref fields like meetingRef, customerRef, etc
 export interface GeneralRef {
@@ -97,12 +98,14 @@ export interface HmsInstance {
 	isLocalVideoEnabled: Ref<boolean>
 	isConnected: Ref<boolean>
 	peers: Ref<Array<any>> // Specify a more accurate type if available
+	peersWithAudioStatus: Ref<Array<any>>
 	joinRoom: (roomCode: string, username: string) => Promise<void>
 	leaveRoom: () => Promise<void>
 	toggleAudio: () => Promise<void>
 	toggleVideo: () => Promise<void>
 	sendBroadcastMessage: (message: string) => Promise<void>
 	messages: Ref<Array<ChatMessage>>
+	hmsNotifications: IHMSNotifications
 }
 interface ChatMessage {
 	id: string

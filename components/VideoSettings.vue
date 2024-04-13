@@ -1,11 +1,18 @@
 <script setup>
 	import { ref } from 'vue'
-	import { Cog6ToothIcon, VideoCameraSlashIcon, VideoCameraIcon } from '@heroicons/vue/24/outline'
+	import { Cog6ToothIcon, VideoCameraSlashIcon, VideoCameraIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
 	import { MicrophoneIcon } from '@heroicons/vue/24/solid'
 
-	defineProps(['title', 'description', 'boxLength'])
+	defineProps(['title', 'description'])
 
-	const video = useVideoStore()
+	const media = useMediaStore()
+
+	function toggleVideo() {
+		media.toggleVideo()
+	}
+	function toggleAudio() {
+		media.toggleAudio()
+	}
 </script>
 
 <template>
@@ -15,41 +22,59 @@
 			This is your chance to make sure your camera is setup and your microphone is working
 		</p>
 		<div class="relative mb-5 mt-4 aspect-video h-72 w-full rounded bg-zinc-950 text-white md:col-span-8">
-			<VideoPreview :cameraActive="video.cameraActive" v-if="video.cameraActive" />
+			<VideoPreview :cameraActive="media.state.isVideoEnabled" v-if="media.state.isVideoEnabled" />
 
 			<div v-else class="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 transform">
-				<VideoCameraSlashIcon @click="video.toggleCamera" />
+				<VideoCameraSlashIcon @click="media.toggleModal" />
 			</div>
 		</div>
-		<div class="">
-			<MicControls :box-length="boxLength" />
+		<div>
+			<MicControls />
 		</div>
 		<div class="mt-4 flex justify-between">
 			<div class="flex gap-2">
-				<Button type="primary">
-					<div class="h-4 w-4">
-						<Cog6ToothIcon />
-					</div>
-				</Button>
-				<Button
-					type="primary"
-					@click="video.toggleCamera"
-					v-if="!video.cameraActive"
-					class="relative border border-transparent"
-					data-testid="video-icon"
-				>
-					<div
-						class="h-4 w-4 after:absolute after:left-1/2 after:top-1/2 after:h-12 after:w-[2px] after:-translate-x-1/2 after:-translate-y-1/2 after:rotate-45 after:rounded-xl after:bg-red-500 after:shadow-2xl"
+				<DeviceControlModal />
+				<div>
+					<Button v-if="media.state?.isVideoEnabled" @click.stop="toggleVideo" type="primary" class="border">
+						<div class="h-4 w-4">
+							<VideoCameraIcon />
+						</div>
+					</Button>
+
+					<Button
+						type="primary"
+						@click.stop="toggleVideo"
+						v-else
+						class="relative border border-transparent"
+						data-testid="video-icon"
 					>
-						<VideoCameraIcon />
-					</div>
-				</Button>
-				<Button v-else @click="video.toggleCamera" type="primary" class="border border-green-500">
-					<div class="h-4 w-4"><VideoCameraIcon /></div>
-				</Button>
-				<Button type="primary" data-testid="microphone-icon">
-					<div class="h-4 w-4"><MicrophoneIcon /></div>
-				</Button>
+						<div
+							class="h-4 w-4 after:absolute after:left-1/2 after:top-1/2 after:h-12 after:w-[2px] after:-translate-x-1/2 after:-translate-y-1/2 after:rotate-45 after:rounded-xl after:bg-red-500 after:shadow-2xl"
+						>
+							<VideoCameraIcon />
+						</div>
+					</Button>
+				</div>
+				<div>
+					<Button v-if="media.state?.isAudioEnabled" @click="toggleAudio" type="primary" class="border">
+						<div class="h-4 w-4">
+							<MicrophoneIcon />
+						</div>
+					</Button>
+					<Button
+						type="primary"
+						@click="toggleAudio"
+						v-else
+						class="relative border border-transparent"
+						data-testid="video-icon"
+					>
+						<div
+							class="h-4 w-4 after:absolute after:left-1/2 after:top-1/2 after:h-12 after:w-[2px] after:-translate-x-1/2 after:-translate-y-1/2 after:rotate-45 after:rounded-xl after:bg-red-500 after:shadow-2xl"
+						>
+							<MicrophoneIcon />
+						</div>
+					</Button>
+				</div>
 			</div>
 			<div>
 				<slot name="join"></slot>
@@ -92,7 +117,8 @@
 	.level-container {
 		display: flex;
 		flex-direction: column;
-		height: 300px; /* Adjust as needed */
+		height: 300px;
+		/* Adjust as needed */
 		justify-content: space-between;
 	}
 
@@ -101,11 +127,13 @@
 		width: 20px;
 		height: 10%;
 		margin-bottom: 2px;
-		border-radius: 10px; /* This creates the rounded corners */
+		border-radius: 10px;
+		/* This creates the rounded corners */
 	}
 
 	.level-bar.active {
 		background-color: #4caf50;
-		border-radius: 10px; /* Ensure the active state also has rounded corners */
+		border-radius: 10px;
+		/* Ensure the active state also has rounded corners */
 	}
 </style>
