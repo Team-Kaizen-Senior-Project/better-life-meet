@@ -46,7 +46,7 @@
 </script>
 
 <template>
-	<div class="container mx-auto mb-8 mt-8" data-testid="meeting-container">
+	<div class="mx-auto p-4" data-testid="meeting-container">
 		<div v-if="isConnected" class="conference-section" data-testid="conference-section">
 			<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 				<div
