@@ -106,4 +106,11 @@
 	.dominant-speaker {
 		box-shadow: 0 0 0 3px limegreen;
 	}
+
+	.peer-video {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 16 / 9;
+		object-fit: contain;
+	}
 </style>

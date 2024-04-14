@@ -1,8 +1,14 @@
 <script setup lang="ts">
+	import { useWindowSize } from '@vueuse/core'
 	import { useLeaveModalStore } from '../../../stores/LeaveMeetingStore'
-
+	import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '~/components/ui/resizable'
+	definePageMeta({
+		layout: 'meeting',
+	})
 	const meetingStore = useMeetingStore()
 	const media = useMediaStore()
+	const chatbox = useChatboxStore()
+
 	const recordedVideoIsPlaying = ref(false)
 	const recordedVideo = ref<any | undefined>(undefined)
 	const recordedVideoStartAt = ref<number>(0)
@@ -11,9 +17,7 @@
 	const leaveMeetingModal = useLeaveModalStore()
 
 	const isLeaveModalOpen = computed(() => leaveMeetingModal.isLeaveModalOpen)
-	definePageMeta({
-		layout: 'meeting',
-	})
+
 	const route = useRoute()
 	const meetingId = computed(() => route.params.id as string)
 	const { getMeeting, getVimeoVideo } = useApi()
@@ -77,6 +81,15 @@
 		return meeting.value?.vimeoId || '523363936'
 	})
 
+	const { width } = useWindowSize({
+		includeScrollbar: true, // Considers the scrollbar in the width calculation if it's visible
+		listenOrientation: true, // Handles orientation changes in devices
+	})
+
+	const panelDirection = computed(() => {
+		return width.value < 768 ? 'vertical' : 'horizontal' // Assumes 768px as a breakpoint for mobile devices
+	})
+
 	function handleBeforeUnload(event: BeforeUnloadEvent) {
 		if (isConnected.value) {
 			event.preventDefault()
@@ -111,49 +124,53 @@
 </script>
 
 <template>
-	<section class="grid place-items-center bg-zinc-800 py-4">
-		<!-- <MeetingCountdown v-if="countdown.showCountdown" :meetingStartTime="meeting.startTime" /> -->
-		<inner-column class="">
-			<div>
-				<div
-					v-if="loadingRecordedVideo"
-					class="flex items-center justify-center rounded-lg bg-zinc-900 px-40 py-20 text-white"
-				>
-					Loading Meeting
-				</div>
-				<div
-					v-else-if="!hasStarted"
-					className="flex flex-col items-center justify-center rounded-lg  bg-zinc-900 px-40 py-20 text-white"
-				>
-					<p className="text-2xl font-medium">{{ countdown }}</p>
-				</div>
-				<div v-else-if="showBufferText" class="mx-auto max-w-fit rounded-lg bg-zinc-900 p-6 text-center text-white">
-					<p class="font-semibold">Please wait</p>
-					<p>The meeting will start shortly</p>
-				</div>
-				<PrerecordedVideo
-					v-else-if="recordedVideoIsPlaying"
-					:video="recordedVideo"
-					:startAt="recordedVideoStartAt"
-					@toggle-video="toggleVideo"
-				/>
-				<div v-else class="md:flex-end flex w-full flex-col md:flex-row">
-					<!-- Local user's video feed -->
-					<div class="relative w-full overflow-y-auto rounded-lg bg-zinc-900">
-						<div v-if="!isConnected" class="flex flex-col items-center justify-center p-6 text-white">
-							<p class="font-semibold">Please wait</p>
-							<p>Connecting to the meeting</p>
-							<Loader class="mt-4" />
-						</div>
-						<MeetingVideo v-if="!media.state.modalOpen" :roomCode="meeting?.roomCode" />
-					</div>
-
+	<ResizablePanelGroup :direction="panelDirection" class="">
+		<ResizablePanel>
+			<section class="grid place-items-center bg-zinc-800 py-4">
+				<!-- <MeetingCountdown v-if="countdown.showCountdown" :meetingStartTime="meeting.startTime" /> -->
+				<inner-column class="">
 					<div>
-						<ChatBox />
+						<div
+							v-if="loadingRecordedVideo"
+							class="flex items-center justify-center rounded-lg bg-zinc-900 px-40 py-20 text-white"
+						>
+							Loading Meeting
+						</div>
+						<div
+							v-else-if="!hasStarted"
+							className="flex flex-col items-center justify-center rounded-lg  bg-zinc-900 px-40 py-20 text-white"
+						>
+							<p className="text-2xl font-medium">{{ countdown }}</p>
+						</div>
+						<div v-else-if="showBufferText" class="mx-auto max-w-fit rounded-lg bg-zinc-900 p-6 text-center text-white">
+							<p class="font-semibold">Please wait</p>
+							<p>The meeting will start shortly</p>
+						</div>
+						<PrerecordedVideo
+							v-else-if="recordedVideoIsPlaying"
+							:video="recordedVideo"
+							:startAt="recordedVideoStartAt"
+							@toggle-video="toggleVideo"
+						/>
+						<div v-else class="md:flex-end flex w-full flex-col md:flex-row">
+							<!-- Local user's video feed -->
+							<div class="relative w-full overflow-y-auto rounded-lg bg-zinc-900">
+								<div v-if="!isConnected" class="flex flex-col items-center justify-center p-6 text-white">
+									<p class="font-semibold">Please wait</p>
+									<p>Connecting to the meeting</p>
+									<Loader class="mt-4" />
+								</div>
+								<MeetingVideo v-if="!media.state.modalOpen" :roomCode="meeting?.roomCode" />
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>
-		</inner-column>
-	</section>
-	<BreakoutRoomModal :meetingRef="meetingId" />
+				</inner-column>
+			</section>
+		</ResizablePanel>
+		<BreakoutRoomModal :meetingRef="meetingId" />
+		<ResizableHandle :class="{ hidden: !chatbox.isChatBoxVisible }" />
+		<ResizablePanel :default-size="30" :max-size="45" :minSize="30" :class="{ hidden: !chatbox.isChatBoxVisible }">
+			<ChatBox />
+		</ResizablePanel>
+	</ResizablePanelGroup>
 </template>

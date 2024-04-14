@@ -65,6 +65,7 @@
 		"tailwind-merge": "^2.2.1",
 		"tailwindcss-animate": "^1.0.7",
 		"uuid": "^9.0.1",
+		"vaul-vue": "^0.1.0",
 		"vimeo": "^2.3.1",
 		"vue-sonner": "^1.1.2"
 	},
