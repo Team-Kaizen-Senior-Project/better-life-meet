@@ -87,7 +87,7 @@
 	})
 
 	const panelDirection = computed(() => {
-		return width.value < 768 ? 'vertical' : 'horizontal' // Assumes 768px as a breakpoint for mobile devices
+		return width.value < 768 ? 'vertical' : 'horizontal' //  768px as a breakpoint for mobile devices
 	})
 
 	function handleBeforeUnload(event: BeforeUnloadEvent) {
@@ -124,11 +124,11 @@
 </script>
 
 <template>
-	<ResizablePanelGroup :direction="panelDirection" class="">
-		<ResizablePanel>
+	<ResizablePanelGroup :direction="panelDirection" class="video-section mx-auto max-w-[1200px] gap-2">
+		<ResizablePanel :style="{ overflowY: 'auto' }">
 			<section class="grid place-items-center bg-zinc-800 py-4">
 				<!-- <MeetingCountdown v-if="countdown.showCountdown" :meetingStartTime="meeting.startTime" /> -->
-				<inner-column class="">
+				<inner-column>
 					<div>
 						<div
 							v-if="loadingRecordedVideo"
@@ -168,9 +168,22 @@
 			</section>
 		</ResizablePanel>
 		<BreakoutRoomModal :meetingRef="meetingId" />
-		<ResizableHandle :class="{ hidden: !chatbox.isChatBoxVisible }" />
-		<ResizablePanel :default-size="30" :max-size="45" :minSize="30" :class="{ hidden: !chatbox.isChatBoxVisible }">
+		<ResizableHandle :class="{ hidden: !chatbox.isChatBoxVisible }" class="bg-transparent" />
+		<ResizablePanel
+			:default-size="30"
+			:max-size="45"
+			:minSize="30"
+			:class="{ hidden: !chatbox.isChatBoxVisible }"
+			class=""
+		>
 			<ChatBox />
 		</ResizablePanel>
 	</ResizablePanelGroup>
 </template>
+
+<style scoped>
+	.video-section {
+		scrollbar-width: thin;
+		scrollbar-color: #3f3f46 transparent;
+	}
+</style>
