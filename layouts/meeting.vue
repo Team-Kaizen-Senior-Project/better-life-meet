@@ -1,13 +1,13 @@
 <script setup></script>
 
 <template>
-	<main id="page-content" class="flex-grow bg-zinc-800">
+	<PodHeader />
+
+	<main id="page-content" class="flex-grow overflow-auto bg-zinc-800 p-4">
 		<slot />
 	</main>
 
-	<footer>
-		<slot name="footer"></slot>
-	</footer>
+	<PodFooter />
 </template>
 
 <style></style>
