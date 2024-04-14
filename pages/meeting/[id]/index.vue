@@ -86,6 +86,22 @@
 		listenOrientation: true, // Handles orientation changes in devices
 	})
 
+	const panelSizes = computed(() => {
+		if (panelDirection.value === 'vertical') {
+			return {
+				defaultSize: 50, // Change to your desired value for vertical
+				maxSize: 70, // Change to your desired value for vertical
+				minSize: 50, // Change to your desired value for vertical
+			}
+		} else {
+			return {
+				defaultSize: 30, // Current values for horizontal
+				maxSize: 45,
+				minSize: 30,
+			}
+		}
+	})
+
 	const panelDirection = computed(() => {
 		return width.value < 768 ? 'vertical' : 'horizontal' //  768px as a breakpoint for mobile devices
 	})
@@ -170,11 +186,10 @@
 		<BreakoutRoomModal :meetingRef="meetingId" />
 		<ResizableHandle :class="{ hidden: !chatbox.isChatBoxVisible }" class="bg-transparent" />
 		<ResizablePanel
-			:default-size="30"
-			:max-size="45"
-			:minSize="30"
+			:default-size="panelSizes.defaultSize"
+			:max-size="panelSizes.maxSize"
+			:minSize="panelSizes.minSize"
 			:class="{ hidden: !chatbox.isChatBoxVisible }"
-			class=""
 		>
 			<ChatBox />
 		</ResizablePanel>
@@ -184,6 +199,6 @@
 <style scoped>
 	.video-section {
 		scrollbar-width: thin;
-		scrollbar-color: #3f3f46 transparent;
+		scrollbar-color: #a1a1aa transparent;
 	}
 </style>
