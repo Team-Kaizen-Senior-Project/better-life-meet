@@ -37,7 +37,7 @@
 		class="flex h-[78vh] flex-col overflow-hidden rounded-lg bg-zinc-600 p-4 px-4 drop-shadow-xl"
 	>
 		<div class="mb-4 flex items-center justify-between rounded-md bg-zinc-700 p-2">
-			<h1 class="text-white">Meeting Chat</h1>
+			<h1 class="text-white" data-testid="meeting-chat">Meeting Chat</h1>
 			<button @click="closeChatBox" class="ml-2">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="h-8">
 					<path
