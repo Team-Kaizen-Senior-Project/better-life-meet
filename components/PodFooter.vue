@@ -63,9 +63,13 @@
 						</Button>
 						<VideoSettingsPopover />
 					</div>
-					<AudioOutputPopover />
+					<div class="hidden sm:block">
+						<AudioOutputPopover />
+					</div>
 				</div>
-				<ParticipantIcons />
+				<div class="hidden sm:block">
+					<ParticipantIcons />
+				</div>
 				<div class="flex flex-row gap-2">
 					<Button
 						v-if="isConnected"
