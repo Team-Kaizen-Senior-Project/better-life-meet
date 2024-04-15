@@ -170,6 +170,7 @@ export interface HmsSession {
 export interface HmsSessions {
 	limit: number
 	data: HmsSession[]
+	last?: string
 }
 
 export interface HmsSessionsFilters {
@@ -220,4 +221,26 @@ export type HmsEventsFilters = {
 	user_id?: string
 	limit?: number
 	start?: string
+}
+
+export interface MeetingSession {
+	id: string
+	podName: string
+	startTime: string
+	endTime: string
+	timeZone: string
+	peers: MeetingSessionPeer[]
+}
+
+export interface MeetingSessionPeer {
+	name: string
+	joined_at: string
+	left_at?: string
+	duration: number
+}
+
+export interface MeetingSessionList {
+	limit: number
+	data: MeetingSession[]
+	last?: string
 }

@@ -1,7 +1,7 @@
-import type { HMSPeer } from '@100mslive/hms-video-store/dist/internal'
 import { AbortError, ServiceError, fql } from 'fauna'
 import { getHmsSessions } from '~/server/utils/hms'
-import type { HmsSessionsFilters, Meeting, Pod } from '~/types'
+import type { HmsSessions, HmsSessionsFilters, Meeting, Pod } from '~/types'
+import type { MeetingSession, MeetingSessionList, MeetingSessionPeer } from '..'
 
 export default defineEventHandler(async (event) => {
 	// Initialize Fauna client
@@ -11,10 +11,10 @@ export default defineEventHandler(async (event) => {
 	const filters = getQuery<Omit<HmsSessionsFilters, 'active'>>(event)
 
 	try {
-		const sessions = await getHmsSessions(filters)
+		const sessions: HmsSessions = await getHmsSessions(filters)
 
 		// For each session, retreive the meeting by room ID.
-		const meetings = await Promise.all(
+		const meetings: MeetingSession[] = await Promise.all(
 			sessions.data.map(async (session) => {
 				let query = fql`let meeting = Meeting.firstWhere(.roomId == ${session.room_id});
 				if (!meeting.exists()) abort({ message: "Meeting with this ID does not exist." });
@@ -30,59 +30,66 @@ export default defineEventHandler(async (event) => {
 
 				const pod = response.data as unknown as Pod
 
+				//
+				const peers = new Map<string, MeetingSessionPeer>()
+				Object.values(session.peers).forEach((peer) => {
+					if (peers.has(peer.name)) {
+						const existingPeer = peers.get(peer.name)! // defined if true
+
+						if (peer.left_at) {
+							const duration = (Date.parse(peer.left_at) - Date.parse(peer.joined_at)) / 1000
+							existingPeer.duration += Math.ceil(duration)
+						}
+
+						// Update for oldest joined_at
+						existingPeer.joined_at =
+							Date.parse(existingPeer.joined_at) < Date.parse(peer.joined_at) ? existingPeer.joined_at : peer.joined_at
+
+						// Set if unset left_at
+						if (peer.left_at && !existingPeer.left_at) {
+							existingPeer.left_at = peer.left_at
+						}
+						// Update for newest left_at
+						else if (peer.left_at && existingPeer.left_at) {
+							existingPeer.left_at =
+								Date.parse(existingPeer.left_at) < Date.parse(peer.left_at) ? peer.left_at : existingPeer.left_at
+						}
+					} else {
+						const newPeer: MeetingSessionPeer = {
+							name: peer.name,
+							joined_at: peer.joined_at,
+							left_at: peer.left_at,
+							duration: 0,
+						}
+
+						if (peer.left_at) {
+							const duration = (Date.parse(peer.left_at) - Date.parse(peer.joined_at)) / 1000
+							newPeer.duration = Math.ceil(duration)
+						}
+
+						peers.set(peer.name, newPeer)
+					}
+				})
+
 				return {
 					id: meeting.id,
-					pod: pod.name,
+					podName: pod.name,
 					active: session.active,
 					startTime: meeting.startTime.isoString,
 					endTime: meeting.endTime.isoString,
 					timeZone: meeting.timeZone,
-					peers: session.peers,
+					peers: Array.from(peers, ([_, v]) => v),
 				}
 			}),
 		)
 
-		meetings.forEach((meeting) => {
-			const peers = new Map()
-			Object.values(meeting.peers).forEach((peer) => {
-				if (!peers.has(peer.name)) {
-					peers.set(peer.name, {
-						joined_at: peer.joined_at,
-						left_at: peer.left_at,
-					})
+		const meetingSessionList: MeetingSessionList = {
+			limit: sessions.limit,
+			data: meetings,
+			last: sessions.last,
+		}
 
-					if (peer.left_at) {
-						const duration = (Date.parse(peer.left_at) - Date.parse(peer.joined_at)) / 1000
-						peers.get(peer.name).duration = Math.ceil(duration)
-					}
-				} else {
-					if (peer.left_at) {
-						const duration = (Date.parse(peer.left_at) - Date.parse(peer.joined_at)) / 1000
-						peers.get(peer.name).duration += Math.ceil(duration)
-					}
-
-					// Update for oldest joined_at
-					const seen = peers.get(peer.name)
-					seen.joined_at = Date.parse(seen.joined_at) < Date.parse(peer.joined_at) ? seen.joined_at : peer.joined_at
-
-					// Set if unset left_at
-					if (peer.left_at && !seen.left_at) {
-						seen.left_at = peer.left_at
-					}
-					// Update for newest left_at
-					else if (peer.left_at && seen.left_at) {
-						seen.left_at = Date.parse(seen.left_at) < Date.parse(peer.left_at) ? peer.left_at : seen.left_at
-					}
-				}
-			})
-			meeting.peers = Object.fromEntries(peers)
-		})
-
-		// well...
-		// @ts-ignore
-		sessions.data = meetings
-
-		return sessions
+		return meetingSessionList
 	} catch (error) {
 		console.log(error)
 		if (error instanceof AbortError) {
