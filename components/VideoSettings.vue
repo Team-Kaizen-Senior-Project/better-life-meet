@@ -66,12 +66,12 @@
 						@click="toggleAudio"
 						v-else
 						class="relative border border-transparent"
-						data-testid="video-icon"
+						data-testid="microphone-icon"
 					>
 						<div
 							class="h-4 w-4 after:absolute after:left-1/2 after:top-1/2 after:h-12 after:w-[2px] after:-translate-x-1/2 after:-translate-y-1/2 after:rotate-45 after:rounded-xl after:bg-red-500 after:shadow-2xl"
 						>
-							<MicrophoneIcon />
+							<MicrophoneIcon data-testid="microphone-icon" />
 						</div>
 					</Button>
 				</div>

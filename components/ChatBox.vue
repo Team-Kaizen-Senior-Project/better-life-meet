@@ -51,7 +51,7 @@
 <template>
 	<div v-if="isChatBoxVisible" class="chat flex h-full flex-col overflow-hidden rounded-lg bg-zinc-700 drop-shadow-xl">
 		<div class="flex items-center justify-between border-b border-zinc-600 bg-zinc-700 px-4 py-3">
-			<h1 class="font-bold text-white">Meeting Chat</h1>
+			<h1 class="font-bold text-white" data-testid="meeting-chat">Meeting Chat</h1>
 			<button @click="closeChatBox" class="ml-2">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="h-6">
 					<path

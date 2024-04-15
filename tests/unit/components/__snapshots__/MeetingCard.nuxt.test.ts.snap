@@ -1,0 +1,18 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MeetingCard > MeetingCard displays correctly 1`] = `
+"<div class="rounded-lg bg-zinc-800 p-4 border-white">
+  <div class="grid gap-2">
+    <div class="text-sm font-medium text-white">Pod accountability meeting</div>
+    <div class="grid gap-2">
+      <p class="text-sm text-zinc-300">Mar 29 2024</p>
+      <p class="text-sm text-zinc-300"><span>9:43 AM - 9:43 AM</span></p>
+      <!--v-if-->
+    </div>
+  </div>
+  <div class="mt-4 flex w-full items-center justify-end">
+    <!--v-if-->
+    <!--v-if-->
+  </div>
+</div>"
+`;

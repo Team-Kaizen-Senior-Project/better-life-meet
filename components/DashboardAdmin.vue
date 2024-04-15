@@ -108,7 +108,7 @@
 						<MeetingCard :meeting="meeting" :isFirst="false" @refresh="refresh" />
 					</div>
 				</div>
-				<div v-else>No meetings found.</div>
+				<div v-else data-testid="no-meetings-found">No meetings found.</div>
 			</div>
 		</inner-column>
 	</section>
