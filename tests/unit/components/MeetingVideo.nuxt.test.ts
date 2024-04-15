@@ -7,14 +7,14 @@ import { useCustomerStore } from "~/stores/CustomerStore"
 import { getHmsInstance } from "~/composables/useHms"
 
 vi.mock('~/stores/CustomerStore', () => ({
-    useCustomerStore: vi.fn(() => ({
-        state: {
-            customer: {
-                firstName: 'John',
-                lastName: 'Doe'
-            }
-        }
-    }))
+	useCustomerStore: vi.fn(() => ({
+		state: {
+			customer: {
+				firstName: 'John',
+				lastName: 'Doe',
+			},
+		},
+	})),
 }))
 
 vi.mock('~/composables/useHms', () => ({
@@ -56,47 +56,47 @@ describe('MeetingVideo', () => {
         }
     })
 
-    it('Video renders', async () => {
-        const wrapper = await mountSuspended(MeetingVideo, {
-            global: {
-                plugins: []
-            }
-        })
-        await nextTick()
-        expect(wrapper.find('[data-testid="video"]').exists()).toBe(true)
-    });
+	it('Video renders', async () => {
+		const wrapper = await mountSuspended(MeetingVideo, {
+			global: {
+				plugins: [],
+			},
+		})
+		await nextTick()
+		expect(wrapper.find('[data-testid="video"]').exists()).toBe(true)
+	})
 
-    it ('Checks peers`', async () => {
-        const wrapper = await mountSuspended(MeetingVideo, {
-            global: {
-                plugins: []
-            }
-        })
-        await nextTick()
-        const peerNames = wrapper.findAll('.peer-name')
-        expect(peerNames.length).toBe(3)
-    })
+	it('Checks peers`', async () => {
+		const wrapper = await mountSuspended(MeetingVideo, {
+			global: {
+				plugins: [],
+			},
+		})
+		await nextTick()
+		const peerNames = wrapper.findAll('.peer-name')
+		expect(peerNames.length).toBe(3)
+	})
 
-    it ('creates video elements for each peer', async () => {
-        const wrapper = await mountSuspended(MeetingVideo, {
-            global: {
-                plugins: []
-            }
-        })
-        await nextTick()
-        const videoElements = wrapper.findAll('video')
-        expect(videoElements.length).toBe(3)
-    })
+	it('creates video elements for each peer', async () => {
+		const wrapper = await mountSuspended(MeetingVideo, {
+			global: {
+				plugins: [],
+			},
+		})
+		await nextTick()
+		const videoElements = wrapper.findAll('video')
+		expect(videoElements.length).toBe(3)
+	})
 
-    it ('uses correct user name when joining room', async () => {
-        const wrapper = await mountSuspended(MeetingVideo, {
-            global: {
-                plugins: []
-            }
-        })
-        await nextTick()
-        const c = useCustomerStore()
-        const expectedUserName = c.state.customer?.firstName + ' ' + c.state.customer?.lastName
-        expect(expectedUserName).toBe('John Doe')
-    })
-});
+	it('uses correct user name when joining room', async () => {
+		const wrapper = await mountSuspended(MeetingVideo, {
+			global: {
+				plugins: [],
+			},
+		})
+		await nextTick()
+		const c = useCustomerStore()
+		const expectedUserName = c.state.customer?.firstName + ' ' + c.state.customer?.lastName
+		expect(expectedUserName).toBe('John Doe')
+	})
+})

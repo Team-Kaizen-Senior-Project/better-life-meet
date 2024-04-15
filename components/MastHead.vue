@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const { signOut } = useAuth()
-const { state: customerState } = useCustomerStore()
-const customer = computed(() => customerState.customer)
+	const { signOut } = useAuth()
+	const { state: customerState } = useCustomerStore()
+	const customer = computed(() => customerState.customer)
 </script>
 
 <template>

@@ -1,4 +1,4 @@
-import { f } from "msw/lib/core/HttpResponse-_514VQ9z";
+import { f } from 'msw/lib/core/HttpResponse-_514VQ9z'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({

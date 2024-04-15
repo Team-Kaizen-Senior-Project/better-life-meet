@@ -103,7 +103,7 @@
 						Start
 						<span class="text-red-400">*</span>
 					</label>
-					<div class="flex gap-2 flex-row">
+					<div class="flex flex-row gap-2">
 						<input
 							required
 							v-model="state.form.startData.date"
@@ -126,7 +126,7 @@
 						End
 						<span class="text-red-400">*</span>
 					</label>
-					<div class="flex gap-2 flex-row">
+					<div class="flex flex-row gap-2">
 						<input
 							required
 							v-model="state.form.endData.date"
@@ -154,7 +154,7 @@
 						v-model="state.form.timeZone"
 						name="meeting-timezone-input"
 						id="meeting-timezone-input"
-						class="min-w-0 min-h-10 flex-auto rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] pr-10 text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
+						class="min-h-10 min-w-0 flex-auto rounded-md border border-zinc-700 border-zinc-900/10 bg-zinc-700 px-3 py-[calc(theme(spacing.2)-1px)] pr-10 text-zinc-200 shadow-md shadow-zinc-800/5 placeholder:text-zinc-500 focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-400/10 sm:text-sm"
 					>
 						<option v-for="timezone in timeZones" :value="timezone">
 							{{ timezone }}

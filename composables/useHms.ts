@@ -15,10 +15,9 @@ import {
 	selectDominantSpeaker,
 	type HMSPeer,
 	type HMSPeerWithMuteStatus,
-	type HMSVideoTrack
+	type HMSVideoTrack,
 } from '@100mslive/hms-video-store'
 import type { HmsInstance, ChatMessage } from '~/types'
-
 
 // this is the hms instance
 // if you want to use the instance just do export const useHmsInstance and you can import it into any file.

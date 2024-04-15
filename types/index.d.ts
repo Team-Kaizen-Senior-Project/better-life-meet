@@ -1,6 +1,6 @@
 // The types that are followed by 'fields' key are used in create and update types instead of the actual type
 // AttendeeFields is the create/update type of Attendee
-import type { IHMSNotifications } from "@100mslive/hms-video-store"
+import type { IHMSNotifications } from '@100mslive/hms-video-store'
 
 // for ref fields like meetingRef, customerRef, etc
 export interface GeneralRef {
@@ -143,18 +143,18 @@ export interface HmsRoom {
 	session: Session
 }
 
-export interface Peer {
+export interface HmsPeer {
 	id: string
 	session_id: string
 	name: string
 	role: string
 	user_id: string
 	joined_at: string
-	left_at: string
+	left_at?: string
 }
 
 interface HmsPeers {
-	[key: string]: Peer
+	[key: string]: HmsPeer
 }
 
 export interface HmsSession {
@@ -167,7 +167,22 @@ export interface HmsSession {
 	updated_at: string
 }
 
-interface HmsTrackEvents {
+export interface HmsSessions {
+	limit: number
+	data: HmsSession[]
+	last?: string
+}
+
+export interface HmsSessionsFilters {
+	active?: boolean
+	room_id?: string
+	after?: string
+	before?: string
+	limit?: number
+	start?: string
+}
+
+interface HmsTrackEvent {
 	room_id: string
 	session_id: string
 	room_name: string
@@ -178,24 +193,56 @@ interface HmsTrackEvents {
 	role: string
 	track_id: string
 	stream_id: string
-	type: string
+	type: 'audio' | 'video'
 	source: string
 	mute: boolean
 	started_at: string
 	stopped_at?: string // only specified in track.remove.success event
 }
 
-export interface HmsEvents {
+export interface HmsEvent {
 	version: string
 	id: string
 	timestamp: string
 	type: string
-	data: HmsTrackEvents
+	data: HmsTrackEvent
 }
 
 export interface HmsEventsResponse {
 	limit: number
 	total: number
-	next: string
-	events: HmsEvents[]
+	next?: string
+	events: HmsEvent[]
+}
+
+export type HmsEventsFilters = {
+	session_id?: string
+	peer_id?: string
+	user_id?: string
+	limit?: number
+	start?: string
+}
+
+export interface MeetingSession {
+	id: string
+	pod_name: string
+	start_time: string
+	end_time: string
+	time_zone: string
+	peers: MeetingSessionPeer[]
+}
+
+export interface MeetingSessionPeer {
+	name: string
+	joined_at: string
+	left_at?: string
+	duration: number
+	mic_duration: number
+	video_duration: number
+}
+
+export interface MeetingSessionList {
+	limit: number
+	data: MeetingSession[]
+	last?: string
 }

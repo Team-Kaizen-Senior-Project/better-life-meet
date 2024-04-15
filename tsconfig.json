@@ -4,7 +4,7 @@
 			"#internal/nitro": ["./node_modules/nitropack/dist/runtime"],
 			"#internal/nitro/*": ["./node_modules/nitropack/dist/runtime/*"],
 			"~/*": ["./*"],
-			"@/*":["./src/*"]
+			"@/*": ["./src/*"]
 		},
 		"types": ["vitest/globals"],
 		"moduleResolution": "node"

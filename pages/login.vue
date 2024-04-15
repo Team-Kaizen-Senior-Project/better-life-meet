@@ -41,7 +41,7 @@
 
 			<!-- Right Side (Login Form) -->
 			<div class="flex w-full flex-col items-center justify-center bg-gray-50 md:w-1/2 md:flex-row">
-				<img src="/better-life-logo.png" alt="Better Life Logo" class="w-[35vw] -mt-8 mb-2 min-w-[200px] md:hidden" />
+				<img src="/better-life-logo.png" alt="Better Life Logo" class="-mt-8 mb-2 w-[35vw] min-w-[200px] md:hidden" />
 				<div class="w-96 rounded-lg bg-white p-10 shadow-xl">
 					<h1 class="mb-6 text-2xl font-bold">Login</h1>
 
