@@ -1,7 +1,14 @@
 import { AbortError, ServiceError, fql } from 'fauna'
 import { getHmsSessions } from '~/server/utils/hms'
-import type { HmsSessions, HmsSessionsFilters, Meeting, Pod } from '~/types'
-import type { MeetingSession, MeetingSessionList, MeetingSessionPeer } from '..'
+import type {
+	HmsSessions,
+	HmsSessionsFilters,
+	Meeting,
+	MeetingSession,
+	MeetingSessionList,
+	MeetingSessionPeer,
+	Pod,
+} from '~/types'
 
 export default defineEventHandler(async (event) => {
 	// Initialize Fauna client
@@ -60,6 +67,8 @@ export default defineEventHandler(async (event) => {
 							joined_at: peer.joined_at,
 							left_at: peer.left_at,
 							duration: 0,
+							mic_duration: 0,
+							video_duration: 0,
 						}
 
 						if (peer.left_at) {
@@ -71,14 +80,34 @@ export default defineEventHandler(async (event) => {
 					}
 				})
 
+				const meetingPeers = Array.from(peers, ([_, v]) => v)
+
+				// For each peer, let's calculate how long they used their mic/video
+				// Get track events by room ID
+				const trackEvents = await getHmsEvents(meeting.roomId, 'remove', { limit: 100 })
+				meetingPeers.forEach((peer) => {
+					const peerEvents = trackEvents.events.filter((event) => event.data.user_name === peer.name)
+					peerEvents.forEach((event) => {
+						const stopped_at = event.data.stopped_at! // defined since it's a successful remove event
+						const started_at = event.data.started_at
+
+						const subDuration = Math.ceil((Date.parse(stopped_at) - Date.parse(started_at)) / 1000)
+						if (event.data.type === 'audio') {
+							peer.mic_duration += subDuration
+						} else {
+							peer.video_duration += subDuration
+						}
+					})
+				})
+
 				return {
 					id: meeting.id,
-					podName: pod.name,
+					pod_name: pod.name,
 					active: session.active,
-					startTime: meeting.startTime.isoString,
-					endTime: meeting.endTime.isoString,
-					timeZone: meeting.timeZone,
-					peers: Array.from(peers, ([_, v]) => v),
+					start_time: meeting.startTime.isoString,
+					end_time: meeting.endTime.isoString,
+					time_zone: meeting.timeZone,
+					peers: meetingPeers,
 				}
 			}),
 		)

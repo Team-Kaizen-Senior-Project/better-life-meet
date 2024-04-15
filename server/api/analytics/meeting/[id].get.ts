@@ -41,10 +41,10 @@ export default defineEventHandler(async (event) => {
 
 		const meetingSession: MeetingSession = {
 			id: meeting.id,
-			podName: pod.name,
-			startTime: meeting.startTime.isoString,
-			endTime: meeting.endTime.isoString,
-			timeZone: meeting.timeZone,
+			pod_name: pod.name,
+			start_time: meeting.startTime.isoString,
+			end_time: meeting.endTime.isoString,
+			time_zone: meeting.timeZone,
 			peers: [],
 		}
 
@@ -77,6 +77,8 @@ export default defineEventHandler(async (event) => {
 					joined_at: peer.joined_at,
 					left_at: peer.left_at,
 					duration: 0,
+					mic_duration: 0,
+					video_duration: 0,
 				}
 
 				if (peer.left_at) {
@@ -89,6 +91,26 @@ export default defineEventHandler(async (event) => {
 		})
 
 		meetingSession.peers = Array.from(peers, ([_, v]) => v)
+
+		// For each peer, let's calculate how long they used their mic/video
+		// Get track events by room ID
+		// WARN: This may be inaccurate, as it only retrieves 100 track 'remove' events.
+		const trackEvents = await getHmsEvents(roomId, 'remove', { limit: 100 })
+
+		meetingSession.peers.forEach((peer) => {
+			const peerEvents = trackEvents.events.filter((event) => event.data.user_name === peer.name)
+			peerEvents.forEach((event) => {
+				const stopped_at = event.data.stopped_at! // defined since it's a successful remove event
+				const started_at = event.data.started_at
+
+				const subDuration = Math.ceil((Date.parse(stopped_at) - Date.parse(started_at)) / 1000)
+				if (event.data.type === 'audio') {
+					peer.mic_duration += subDuration
+				} else {
+					peer.video_duration += subDuration
+				}
+			})
+		})
 
 		// Return query result
 		return meetingSession

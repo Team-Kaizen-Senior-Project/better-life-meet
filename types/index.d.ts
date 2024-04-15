@@ -182,7 +182,7 @@ export interface HmsSessionsFilters {
 	start?: string
 }
 
-interface HmsTrackEvents {
+interface HmsTrackEvent {
 	room_id: string
 	session_id: string
 	room_name: string
@@ -193,26 +193,26 @@ interface HmsTrackEvents {
 	role: string
 	track_id: string
 	stream_id: string
-	type: string
+	type: 'audio' | 'video'
 	source: string
 	mute: boolean
 	started_at: string
 	stopped_at?: string // only specified in track.remove.success event
 }
 
-export interface HmsEvents {
+export interface HmsEvent {
 	version: string
 	id: string
 	timestamp: string
 	type: string
-	data: HmsTrackEvents
+	data: HmsTrackEvent
 }
 
 export interface HmsEventsResponse {
 	limit: number
 	total: number
-	next: string
-	events: HmsEvents[]
+	next?: string
+	events: HmsEvent[]
 }
 
 export type HmsEventsFilters = {
@@ -225,10 +225,10 @@ export type HmsEventsFilters = {
 
 export interface MeetingSession {
 	id: string
-	podName: string
-	startTime: string
-	endTime: string
-	timeZone: string
+	pod_name: string
+	start_time: string
+	end_time: string
+	time_zone: string
 	peers: MeetingSessionPeer[]
 }
 
@@ -237,6 +237,8 @@ export interface MeetingSessionPeer {
 	joined_at: string
 	left_at?: string
 	duration: number
+	mic_duration: number
+	video_duration: number
 }
 
 export interface MeetingSessionList {
