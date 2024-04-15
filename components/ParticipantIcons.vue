@@ -1,7 +1,6 @@
 <script setup lang="ts">
 	import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
-	import { MicrophoneIcon, VideoCameraIcon, VideoCameraSlashIcon } from '@heroicons/vue/24/outline'
-
+	import { MicrophoneIcon, VideoCameraIcon, VideoCameraSlashIcon, UserGroupIcon } from '@heroicons/vue/24/outline'
 
 	const { isConnected, peers, peersWithAudioStatus } = useHms()
 
@@ -37,33 +36,42 @@
 			<div
 				v-for="(peer, index) in peers"
 				:key="peer.id"
-				class="absolute"
+				class="absolute hidden md:block"
 				:style="{ left: 'calc(50% - ' + index * -30 + 'px' }"
 			>
-				<button v-if="index < 3"
+				<button
+					v-if="index < 3"
 					@click="popoverOpen = true"
 					class="inline-block aspect-[1/1] h-10 w-10 rounded-full text-white"
 					:style="{ backgroundColor: generateColor(peer.name.split(' ')[0], peer.name.split(' ')[1]) }"
 				>
 					{{ peer.name.split(' ')[0][0] }}{{ peer.name.split(' ')[1][0] }}
 				</button>
-				<button v-else-if="index == 3"
+				<button
+					v-else-if="index == 3"
 					@click="popoverOpen = true"
-					class="inline-block aspect-[1/1] h-10 w-10 rounded-full text-white background-color-"
+					class="background-color- inline-block aspect-[1/1] h-10 w-10 rounded-full text-white"
 					:style="{ backgroundColor: 'hsla(0, 0%, 32%, 0.85)' }"
-					>
+				>
 					...
 				</button>
 			</div>
+			<UserGroupIcon class="h-7 w-7 text-slate-300 md:hidden" />
 		</PopoverTrigger>
 		<PopoverContent class="w-80 bg-zinc-900" align="center" style="margin-bottom: 50px; margin-left: 80px">
 			<div class="space-y-4">
 				<h4 class="text-sm font-medium text-white">Participants ({{ peers.length }})</h4>
-				<div v-for="(peerWithAudioStatus) in peersWithAudioStatus" :key="peerWithAudioStatus.id">
+				<div v-for="peerWithAudioStatus in peersWithAudioStatus" :key="peerWithAudioStatus.id">
 					<div class="flex items-center justify-between">
 						<button
 							class="inline-block aspect-[1/1] h-8 w-8 rounded-full text-white"
-							:style="{ backgroundColor: generateColor(peerWithAudioStatus.peer.name.split(' ')[0], peerWithAudioStatus.peer.name.split(' ')[1]) }">
+							:style="{
+								backgroundColor: generateColor(
+									peerWithAudioStatus.peer.name.split(' ')[0],
+									peerWithAudioStatus.peer.name.split(' ')[1],
+								),
+							}"
+						>
 							{{ peerWithAudioStatus.peer.name.split(' ')[0][0] }}{{ peerWithAudioStatus.peer.name.split(' ')[1][0] }}
 						</button>
 						<p class="text-sm font-light text-white" style="padding-right: 100px">

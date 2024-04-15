@@ -1,6 +1,10 @@
+interface MeetingStartCallbackParams {
+	elapsedMeetingTime: number
+}
+
 interface Params {
 	startTime?: MaybeRef<string | undefined>
-	onMeetingStart?: () => any
+	onMeetingStart?: (params: MeetingStartCallbackParams) => any
 }
 
 export const useMeetingCountdown = (params: Params) => {
@@ -24,7 +28,9 @@ export const useMeetingCountdown = (params: Params) => {
 		const now = dayjs()
 
 		if (now.isAfter(startTime)) {
-			onTimerFinish()
+			onTimerFinish({
+				elapsed: now.diff(startTime),
+			})
 			return
 		}
 
@@ -43,9 +49,9 @@ export const useMeetingCountdown = (params: Params) => {
 		clearInterval(interval.value)
 	}
 
-	const onTimerFinish = () => {
+	const onTimerFinish = ({ elapsed }: { elapsed: number }) => {
 		hasStarted.value = true
-		params.onMeetingStart?.()
+		params.onMeetingStart?.({ elapsedMeetingTime: elapsed })
 		stopInterval()
 	}
 

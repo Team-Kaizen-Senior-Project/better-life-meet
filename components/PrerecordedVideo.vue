@@ -1,34 +1,34 @@
 <script setup lang="ts">
-	const props = defineProps({
-		vimeoId: {
-			type: String,
-			required: true,
+	const props = withDefaults(
+		defineProps<{
+			video?: any
+			startAt?: number
+		}>(),
+		{
+			startAt: 0,
 		},
-	})
-
-	const { getVimeoVideo } = useApi()
-
-	const { data: video, refresh, pending } = await useAsyncData<any>('vimeo-video', () => getVimeoVideo(props.vimeoId))
-
+	)
+	// const { getVimeoVideo } = useApi()
+	// const { data: video, refresh, pending } = await useAsyncData<any>('vimeo-video', () => getVimeoVideo(props.vimeoId))
 	const videoUrl = computed(() => {
-		return video.value.download[1].link
+		if (!props.video) return undefined
+		return `${props.video.download[1].link}#t=${props.startAt}`
 	})
-
 	const emit = defineEmits(['toggleVideo'])
 </script>
-
 <template>
-	<div class="mx-auto max-w-[1000px]">
+	<div class="mx-auto max-w-[1000px] py-2">
 		<video
+			v-if="video"
 			@ended="emit('toggleVideo')"
 			controls
 			contextmenu="disabled"
-			autplay
+			autoplay
 			playsinline="true"
 			:src="videoUrl"
 			:width="video.width"
 			:height="video.height"
-			class="w-full rounded-lg bg-zinc-900"
+			class="max-h-[500px] w-full rounded-lg bg-zinc-900"
 		></video>
 	</div>
 </template>

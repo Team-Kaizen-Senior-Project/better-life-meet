@@ -28,7 +28,7 @@ export const useMediaStore = defineStore(
 		})
 
 		async function initDeviceSources() {
-			console.log("init")
+			console.log('init')
 			let devices = await navigator.mediaDevices.enumerateDevices()
 			state.mediaDevices = devices
 			await updateDeviceLists()
@@ -52,7 +52,7 @@ export const useMediaStore = defineStore(
 			}
 		}
 		async function updateDeviceLists() {
-			console.log("update")
+			console.log('update')
 
 			state.audioDevices = state.mediaDevices.filter((device) => device.kind === 'audioinput')
 			state.videoDevices = state.mediaDevices.filter((device) => device.kind === 'videoinput')
@@ -60,26 +60,28 @@ export const useMediaStore = defineStore(
 		}
 		async function checkPermissions() {
 			try {
-				const micPermissionStatus = await navigator.permissions.query({ name: 'microphone' });
-				const cameraPermissionStatus = await navigator.permissions.query({ name: 'camera' });
+				const micPermissionStatus = await navigator.permissions.query({ name: 'microphone' })
+				const cameraPermissionStatus = await navigator.permissions.query({ name: 'camera' })
 				console.log(micPermissionStatus)
-				if (micPermissionStatus.state === 'prompt' || micPermissionStatus.state === 'denied' ||
-					cameraPermissionStatus.state === 'prompt' || cameraPermissionStatus.state === 'denied') {
+				if (
+					micPermissionStatus.state === 'prompt' ||
+					micPermissionStatus.state === 'denied' ||
+					cameraPermissionStatus.state === 'prompt' ||
+					cameraPermissionStatus.state === 'denied'
+				) {
 					try {
-						console.log("inside")
-						await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-						await initDeviceSources();
-
+						console.log('inside')
+						await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+						await initDeviceSources()
 					} catch (error) {
-						console.error('Permissions not granted:', error);
+						console.error('Permissions not granted:', error)
 					}
-				}
-				else {
-					await initDeviceSources();
+				} else {
+					await initDeviceSources()
 				}
 				console.log(state.mediaDevices)
 			} catch (error) {
-				console.error('Error checking permissions:', error);
+				console.error('Error checking permissions:', error)
 			}
 		}
 
@@ -131,7 +133,7 @@ export const useMediaStore = defineStore(
 			updateDeviceLists,
 			setModalOpen,
 			toggleModal,
-			checkPermissions
+			checkPermissions,
 		}
 	},
 	{

@@ -169,7 +169,6 @@
 				:to="`/meeting/${meeting?.id}`"
 				class="flex gap-2 rounded-md px-3 py-2 text-sm font-medium leading-tight text-white shadow"
 				:class="buttonClass"
-				@click="media.toggleModal"
 				data-testid="join-meeting"
 			>
 				Join
