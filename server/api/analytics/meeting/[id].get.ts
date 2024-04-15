@@ -95,7 +95,7 @@ export default defineEventHandler(async (event) => {
 		// For each peer, let's calculate how long they used their mic/video
 		// Get track events by room ID
 		// WARN: This may be inaccurate, as it only retrieves 100 track 'remove' events.
-		const trackEvents = await getHmsEvents(roomId, 'remove', { limit: 100 })
+		const trackEvents = await getHmsEvents(roomId, 'remove', { limit: 100, session_id: session.id })
 
 		meetingSession.peers.forEach((peer) => {
 			const peerEvents = trackEvents.events.filter((event) => event.data.user_name === peer.name)
