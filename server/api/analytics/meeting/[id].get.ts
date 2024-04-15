@@ -104,10 +104,13 @@ export default defineEventHandler(async (event) => {
 				const started_at = event.data.started_at
 
 				const subDuration = Math.ceil((Date.parse(stopped_at) - Date.parse(started_at)) / 1000)
-				if (event.data.type === 'audio') {
-					peer.mic_duration += subDuration
-				} else {
-					peer.video_duration += subDuration
+				console.log(event.data)
+				if (!event.data.mute) {
+					if (event.data.type === 'audio') {
+						peer.mic_duration += subDuration
+					} else {
+						peer.video_duration += subDuration
+					}
 				}
 			})
 		})

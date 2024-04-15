@@ -28,7 +28,10 @@ export default NuxtAuthHandler({
 					const { getCustomerByEmail } = useApi()
 					const customer: Customer = await getCustomerByEmail(credentials?.email)
 
-					if (credentials?.email === customer.email && credentials?.password === 'password') {
+					if (
+						String(credentials?.email).toLowerCase() === customer.email.toLowerCase() &&
+						credentials?.password === 'password'
+					) {
 						// Any object returned will be saved in `user` property of the JWT
 						return customer
 					} else {
