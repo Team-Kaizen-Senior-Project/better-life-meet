@@ -9,7 +9,7 @@
 	})
 	const customModal = ref({
 		overlay: {
-			background: 'bg-zinc-900/90',
+			background: 'bg-zinc-800/90',
 		},
 	})
 	function joinMeeting() {

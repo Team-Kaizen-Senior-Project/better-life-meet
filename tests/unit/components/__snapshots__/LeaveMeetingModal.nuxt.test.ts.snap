@@ -1,0 +1,10 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LeaveMeetingModal > opens modal correctly 1`] = `
+"<button class="inline-flex items-center shadow-sm rounded-lg bg-rose-600 px-3 py-2 text-sm font-medium text-white hover:bg-rose-700 rounded-lg bg-rose-600 px-3 py-2 text-sm font-medium text-white hover:bg-rose-700" data-testid="leave-button"> Leave </button>
+<!--teleport start-->
+<!--teleport end-->
+<div style="position: fixed; height: 0px; padding: 0px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0px; display: none;"></div>"
+`;
+
+exports[`LeaveMeetingModal > renders correctly 1`] = `"<button class="inline-flex items-center shadow-sm rounded-lg bg-rose-600 px-3 py-2 text-sm font-medium text-white hover:bg-rose-700 rounded-lg bg-rose-600 px-3 py-2 text-sm font-medium text-white hover:bg-rose-700" data-testid="leave-button"> Leave </button>"`;

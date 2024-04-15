@@ -29,7 +29,7 @@
 </script>
 
 <template>
-	<footer class="absolute bottom-0 w-full bg-black py-4">
+	<footer class="w-full bg-black py-4">
 		<inner-column>
 			<div class="mx-auto flex items-center justify-between">
 				<div class="flex gap-2">
@@ -63,9 +63,13 @@
 						</Button>
 						<VideoSettingsPopover />
 					</div>
-					<AudioOutputPopover />
+					<div class="hidden sm:block">
+						<AudioOutputPopover />
+					</div>
 				</div>
-				<ParticipantIcons />
+				<div class="hidden sm:block">
+					<ParticipantIcons />
+				</div>
 				<div class="flex flex-row gap-2">
 					<Button
 						v-if="isConnected"

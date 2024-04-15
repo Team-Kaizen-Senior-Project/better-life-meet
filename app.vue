@@ -4,7 +4,7 @@
 </script>
 
 <template>
-	<div class="app flex min-h-screen flex-col" :data-route="route.name">
+	<div class="app flex h-screen flex-col" :data-route="route.name">
 		<NuxtLayout>
 			<NuxtPage />
 			<Toaster />

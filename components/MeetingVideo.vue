@@ -46,7 +46,7 @@
 </script>
 
 <template>
-	<div class="container mx-auto mb-8 mt-8" data-testid="meeting-container">
+	<div class="mx-auto p-4" data-testid="meeting-container">
 		<div v-if="isConnected" class="conference-section" data-testid="conference-section">
 			<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 				<div
@@ -54,7 +54,7 @@
 					:key="peerWithAudioStatus.peer.id"
 					:class="{
 						'dominant-speaker': dominantSpeaker && peerWithAudioStatus.peer.id === dominantSpeaker.id,
-						'relative w-full rounded-lg bg-zinc-500 sm:w-auto': true,
+						'relative w-full rounded-lg bg-zinc-600 sm:w-auto': true,
 					}"
 				>
 					<div class="relative z-[2]">
@@ -105,5 +105,12 @@
 
 	.dominant-speaker {
 		box-shadow: 0 0 0 3px limegreen;
+	}
+
+	.peer-video {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 16 / 9;
+		object-fit: contain;
 	}
 </style>

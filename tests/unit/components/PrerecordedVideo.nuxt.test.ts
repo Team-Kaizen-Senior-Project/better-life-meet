@@ -2,6 +2,17 @@ import { describe, it } from 'vitest'
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 import PrerecordedVideo from '@/components/PrerecordedVideo.vue'
 
+vi.mock('@/composables/useApi', () => ({
+	useApi: () => ({
+		getVimeoVideo: () => Promise.resolve({
+			download: [
+				{ link: 'dummy_link_0' },
+				{ link: 'dummy_link_1' }
+			]
+		})
+	})
+}))
+
 describe('PrerecordedVideo', () => {
 	it('renders the video element with the correct attributes', async () => {
 		const wrapper = await mountSuspended(PrerecordedVideo, {
@@ -14,7 +25,7 @@ describe('PrerecordedVideo', () => {
 		expect(video.exists()).toBe(true)
 		expect(video.attributes('controls')).toBeDefined()
 		expect(video.attributes('playsinline')).toBe('true')
-		expect(video.attributes('src')).toBe('/assets/a.mp4')
+		expect(video.attributes('src')).toBe('dummy_link_1')
 	})
 
 	it('emits "toggleVideo" when the video has ended', async () => {

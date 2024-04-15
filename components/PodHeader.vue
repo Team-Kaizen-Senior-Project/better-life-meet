@@ -31,29 +31,31 @@
 </script>
 <template>
 	<header class="bg-black py-4">
-		<div class="mx-auto flex w-[95vw] max-w-[1600px] items-center justify-between">
-			<div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-4">
-				<p class="text-lg font-medium text-white">Pod Accountability Meeting</p>
-				<!-- Used to override width -->
-				<div class="schedule-dropdown">
-					<UDropdown :items="podMeetings" :popper="{ placement: 'bottom-start' }">
-						<UButton
-							class="bg-sky-500 hover:bg-sky-600"
-							label="View Schedule"
-							trailing-icon="i-heroicons-chevron-down-20-solid"
-							data-testid="view-schedule"
-						/>
-					</UDropdown>
+		<inner-column>
+			<div class="flex items-center justify-between">
+				<div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-4">
+					<p class="text-lg font-medium text-white">Pod Accountability Meeting</p>
+					<!-- Used to override width -->
+					<div class="schedule-dropdown">
+						<UDropdown :items="podMeetings" :popper="{ placement: 'bottom-start' }">
+							<UButton
+								class="bg-sky-500 hover:bg-sky-600"
+								label="View Schedule"
+								trailing-icon="i-heroicons-chevron-down-20-solid"
+								data-testid="view-schedule"
+							/>
+						</UDropdown>
+					</div>
+				</div>
+				<div class="flex items-center gap-2">
+					<CustomerIcon />
+					<div class="flex hidden flex-col text-sm text-white md:block" v-if="customer">
+						<p>{{ customer.firstName }}</p>
+						<p class="hidden truncate max-md:max-w-[125px] md:block">{{ customer.email }}</p>
+					</div>
 				</div>
 			</div>
-			<div class="flex items-center gap-2">
-				<CustomerIcon />
-				<div class="flex flex-col text-sm text-white" v-if="customer">
-					<p>{{ customer.firstName }}</p>
-					<p class="truncate max-md:max-w-[125px]">{{ customer.email }}</p>
-				</div>
-			</div>
-		</div>
+		</inner-column>
 	</header>
 </template>
 
