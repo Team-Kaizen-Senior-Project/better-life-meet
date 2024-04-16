@@ -78,7 +78,7 @@
 	}
 
 	const effectiveVimeoId = computed(() => {
-		return meeting.value?.vimeoId || '523363936'
+		return meeting.value?.vimeoId || '557876585'
 	})
 
 	const { width } = useWindowSize({
