@@ -68,22 +68,26 @@
 				<h1 className="text-2xl">All pod meetings</h1>
 				<Popover v-model:open="popoverOpenRef">
 					<PopoverTrigger asChild>
-						<Button>Set Video</Button>
+						<Button variant="ghost" class="bg-zinc-950 text-white hover:bg-zinc-900 hover:text-white">Add video</Button>
 					</PopoverTrigger>
-					<PopoverContent class="w-80 border-transparent bg-zinc-900">
-						<h3 class="pb-2 font-medium">Update or set video of all meetings.</h3>
+					<PopoverContent class="w-80 border-transparent bg-zinc-900 text-white">
+						<h3 class="font-medium">Update or add a video</h3>
+						<p class="mt-1 text-xs text-zinc-300">
+							Add a prerecorded video to any pod meetings without one, or replace the video in all pod meetings with a
+							new one.
+						</p>
 
 						<Input
-							placeholder="Enter Vimeo Id"
+							placeholder="Enter Vimeo id"
 							id="width"
 							type="text"
 							v-model="videoIdRef"
-							class="col-span-2 mt-3 h-8 border-zinc-600 bg-zinc-800 text-white focus-visible:ring-zinc-700"
+							class="col-span-2 mt-4 h-8 border-zinc-600 bg-zinc-800 text-white focus-visible:ring-zinc-700"
 						/>
 
 						<label class="mt-3 flex items-center gap-2">
 							<input v-model="overrideRef" type="checkbox" />
-							<span class="text-sm">Override current video urls</span>
+							<span class="text-sm text-zinc-300">Add to all meetings</span>
 						</label>
 
 						<Button

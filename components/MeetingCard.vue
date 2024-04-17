@@ -184,8 +184,8 @@
 			</button>
 
 			<div v-if="isAdmin">
-				<div v-if="hasVimeoId" class="mb-2 text-sm">
-					id:
+				<div v-if="hasVimeoId" class="mb-2 flex flex-row gap-1 text-sm text-zinc-300">
+					<span class="font-medium">id:</span>
 					<span v-if="vimeoLoading">...</span>
 					<NuxtLink class="underline" v-else-if="vimeo.link" :to="vimeo.link">{{ meeting?.vimeoId }}</NuxtLink>
 					<span v-else>invalid id</span>
