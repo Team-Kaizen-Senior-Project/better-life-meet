@@ -36,7 +36,7 @@
 			<div class="text-center">
 				<p class="mb-2 text-lg font-semibold text-white">Are you sure you want to leave the meeting?</p>
 				<p class="text-sm text-zinc-200">
-					Your attendance will be logged. We track this data too ensure each pod accountability meeting is successful
+					Your attendance will be logged. We track this data to ensure each pod accountability meeting is successful
 				</p>
 			</div>
 			<div class="mt-4 flex justify-center gap-4">
