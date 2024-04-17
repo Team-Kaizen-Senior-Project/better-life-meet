@@ -18,7 +18,7 @@
 
 	const handleCancel = async () => {
 		try {
-			await navigateTo('/dashboard')
+			await navigateTo('/')
 		} catch (error) {
 			console.log(error)
 		}
