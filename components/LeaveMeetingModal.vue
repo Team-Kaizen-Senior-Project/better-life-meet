@@ -14,7 +14,7 @@
 	async function confirmLeave() {
 		try {
 			await leaveRoom()
-			await navigateTo('/dashboard')
+			await navigateTo('/')
 			leaveMeetingModal.toggleLeaveModal()
 		} catch (error) {
 			console.log(error)

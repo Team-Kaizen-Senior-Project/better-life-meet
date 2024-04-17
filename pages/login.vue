@@ -23,7 +23,7 @@
 			//only unauthenticated users can access this page
 			unauthenticatedOnly: true,
 			//once user logs in, redirect them to the dashboard
-			navigateAuthenticatedTo: '/dashboard',
+			navigateAuthenticatedTo: '/',
 		},
 		layout: false,
 	})

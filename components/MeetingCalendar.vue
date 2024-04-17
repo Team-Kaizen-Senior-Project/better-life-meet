@@ -1,6 +1,5 @@
 <script setup lang="ts">
 	import type {} from '@samk-dev/nuxt-vcalendar'
-	import { defineProps, ref } from 'vue'
 	import type { Meeting } from '~/types'
 	const props = defineProps({
 		meetings: Array as PropType<Meeting[]>,
