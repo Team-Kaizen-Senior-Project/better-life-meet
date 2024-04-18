@@ -11,6 +11,9 @@
 </script>
 
 <template>
+	<Head>
+		<title>TribeMeet Dashboard</title>
+	</Head>
 	<!-- Render AdminDashboard if the user is an admin -->
 	<DashboardAdmin v-if="isAdmin" />
 

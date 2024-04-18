@@ -30,6 +30,7 @@
 </script>
 
 <template>
+	<Head><title>Login</title></Head>
 	<form class="space-y-4 md:space-y-6" @submit.prevent="mySignInHandler('credentials', { email, password })">
 		<div class="flex h-screen">
 			<!-- Left Side (Logo) -->
