@@ -65,7 +65,7 @@
 		<div class="mb-4 flex flex-1 flex-col overflow-y-auto p-4 px-4">
 			<!-- Dynamically display messages -->
 			<div v-for="message in messages" :key="message.id">
-				<div v-if="message.sendername == currentUser" class="mb-3 flex justify-end pr-2">
+				<div v-if="message.sendername == currentUser" class="messageText mb-3 flex justify-end pr-2">
 					<div class="flex-direction column">
 						<div class="flex justify-end text-xs text-white">
 							<span class="mb-1 font-medium">{{ message.sendername }}</span>
@@ -81,7 +81,7 @@
 						</div>
 					</div>
 				</div>
-				<div v-else-if="message.sendername != currentUser" class="mb-3 flex justify-start pl-2">
+				<div v-else-if="message.sendername != currentUser" class="messageText mb-3 flex justify-start pl-2">
 					<div class="flex-direction column">
 						<div class="flex text-xs text-white">
 							<span class="mb-1 font-medium">{{ message.sendername }}</span>
@@ -110,6 +110,7 @@
 				variant="default"
 				size="sm"
 				class="max-w-fit self-end bg-sky-600 text-white hover:bg-sky-700"
+				data-testid="send-button"
 			>
 				chat
 			</Button>
