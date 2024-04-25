@@ -71,6 +71,19 @@ export default defineEventHandler(async (event) => {
 			}),
 		)
 
+		// Sanity sort... Order probably got lost on promises.
+		if (order) {
+			if (order === 'asc') {
+				analytics.sort((a, b) => {
+					return Date.parse(a.start_time) - Date.parse(b.start_time)
+				})
+			} else {
+				analytics.sort((a, b) => {
+					return Date.parse(b.start_time) - Date.parse(a.start_time)
+				})
+			}
+		}
+
 		return {
 			data: analytics,
 			after: meetingList.after,
