@@ -140,6 +140,9 @@
 </script>
 
 <template>
+	<Head>
+		<title>Pod Meeting</title>
+	</Head>
 	<ResizablePanelGroup :direction="panelDirection" class="video-section mx-auto max-w-[1200px] gap-2">
 		<ResizablePanel :style="{ overflowY: 'auto' }">
 			<section class="grid place-items-center bg-zinc-800 py-4">

@@ -2,36 +2,38 @@ import { describe, it } from 'vitest'
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 import PrerecordedVideo from '@/components/PrerecordedVideo.vue'
 
-vi.mock('@/composables/useApi', () => ({
-	useApi: () => ({
-		getVimeoVideo: () => Promise.resolve({
-			download: [
-				{ link: 'dummy_link_0' },
-				{ link: 'dummy_link_1' }
-			]
-		})
-	})
-}))
-
 describe('PrerecordedVideo', () => {
 	it('renders the video element with the correct attributes', async () => {
 		const wrapper = await mountSuspended(PrerecordedVideo, {
 			props: {
-				meetingStartTime: { isoString: new Date().toISOString() },
+				video: {
+					download: [
+						{},
+						{
+							link: './a.mp4',
+						},
+					],
+				},
 			},
 		})
-
 		const video = wrapper.find('video')
 		expect(video.exists()).toBe(true)
 		expect(video.attributes('controls')).toBeDefined()
 		expect(video.attributes('playsinline')).toBe('true')
-		expect(video.attributes('src')).toBe('dummy_link_1')
+		expect(video.attributes('src')).toBe('./a.mp4#t=0')
 	})
 
 	it('emits "toggleVideo" when the video has ended', async () => {
 		const wrapper = await mountSuspended(PrerecordedVideo, {
 			props: {
-				meetingStartTime: { isoString: new Date().toISOString() },
+				video: {
+					download: [
+						{},
+						{
+							link: './a.mp4',
+						},
+					],
+				},
 			},
 		})
 		const video = wrapper.find('video')
@@ -42,7 +44,14 @@ describe('PrerecordedVideo', () => {
 	it('emits toggleVideo event when user is too late to watch the video', async () => {
 		const wrapper = await mountSuspended(PrerecordedVideo, {
 			props: {
-				meetingStartTime: { isoString: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString() }, // 24 hours ago
+				video: {
+					download: [
+						{},
+						{
+							link: './a.mp4',
+						},
+					],
+				},
 			},
 		})
 
