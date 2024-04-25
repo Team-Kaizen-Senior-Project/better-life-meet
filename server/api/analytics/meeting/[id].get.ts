@@ -1,5 +1,5 @@
 import { AbortError, ServiceError, fql } from 'fauna'
-import type { Meeting, MeetingSession, MeetingSessionPeer, Pod } from '~/types'
+import type { Meeting, MeetingAnalytics, MeetingSessionPeer, Pod } from '~/types'
 
 // Endpoint for reading meeting given an Id
 export default defineEventHandler(async (event) => {
@@ -23,23 +23,26 @@ export default defineEventHandler(async (event) => {
 		const roomId = meeting.roomId
 		const sessions = await getHmsSessions({ room_id: roomId })
 
-		// We assume there's only one session per room or throw an error if there is none
-		const session = sessions.data[0]
-		if (!session) {
+		// We assume there's only one session per room, we retrieve the one with the most peers
+		// or throw an error if there is no session
+		if (sessions.data == null) {
 			throw createError({
 				statusCode: 404,
-				statusMessage: 'Meeting not associated with a session.',
+				statusMessage: 'Meeting not associated with a 100ms session.',
 			})
 		}
+		const session = sessions.data.reduce((prev, curr) => {
+			return Object.entries(prev.peers).length < Object.entries(curr.peers).length ? curr : prev
+		})
 
 		query = fql`let pod = Pod.byId(${meeting.podRef.id});
-		if (!pod.exists()) abort({ message: "Pod with this ID does not exist." });
+		if (pod == null) abort({ message: "Pod with this ID does not exist." });
 		pod;`
 		response = await client.query(query)
 
 		const pod = response.data as unknown as Pod
 
-		const meetingSession: MeetingSession = {
+		const meetingSession: MeetingAnalytics = {
 			id: meeting.id,
 			pod_name: pod.name,
 			start_time: meeting.startTime.isoString,
@@ -104,7 +107,6 @@ export default defineEventHandler(async (event) => {
 				const started_at = event.data.started_at
 
 				const subDuration = Math.ceil((Date.parse(stopped_at) - Date.parse(started_at)) / 1000)
-				console.log(event.data)
 				if (!event.data.mute) {
 					if (event.data.type === 'audio') {
 						peer.mic_duration += subDuration

@@ -223,7 +223,7 @@ export type HmsEventsFilters = {
 	start?: string
 }
 
-export interface MeetingSession {
+export interface MeetingAnalytics {
 	id: string
 	pod_name: string
 	start_time: string
@@ -239,10 +239,4 @@ export interface MeetingSessionPeer {
 	duration: number
 	mic_duration: number
 	video_duration: number
-}
-
-export interface MeetingSessionList {
-	limit: number
-	data: MeetingSession[]
-	last?: string
 }

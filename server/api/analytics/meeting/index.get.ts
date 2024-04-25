@@ -1,128 +1,81 @@
 import { AbortError, ServiceError, fql } from 'fauna'
-import { getHmsSessions } from '~/server/utils/hms'
-import type {
-	HmsSessions,
-	HmsSessionsFilters,
-	Meeting,
-	MeetingSession,
-	MeetingSessionList,
-	MeetingSessionPeer,
-	Pod,
-} from '~/types'
+import type { Meeting, MeetingAnalytics } from '~/types'
 
+interface MeetingList {
+	data: Meeting[]
+	after?: string
+}
+
+// Endpoint for retrieving meetings
 export default defineEventHandler(async (event) => {
+	// Extract params from request query
+	const { cursor, count, podId, fromTime, toTime, order }: any = getQuery(event)
+
 	// Initialize Fauna client
 	const { client, error } = useFauna()
 	if (error !== null) return error
 
-	const filters = getQuery<Omit<HmsSessionsFilters, 'active'>>(event)
-
 	try {
-		const sessions: HmsSessions = await getHmsSessions(filters)
+		let query = fql`Meeting.all().order(.startTime)`
 
-		// For each session, retreive the meeting by room ID.
-		const meetings: MeetingSession[] = await Promise.all(
-			sessions.data.map(async (session) => {
-				let query = fql`let meeting = Meeting.firstWhere(.roomId == ${session.room_id});
-				if (!meeting.exists()) abort({ message: "Meeting with this ID does not exist." });
-				meeting;`
-				let response = await client.query(query)
+		// Filter by Pod ID
+		if (podId) {
+			query = fql`
+			let pod = Pod.byId(${podId})
+			${query}.where(.podRef == pod)`
+		}
 
-				const meeting = response.data as unknown as Meeting
+		// Filter meetings starting 'fromTime'
+		if (fromTime) {
+			query = fql`${query}.where(Time.fromString(${fromTime}) <= .startTime)`
+		}
 
-				query = fql`let pod = Pod.byId(${meeting.podRef.id});
-				if (!pod.exists()) abort({ message: "Pod with this ID does not exist." });
-				pod;`
-				response = await client.query(query)
+		// Filter meetings ending 'toTime'
+		if (toTime) {
+			query = fql`${query}.where(.startTime <= Time.fromString(${toTime}))`
+		}
 
-				const pod = response.data as unknown as Pod
+		// Sort by startTime ascending/descending
+		if (order) {
+			if (order === 'asc') {
+				query = fql`${query}.order(asc(.startTime))`
+			} else {
+				query = fql`${query}.order(desc(.startTime))`
+			}
+		}
 
-				//
-				const peers = new Map<string, MeetingSessionPeer>()
-				Object.values(session.peers).forEach((peer) => {
-					if (peers.has(peer.name)) {
-						const existingPeer = peers.get(peer.name)! // defined if true
+		// Enable pagination if 'count' specified
+		if (count) {
+			query = fql`${query}.paginate(${Number(count)})`
+		}
 
-						if (peer.left_at) {
-							const duration = (Date.parse(peer.left_at) - Date.parse(peer.joined_at)) / 1000
-							existingPeer.duration += Math.ceil(duration)
-						}
+		// Ignore other parameters and continue from 'after' cursor
+		if (cursor) {
+			query = fql`Set.paginate(${cursor})`
+		}
 
-						// Update for oldest joined_at
-						existingPeer.joined_at =
-							Date.parse(existingPeer.joined_at) < Date.parse(peer.joined_at) ? existingPeer.joined_at : peer.joined_at
+		const response = await client.query(query)
+		const meetingList = response.data as MeetingList
 
-						// Set if unset left_at
-						if (peer.left_at && !existingPeer.left_at) {
-							existingPeer.left_at = peer.left_at
-						}
-						// Update for newest left_at
-						else if (peer.left_at && existingPeer.left_at) {
-							existingPeer.left_at =
-								Date.parse(existingPeer.left_at) < Date.parse(peer.left_at) ? peer.left_at : existingPeer.left_at
-						}
-					} else {
-						const newPeer: MeetingSessionPeer = {
-							name: peer.name,
-							joined_at: peer.joined_at,
-							left_at: peer.left_at,
-							duration: 0,
-							mic_duration: 0,
-							video_duration: 0,
-						}
-
-						if (peer.left_at) {
-							const duration = (Date.parse(peer.left_at) - Date.parse(peer.joined_at)) / 1000
-							newPeer.duration = Math.ceil(duration)
-						}
-
-						peers.set(peer.name, newPeer)
-					}
-				})
-
-				const meetingPeers = Array.from(peers, ([_, v]) => v)
-
-				// For each peer, let's calculate how long they used their mic/video
-				// Get track events by room ID
-				const trackEvents = await getHmsEvents(meeting.roomId, 'remove', { limit: 100, session_id: session.id })
-				meetingPeers.forEach((peer) => {
-					const peerEvents = trackEvents.events.filter((event) => event.data.user_name === peer.name)
-					peerEvents.forEach((event) => {
-						const stopped_at = event.data.stopped_at! // defined since it's a successful remove event
-						const started_at = event.data.started_at
-
-						const subDuration = Math.ceil((Date.parse(stopped_at) - Date.parse(started_at)) / 1000)
-						if (!event.data.mute) {
-							if (event.data.type === 'audio') {
-								peer.mic_duration += subDuration
-							} else {
-								peer.video_duration += subDuration
-							}
-						}
-					})
-				})
-
-				return {
-					id: meeting.id,
-					pod_name: pod.name,
-					active: session.active,
-					start_time: meeting.startTime.isoString,
-					end_time: meeting.endTime.isoString,
-					time_zone: meeting.timeZone,
-					peers: meetingPeers,
+		const analytics: MeetingAnalytics[] = []
+		await Promise.all(
+			meetingList.data.map(async (meeting) => {
+				try {
+					const meetingAnalytics = await $fetch(`/api/analytics/meeting/${meeting.id}`)
+					analytics.push(meetingAnalytics as MeetingAnalytics)
+				} catch (err) {
+					// Something went wrong in fetching meeting analytics...
+					// Most likely no 100ms session associated with meeting.
+					console.error(err)
 				}
 			}),
 		)
 
-		const meetingSessionList: MeetingSessionList = {
-			limit: sessions.limit,
-			data: meetings,
-			last: sessions.last,
+		return {
+			data: analytics,
+			after: meetingList.after,
 		}
-
-		return meetingSessionList
 	} catch (error) {
-		console.log(error)
 		if (error instanceof AbortError) {
 			const abortError = error as AbortError
 			const abort = abortError.abort! as { message: string }
