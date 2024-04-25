@@ -68,7 +68,9 @@
 				<h1 className="text-2xl">All pod meetings</h1>
 				<Popover v-model:open="popoverOpenRef">
 					<PopoverTrigger asChild>
-						<Button variant="ghost" class="bg-zinc-950 text-white hover:bg-zinc-900 hover:text-white">Add video</Button>
+						<Button variant="ghost" class="bg-zinc-950 text-white hover:bg-zinc-900 hover:text-white">
+							Add custom prerecorded video
+						</Button>
 					</PopoverTrigger>
 					<PopoverContent class="w-80 border-transparent bg-zinc-900 text-white">
 						<h3 class="font-medium">Update or add a video</h3>

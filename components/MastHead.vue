@@ -15,12 +15,12 @@
 			<div class="flex items-center gap-2">
 				<CustomerIcon />
 				<div class="flex flex-col text-sm text-white">
-					<p>{{ customer?.firstName }}</p>
-					<p class="hidden md:block">{{ customer?.email }}</p>
+					<p class="customer-name">{{ customer?.firstName }}</p>
+					<p class="customer-email hidden md:block">{{ customer?.email }}</p>
 					<p v-if="customer?.admin" class="font-semibold">Admin</p>
 					<p v-else class="font-semibold">Regular User</p>
 				</div>
-				<UButton class="bg-sky-500 hover:bg-blue-600" @click="() => signOut()">Sign Out</UButton>
+				<UButton class="sign-out bg-sky-500 hover:bg-blue-600" @click="() => signOut()">Sign Out</UButton>
 			</div>
 		</div>
 	</header>

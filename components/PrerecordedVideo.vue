@@ -8,8 +8,6 @@
 			startAt: 0,
 		},
 	)
-	// const { getVimeoVideo } = useApi()
-	// const { data: video, refresh, pending } = await useAsyncData<any>('vimeo-video', () => getVimeoVideo(props.vimeoId))
 	const videoUrl = computed(() => {
 		if (!props.video) return undefined
 		return `${props.video.download[1].link}#t=${props.startAt}`

@@ -42,7 +42,7 @@
 				<button
 					v-if="index < 3"
 					@click="popoverOpen = true"
-					class="inline-block aspect-[1/1] h-10 w-10 rounded-full text-white"
+					class="participant-icon inline-block aspect-[1/1] h-10 w-10 rounded-full text-white"
 					:style="{ backgroundColor: generateColor(peer.name.split(' ')[0], peer.name.split(' ')[1]) }"
 				>
 					{{ peer.name.split(' ')[0][0] }}{{ peer.name.split(' ')[1][0] }}
