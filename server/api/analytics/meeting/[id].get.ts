@@ -44,6 +44,7 @@ export default defineEventHandler(async (event) => {
 
 		const meetingSession: MeetingAnalytics = {
 			id: meeting.id,
+			pod_id: pod.id,
 			pod_name: pod.name,
 			start_time: meeting.startTime.isoString,
 			end_time: meeting.endTime.isoString,
