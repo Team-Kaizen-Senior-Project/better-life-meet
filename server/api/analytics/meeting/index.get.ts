@@ -9,7 +9,7 @@ interface MeetingList {
 // Endpoint for retrieving meetings
 export default defineEventHandler(async (event) => {
 	// Extract params from request query
-	const { cursor, count, podId, fromTime, toTime, order }: any = getQuery(event)
+	const { cursor, count, podId, fromTime, toTime, order }: Record<string, string> = getQuery(event)
 
 	// Initialize Fauna client
 	const { client, error } = useFauna()
@@ -51,7 +51,11 @@ export default defineEventHandler(async (event) => {
 
 		// Ignore other parameters and continue from 'after' cursor
 		if (cursor) {
-			query = fql`Set.paginate(${cursor})`
+			// Replace ' ' with '+' since we know it's base64 and unjs/ufo doesn't encode/decode the URI
+			// with '+' correctly due to it being a delimiter.
+			const after = cursor.replaceAll(' ', '+')
+			console.log(after)
+			query = fql`Set.paginate(${after})`
 		}
 
 		const response = await client.query(query)
