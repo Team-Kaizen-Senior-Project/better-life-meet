@@ -18,7 +18,7 @@
 		<PopoverTrigger as-child>
 			<ChevronUpIcon class="absolute right-0 h-4 w-4 text-gray-300 hover:rounded hover:border" />
 		</PopoverTrigger>
-		<PopoverContent class="w-80 border-transparent bg-zinc-900" align="start">
+		<PopoverContent class="popover-content w-80 border-transparent bg-zinc-900" align="start">
 			<span className="text-white text-lg p-2 mb-10">Select a Microphone</span>
 			<div
 				v-for="device in media.state.audioDevices"
