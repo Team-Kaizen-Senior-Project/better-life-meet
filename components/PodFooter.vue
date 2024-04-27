@@ -73,7 +73,7 @@
 				<div class="flex flex-row gap-2">
 					<Button
 						v-if="isConnected"
-						class="relative flex items-center justify-center rounded px-5 py-3"
+						class="toggle-chat relative flex items-center justify-center rounded px-5 py-3"
 						@click="chatbox.toggleChatBox"
 					>
 						<div
