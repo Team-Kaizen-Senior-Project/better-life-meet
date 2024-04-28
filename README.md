@@ -1,13 +1,23 @@
 <p align="center">
-  <img src="./images/kaizen-black.png" width="100"/>
+  <img src="./images/kaizen-white.png" width="100"/>
 </p>
+Team Members:
+- Sparsh Saini
+- Victor Severin
+- Brandon Chu
+- Daryl Denaga
+- Fabian Lopez
+- Jasjot Singh
+- Brian Lowery
+- Matt Christiansen
 
 # TribeMeet
 
 A component-based **web video conferencing application** that integrates with ABetterLife's existing software infrastructure and **resolves** compatibility issues, elevates the user experience, and delivers a robust API for detailed user analytics.
+Currently, ABetterLife uses a service called AirMeet to facilitate their weekly meetings however their customers have consistently had compatibility issues with different devices, cameras, and audio outputs. As stated above our application seeks to mitigate these issues by integrating directly into BetterLife's infrastructure.
 
 <p align="left">
-  <img src="./images/betterlife_image.png" width="100"/>
+  <img src="./images/betterlife_image.png" width="150"/>
 </p>
 
 **ABetterLife:** https://abetterlife.com/
@@ -19,16 +29,10 @@ A component-based **web video conferencing application** that integrates with AB
 - **[TailwindCSS](https://tailwindcss.com/)**: To craft a responsive and aesthetically pleasing user interface with a focus on design consistency and usability.
 - **[Nuxt.js](https://nuxt.com/)**: To harness the benefits of server-side rendering for a fast, rich user interface.
 
-### Backend
-
 #### Application Backend
 
 - **[FaunaDB](https://fauna.com/)**: Utilizing this database for its flexibility and ease of scaling to manage user data effectively. Additionally, ABetterLife’s system is using FaunaDB, so integration will be seamless.
-
-#### WebRTC Server
-
-- **[Node.js](https://nodejs.org/en)** and **[Express](https://expressjs.com/)**: For building a fast, scalable WebRTC server capable of handling concurrent video conferencing sessions.
-- **[MediaSoup](https://mediasoup.org/)**: A versatile WebRTC Selective Forwarding Unit (SFU) for scalable video conferencing.
+- **[100ms](https://www.100ms.live/docs)**: WebRTC wrapper API that facilitates all peer-to-peer video conferencing capabilities including meeting creation, video conferencing, and chat within meeting.
 
 ## ERD
 
@@ -86,27 +90,11 @@ git clone https://github.com/Team-Kaizen-Senior-Project/better-life-meet.git
 
 With **[npm](https://www.npmjs.com/)** installed:
 
-**Install frontend dependencies and run development:**
+**Install dependencies and run development:**
 
 ```bash
-cd ./frontend
 npm install
 npm run dev
-```
-
-**Install backend dependencies and run development:**
-
-```bash
-cd ./backend
-npm install
-npm run watch
-```
-
-**Run entire stack with Docker for development:**
-
-```bash
-docker compose up -d
-docker compose watch
 ```
 
 ## Testing
@@ -128,7 +116,9 @@ Any further information on testing Nuxt applications can be found here: **[Nuxt 
 
 ## Deployment
 
-(_Placeholder for CSC 191_)
+1. Create a PR and request at least 2 developers to perform code review.
+2. Once the review is completed merge PR into the main branch.
+3. After changes are merged to the main branch the CI/CD pipeline runs and automatically runs the test suite and deploys the site to Vercel.
 
 ## Timeline
 
