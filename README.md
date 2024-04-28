@@ -1,19 +1,25 @@
 <p align="center">
   <img src="./images/kaizen-white.png" width="100"/>
 </p>
-Team Members:
-- Sparsh Saini 
-- Victor Severin 
-- Brandon Chu 
-- Daryl Denaga 
-- Fabian Lopez 
-- Jasjot Singh 
-- Brian Lowery 
-- Matt Christiansen 
+Team Members:  <br/>
+<table>
+  <tr>
+    <td>Sparsh Saini</td>
+    <td>Victor Severin</td>
+     <td>Brandon Chu</td>
+    <td>Daryl Denaga</td>
+  </tr>
+  <tr>
+    <td>Fabian Lopez</td>
+    <td>Jasjot Singh</td>
+    <td>Brian Lowery</td>
+    <td>Matt Christiansen</td>
+  </tr>
+</table>
 
 # TribeMeet
 
-A component-based **web video conferencing application** that integrates with ABetterLife's existing software infrastructure and **resolves** compatibility issues, elevates the user experience, and delivers a robust API for detailed user analytics. 
+A component-based **web video conferencing application** that integrates with ABetterLife's existing software infrastructure and **resolves** compatibility issues, elevates the user experience, and delivers a robust API for detailed user analytics.  
 Currently, ABetterLife uses a service called AirMeet to facilitate their weekly meetings however their customers have consistently had compatibility issues with different devices, cameras, and audio outputs. As stated above our application seeks to mitigate these issues by integrating directly into BetterLife's infrastructure.
 
 <p align="left">
@@ -40,18 +46,43 @@ Currently, ABetterLife uses a service called AirMeet to facilitate their weekly 
   <img src="./images/ERD.png" width="600"/>
 </p>
 
-## Prototype
+## Finished Product
 
-**UI Dashboard:**
+**Login**
 
 <p align="center">
-  <img src="./images/user_dashboard.png" width="600"/> <br>
-  <h4>Shown above is the Dashboard, the central page of TribeMeet where logged-in users can:</h4>
+  <img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/6232d801-7f11-4669-a9ed-6d8503c55879"/> <br>
+  <h4>Login, the initial landing page</h4>
+  <ul>
+    <li>Regular users can sign in to access the dashboard and join meetings</li>
+    <li>Admins can sign in to view all meetings and update pre-recorded videos for the week</li>
+  </ul>
+
+</p> <br>
+
+**User Dashboard:**
+
+<p align="center">
+  <img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/076f58f6-909e-402b-b8b7-cdfcc2be64cf"/> <br>
+  <h4>TribeMeet Dashboard, the central page of TribeMeet where logged-in users can:</h4>
   <ul>
     <li>Configure video & mic settings (center)</li>
-    <li>Schedule/join a meeting (right column)</li>
-    <li>Assess habits using habit tracker (top left)</li>
-    <li>View goals for the quarter (bottom left)</li>
+    <li>View upcoming meetings shown by the dot on the calendar and or hovering over the date (upper left column)</li>
+    <li>Schedule a meeting (lower left column)</li>
+    <li>See meetings for the week sorted by the earliest to latest and a join button that displays 15 minutes prior to the meeting's start time.</li>
+  </ul>
+
+</p> <br>
+
+**Admin Dashboard:**
+
+<p align="center">
+  <img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/d96cd2a2-2f96-4d41-be1c-459f4a3ce5aa" width="600"/> <br>
+  <h4>Admin Dashboard, where designated admin accounts are able to:</h4>
+  <ul>
+    <li>View all pod meetings</li>
+    <li>Add/update a pre-recorded video ID for a singular meeting</li>
+    <li>Update all pre-recorded video IDs for all pod meetings</li>
   </ul>
 
 </p> <br>
@@ -59,12 +90,13 @@ Currently, ABetterLife uses a service called AirMeet to facilitate their weekly 
 **Pod Meetings:**
 
 <p align="center">
-  <img src="./images/pod_meetings.png" width="600"/>
+  <img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/43f60bb7-ac8d-47a3-abc5-c76cac5aee6e" width="600"/>
   <h4>The core interface of TribeMeet where participants engage in video conferencing:</h4>
   <ul>
-    <li>View all particpants' cameras in a grid layout</li>
+    <li>View all participants' cameras in a grid layout</li>
     <li>Control your video and microphone</li>
     <li>Exit the meeting with a dedicated leave button</li>
+    <li>See participant list for the meeting</li>
   </ul>
 </p> <br>
 
