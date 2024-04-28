@@ -2,18 +2,18 @@
   <img src="./images/kaizen-white.png" width="100"/>
 </p>
 Team Members:
-- Sparsh Saini
-- Victor Severin
-- Brandon Chu
-- Daryl Denaga
-- Fabian Lopez
-- Jasjot Singh
-- Brian Lowery
-- Matt Christiansen
+- Sparsh Saini 
+- Victor Severin 
+- Brandon Chu 
+- Daryl Denaga 
+- Fabian Lopez 
+- Jasjot Singh 
+- Brian Lowery 
+- Matt Christiansen 
 
 # TribeMeet
 
-A component-based **web video conferencing application** that integrates with ABetterLife's existing software infrastructure and **resolves** compatibility issues, elevates the user experience, and delivers a robust API for detailed user analytics.
+A component-based **web video conferencing application** that integrates with ABetterLife's existing software infrastructure and **resolves** compatibility issues, elevates the user experience, and delivers a robust API for detailed user analytics. 
 Currently, ABetterLife uses a service called AirMeet to facilitate their weekly meetings however their customers have consistently had compatibility issues with different devices, cameras, and audio outputs. As stated above our application seeks to mitigate these issues by integrating directly into BetterLife's infrastructure.
 
 <p align="left">
