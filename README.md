@@ -26,6 +26,8 @@ Team Members:  <br/>
 A component-based **web video conferencing application** that integrates with ABetterLife's existing software infrastructure and **resolves** compatibility issues, elevates the user experience, and delivers a robust API for detailed user analytics.  
 Currently, ABetterLife uses a service called AirMeet to facilitate their weekly meetings however their customers have consistently had compatibility issues with different devices, cameras, and audio outputs. As stated above our application seeks to mitigate these issues by integrating directly into BetterLife's infrastructure.
 
+TribeMeet provides a comprehensive video service. Users can schedule meetings, select camera and video sources before joining, and access meetings directly from their user dashboard. Within these meetings, participants have the flexibility to share their audio and video. They can also switch their audio, video, and speaker sources. Additionally, TribeMeet includes a Chat Box for real-time communication among users, enhancing collaboration. A participant list is visible during meetings, allowing users to see everyone attending. This array of features makes TribeMeet an effective tool for virtual meetings, fostering both communication and productivity. 
+
 **ABetterLife:** https://abetterlife.com/
 
 ## Technology Stack
@@ -131,12 +133,7 @@ npm run dev
 
 ## Testing
 
-TribeMeet uses **[vitest](https://github.com/vitest-dev/vitest)** for testing. To install vitest, use the following commands:
-
-```bash
-cd frontend
-npm install --save-dev vitest @vue/test-utils happy-dom
-```
+TribeMeet uses **[vitest](https://github.com/vitest-dev/vitest)** for frontend testing.
 
 To run tests, use the following command:
 
