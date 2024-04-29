@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./images/kaizen-white.png" width="100"/>
+  <img src="./images/kaizen-black.png" width="200"/>
 </p>
 Team Members:  <br/>
 <table>
@@ -19,12 +19,12 @@ Team Members:  <br/>
 
 # TribeMeet
 
+<p align="center">
+  <img src="./public/better-life-logo.png" width="400"/>
+</p>
+
 A component-based **web video conferencing application** that integrates with ABetterLife's existing software infrastructure and **resolves** compatibility issues, elevates the user experience, and delivers a robust API for detailed user analytics.  
 Currently, ABetterLife uses a service called AirMeet to facilitate their weekly meetings however their customers have consistently had compatibility issues with different devices, cameras, and audio outputs. As stated above our application seeks to mitigate these issues by integrating directly into BetterLife's infrastructure.
-
-<p align="left">
-  <img src="./images/betterlife_image.png" width="150"/>
-</p>
 
 **ABetterLife:** https://abetterlife.com/
 
