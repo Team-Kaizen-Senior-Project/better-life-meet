@@ -1,21 +1,44 @@
 <p align="center">
   <img src="./images/kaizen-black.png" width="200"/>
-</p>
-Team Members:  <br/>
-<table>
+<table align="center">
+  <tr>
+    <th>Team Member</th>
+    <th>Contact Information</th>
+  </tr>
   <tr>
     <td>Sparsh Saini</td>
+    <td>sparshsaini@csus.edu</td>
+  </tr>
+  <tr>
     <td>Victor Severin</td>
-     <td>Brandon Chu</td>
+    <td>victorseverin@csus.edu</td>
+  </tr>
+  <tr>
+    <td>Brandon Chu</td>
+    <td>brandonchu@csus.edu</td>
+  </tr>
+  <tr>
     <td>Daryl Denaga</td>
+    <td>daryldenaga@csus.edu</td>
   </tr>
   <tr>
     <td>Fabian Lopez</td>
+    <td>fabianlopez@csus.edu</td>
+  </tr>
+  <tr>
     <td>Jasjot Singh</td>
+    <td>jasjotsingh@csus.edu</td>
+  </tr>
+  <tr>
     <td>Brian Lowery</td>
+    <td>bdlowery@csus.edu</td>
+  </tr>
+  <tr>
     <td>Matt Christiansen</td>
+    <td>mchristiansen@csus.edu</td>
   </tr>
 </table>
+
 
 # TribeMeet
 
