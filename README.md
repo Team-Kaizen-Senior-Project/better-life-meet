@@ -138,25 +138,21 @@ TribeMeet provides a comprehensive video service. Users can schedule meetings, s
 </p>
 <p align="center">
     <h4>To import the BetterLifeAPI collection and environment files from the GIthub Repo, click “import” on the side menu. The following modal will appear. </h4>
-    <img src="./images/api_postman_example.png" width="600"/>
+    <img src="./images/api_postman_example.png](https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/a86ca957-ebce-4705-b67b-b8eb06519ce6" width="600"/>
     <h4>Select GitHub as your import source. You’ll likely have to link your GitHub account if you haven’t already.</h4>
-    <img src="./images/api_postman_example.png" width="600"/>  
+    <img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/b46e88dd-dd59-4970-afbb-0d6332124923" width="600"/>
+    <img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/8e4473c7-75d1-4f1e-afe8-93fbd04345e0" width="600"/>
     <h4>At this point Postman will identify the collection and environment files stored within the 	‘/tests’ directory </h4>
-    <img src="./images/api_postman_example.png" width="600"/>
+    <img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/a03a9cd8-0c1a-4625-a295-df97880b345d" width="600"/>
     <h4>After importing both the collection and environment files, you will see the following on your workspace dashboard. </h4>
-    <img src="./images/api_postman_example.png" width="600"/>
+    <img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/fadfdbc0-6cad-48fd-9d80-7fd4d025c444" width="600"/>
     <h4> Next, we need to configure the environment for our workspace. To do this select ’TestingEnvironment’ which we previously imported.</h4>
-    <img src="./images/api_postman_example.png" width="600"/>
-    <h4>To view our environment variables that make up our ‘TestingEnvironment’, navigate to the ‘Environments’ tab on the side menu.</h4>
-    <img src="./images/api_postman_example.png" width="600"/>
-    <h4>Note: variables prefixed with “Generated” are created as a result of each run of the automated tests. Predefined variables reference ids and identifies that exist within the database for testing purposes. Variables prefixed with “Invalid” are used for error handling and testing.</h4>
-    <h4> To run a stand-alone test, nagivate to the ‘BetterLifeAPI Tests’ directory and select the test you want. Once selected, you will see the query params, path params, request body, and tests for the chosen endpoint on the top menu.</h4>
-    <img src="./images/api_postman_example.png" width="600"/>
-    <h4> The image above shows the query params associated with a GET request for the Analytics API </h4>
-    <img src="./images/api_postman_example.png" width="600"/>
-    <h4> Shown above are the tests associated with the request that include checks for response body, status code and response time.  </h4>
-    <img src="./images/api_postman_example.png" width="600"/>
-    <h4> In the bottom panel we can observe that all the test passed. </h4>
+    <img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/fc4dbca1-7b96-40cb-a06f-e98ec7e9d320" width="600"/>
+    <h4> To run a stand-alone test, navigate to the ‘BetterLifeAPI Tests’ directory and select the test you want. Once selected, you will see the query params, path params, request body, and tests for the chosen endpoint on the top menu.</h4>
+    <img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/86b7edfa-c5b7-4522-bbd2-cb78da1c86fe" width="600"/>
+    <h4> Shown below are the tests associated with the request that include checks for response body, status code and response time.  </h4>
+    <img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/2ae065ec-ef63-44d3-a442-dbcf4eac53e2" width="600"/>
+
 </p>
 
 
