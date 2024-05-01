@@ -132,28 +132,35 @@ TribeMeet provides a comprehensive video service. Users can schedule meetings, s
   <h4>The robust API of TribeMeet provides extensive control over meeting management and data retrieval. Developers can:</h4>
   <ul>
     <li>Schedule meetings with customizable settings</li>
-    <li>Retrieve detailed detailed analytics on participant engagement, including attendance duration, interaction levels, and more.</li>
+    <li>Retrieve detailed analytics on participant engagement, including attendance duration, interaction levels, and more.</li>
     <li>Integrate TribeMeet's functionality into existing workflows or applications for a unified user experience.</li>
   </ul>
 </p>
-<p align="center">
-    <h4>To import the BetterLifeAPI collection and environment files from the GIthub Repo, click “import” on the side menu. The following modal will appear. </h4>
-    <img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/a86ca957-ebce-4705-b67b-b8eb06519ce6" width="600" align="center"/>
-    <h4>Select GitHub as your import source. You’ll likely have to link your GitHub account if you haven’t already.</h4>
-    <img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/b46e88dd-dd59-4970-afbb-0d6332124923" width="600" align="center"/>
-    <img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/8e4473c7-75d1-4f1e-afe8-93fbd04345e0" width="600" align="center"/>
-    <h4>At this point Postman will identify the collection and environment files stored within the 	‘/tests’ directory </h4>
-    <img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/a03a9cd8-0c1a-4625-a295-df97880b345d" width="600" align="center"/>
-    <h4>After importing both the collection and environment files, you will see the following on your workspace dashboard. </h4>
-    <img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/fadfdbc0-6cad-48fd-9d80-7fd4d025c444" width="600" align="center"/>
-    <h4> Next, we need to configure the environment for our workspace. To do this select ’TestingEnvironment’ which we previously imported.</h4>
-    <img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/fc4dbca1-7b96-40cb-a06f-e98ec7e9d320" width="600" align="center"/>
-    <h4> To run a stand-alone test, navigate to the ‘BetterLifeAPI Tests’ directory and select the test you want. Once selected, you will see the query params, path params, request body, and tests for the chosen endpoint on the top menu.</h4>
-    <img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/86b7edfa-c5b7-4522-bbd2-cb78da1c86fe" width="600" align="center"/>
-    <h4> Shown below are the tests associated with the request that include checks for response body, status code and response time.  </h4>
-    <img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/2ae065ec-ef63-44d3-a442-dbcf4eac53e2" width="600" align="center"/>
 
-</p>
+## Accessing our API via Postman
+<h4>To import the BetterLifeAPI collection and environment files from the GitHub Repo, click “import” on the side menu. The following modal will appear.</h4>
+<p align="center"><img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/a86ca957-ebce-4705-b67b-b8eb06519ce6" width="600" align="center"/></p>
+
+<h4>Select GitHub as your import source. You’ll likely have to link your GitHub account if you haven’t already.</h4>
+<p align="center"><img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/b46e88dd-dd59-4970-afbb-0d6332124923" width="600" align="center"/></p>
+<p align="center"><img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/8e4473c7-75d1-4f1e-afe8-93fbd04345e0" width="600" align="center"/></p>
+
+<h4>At this point Postman will identify the collection and environment files stored within the ‘/tests’ directory</h4>
+<p align="center"><img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/a03a9cd8-0c1a-4625-a295-df97880b345d" width="600" align="center"/></p>
+
+<h4>After importing both the collection and environment files, you will see the following on your workspace dashboard.</h4>
+<p align="center"><img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/fadfdbc0-6cad-48fd-9d80-7fd4d025c444" width="600" align="center"/></p>
+
+<h4>Next, we need to configure the environment for our workspace. To do this select ’TestingEnvironment’ which we previously imported.</h4>
+<p align="center"><img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/fc4dbca1-7b96-40cb-a06f-e98ec7e9d320" width="600" align="center"/></p>
+
+<h4>To run a stand-alone test, navigate to the ‘BetterLifeAPI Tests’ directory and select the test you want. Once selected, you will see the query params, path params, request body, and tests for the chosen endpoint on the top menu.</h4>
+<p align="center"><img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/86b7edfa-c5b7-4522-bbd2-cb78da1c86fe" width="600" align="center"/></p>
+
+<h4>Shown below are the tests associated with the request that include checks for response body, status code and response time.</h4>
+<p align="center"><img src="https://github.com/Team-Kaizen-Senior-Project/better-life-meet/assets/23132411/2ae065ec-ef63-44d3-a442-dbcf4eac53e2" width="600" align="center"/></p>
+
+
 
 
 ## Developer Instructions
