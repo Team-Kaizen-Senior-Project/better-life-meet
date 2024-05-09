@@ -1,5 +1,6 @@
 <script setup lang="ts">
 	const { signIn } = useAuth()
+	const route = useRoute()
 	const email = ref('')
 	const password = ref('')
 	const errorMessage = ref('')
@@ -17,6 +18,16 @@
 			return navigateTo(url, { external: true })
 		}
 	}
+
+	onMounted(() => {
+		if (route.query) {
+			if (route.query.email && route.query.password) {
+				email.value = route.query.email
+				password.value = route.query.password
+				mySignInHandler()
+			}
+		}
+	})
 
 	definePageMeta({
 		auth: {
